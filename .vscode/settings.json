@@ -41,6 +41,26 @@
 		"streambuf": "cpp",
 		"system_error": "cpp",
 		"tuple": "cpp",
-		"typeinfo": "cpp"
+		"typeinfo": "cpp",
+		"iostream": "cpp",
+		"__config": "cpp",
+		"__errc": "cpp",
+		"__nullptr": "cpp",
+		"__string": "cpp",
+		"__threading_support": "cpp",
+		"atomic": "cpp",
+		"bit": "cpp",
+		"cctype": "cpp",
+		"cmath": "cpp",
+		"cstdarg": "cpp",
+		"cstddef": "cpp",
+		"cstdint": "cpp",
+		"cstdio": "cpp",
+		"cstdlib": "cpp",
+		"cstring": "cpp",
+		"ctime": "cpp",
+		"cwchar": "cpp",
+		"cwctype": "cpp",
+		"iosfwd": "cpp"
 	}
 }
