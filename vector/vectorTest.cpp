@@ -22,7 +22,29 @@ int main()
 	std::cout << "size = " << myv.size() << " capcity = " << myv.capacity() << " " << myv[1] << std::endl;
 
 	myv.pop_back();
-	std::cout << "size = " << myv.size() << " capcity = " << myv.capacity() << " " << myv[2] << std::endl;
+	std::cout << "myv: size = " << myv.size() << " capcity = " << myv.capacity() << " " << myv[2] << std::endl;
+	
+	ft::vector<int> v2(myv);
+	std::cout << "v2: size = " << v2.size() << " capacity = " << v2.capacity() << std::endl;
+	for (ft::vector<int>::iterator it = v2.begin(); it != v2.end(); it++)
+		std::cout << *it << std::endl;
+
+	v2.push_back(30);
+	v2.push_back(40);
+	v2.push_back(60);
+	v2.push_back(80);
+	v2.push_back(60);
+	v2.push_back(80);
+	v2.push_back(60);
+	v2.push_back(80);
+	myv = v2;
+	std::cout << "v2: size = " << v2.size() << " capacity = " << v2.capacity() << std::endl;
+	std::cout << "myv: size = " << myv.size() << " capcity = " << myv.capacity() << std::endl;
+	ft::vector<int> v3 = v2;
+	std::cout << "v2: size = " << v2.size() << " capacity = " << v2.capacity() << std::endl;
+	std::cout << "v3: size = " << v3.size() << " capacity = " << v3.capacity() << std::endl;
+
+
 	// ft::vector<int>::iterator it = myv.begin();
 	// for (; it != myv.end(); it++)
 	// 	std::cout << *it << std::endl;

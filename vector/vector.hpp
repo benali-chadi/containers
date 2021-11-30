@@ -4,6 +4,8 @@
 #include <memory>
 #include <algorithm>
 #include "MyIterator.hpp"
+#include "../utils.hpp"
+
 namespace ft
 {
 	template <class T, class Alloc = std::allocator<T> >
@@ -24,27 +26,47 @@ namespace ft
 				* Contructors
 			*/
 
-			explicit vector	(const allocator_type& alloc = allocator_type()): _alloc(alloc), _size(0), _capacity(0) {	_arr = _alloc.allocate(0);	}
-			explicit vector	(size_type n, const value_type& val = value_type(),
+			explicit vector	(const allocator_type& alloc = allocator_type()):			// Default
+				_alloc(alloc), _size(0), _capacity(0) {	_arr = _alloc.allocate(0);	}
+			explicit vector	(size_type n, const value_type& val = value_type(), 		// Fill
 							const allocator_type& alloc = allocator_type()): _alloc(alloc), _size(n), _capacity(n)
 			{
 				_arr = _alloc.allocate(n);
 				for (int i = 0; i < n; i++)
 					_arr[i] = val;
 			}
-			// template <class InputIterator>
-			// 	vector		(InputIterator first, InputIterator last,
-			// 				const allocator_type& alloc = allocator_type()): _alloc(alloc) // initialize _size and _capacity
-			// 	{
-			// 		// Fill _arr by iterating
-			// 	}
-			vector 			(const vector& x) {
+			template <class InputIterator>												// Range
+				vector		(
+								InputIterator first, InputIterator last,
+								const allocator_type& alloc = allocator_type(),
+								typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator()
+							)
+							: _alloc(alloc)
+				{
+					_arr = _alloc.allocate(0);
+					_capacity = 0;
+					for (; first != last; first++)
+					{
+						push_back(*first);
+					}
+				}
+			vector 			(const vector& x)											//Copy
+			{ 
 				// Copy x's element in my array
 				// initialize _size, _capacity and _alloc
+				_capacity = 0;
+				_arr = _alloc.allocate(0);
+				*this = x;
 			}
 
 			vector&	operator= (const vector& x) {
-				// copy size, capacity and x's elements
+				std::cout << "assignation: x.size = " << x._size << std::endl;
+				_size = 0;
+				_capacity = _capacity < x.size() ? x.size() : _capacity; 
+
+				for (int i = 0; i < x.size(); i++)
+					push_back(x._arr[i]);
+				return *this;
 			}
 			
 			/*

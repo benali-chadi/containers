@@ -8,6 +8,7 @@ template <class T>
 class MyIterator: public std::iterator<std::random_access_iterator_tag, T>
 {
 	public:
+		MyIterator() {}
 		MyIterator(T *x): _p(x) {}
 		MyIterator(const MyIterator &x): _p(x._p) {}
 
@@ -38,7 +39,6 @@ class MyIterator: public std::iterator<std::random_access_iterator_tag, T>
 
 	private:
 		T	*_p;
-		MyIterator() {}
 
 };
 }
