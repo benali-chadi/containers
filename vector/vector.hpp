@@ -51,9 +51,7 @@ namespace ft
 					}
 				}
 			vector 			(const vector& x)											//Copy
-			{ 
-				// Copy x's element in my array
-				// initialize _size, _capacity and _alloc
+			{
 				_capacity = 0;
 				_arr = _alloc.allocate(0);
 				*this = x;
