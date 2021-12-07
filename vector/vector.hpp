@@ -210,8 +210,10 @@ namespace ft
 			iterator erase(iterator first, iterator last)
 			{
 				iterator ret = first;
-				for (; first != last; first++)
+				for (; first != last; last--)
+				{
 					erase_one(first);
+				}
 				return first;
 			}
 			// iterator
@@ -219,15 +221,34 @@ namespace ft
 
 			void			swap(vector& x)
 			{
-				// swap the elements from x to the current _arr
-				// all iterators, references and pointers must remain valid
-				// The capacity is also swaped
+				size_type len1 = x.size();
+				size_type len2 = _size;
+				pointer tmp1 = new value_type[len1];
+				pointer tmp2 = new value_type[len2];
+				
+				int i = 0;
+				for (iterator it = x.begin(); it != x.end(); it++, i++)
+					tmp1[i] = *it;
+				
+				i = 0;
+				for (iterator it = begin(); it != end(); it++, i++)
+					tmp2[i] = *it;
+
+				_capacity = 0;
+				x.clear();
+				clear();
+
+				for (int i = 0; i < len1; i++)
+					push_back(tmp1[i]);
+
+				for (int i = 0; i < len2; i++)
+					x.push_back(tmp2[i]);
 			}
 
 			void			clear()
 			{
-				// remove all elements from the array
-				// size = 0
+				while (_size > 0)
+					pop_back();
 			}
 
 			/*

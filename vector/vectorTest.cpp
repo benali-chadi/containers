@@ -83,19 +83,35 @@ int main()
 	
 	// // for (std::vector<int>::iterator d = v.begin(); d != v.end(); d++)
 	// // 	std::cout << *d << std::endl;
-	ft::vector<int> v;
+	std::vector<int> v;
+	std::vector<int> v2;
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		v.push_back(i);
 	}
+	for (int i = 0; i < 3; i++)
+	{
+		v2.push_back(i + 120);
+	}
 
-	v.erase(v.begin() + 1, v.begin() + 3);
+	v2.swap(v);
 
-	ft::vector<int>::iterator it = v.begin();
+	std::cout << "size = " << v.size() << " capacity = " << v.capacity() << std::endl;
+	std::cout << "size = " << v2.size() << " capacity = " << v2.capacity() << std::endl;
+	
+	std::cout << "vector v" << std::endl; 
+	std::vector<int>::iterator it = v.begin();
 	for (; it != v.end(); it++)
 	{
 		std::cout << *it << std::endl;
+	}
+
+	std::cout << "vector v2" << std::endl;
+	std::vector<int>::iterator it2 = v2.begin();
+	for (; it2 != v2.end(); it2++)
+	{
+		std::cout << *it2 << std::endl;
 	}
 
 	return 0;
