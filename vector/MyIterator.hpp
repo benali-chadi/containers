@@ -24,7 +24,7 @@ namespace ft
 			bool		operator>=(const MyIterator& x) {	return _p >= x._p;	}
 			bool		operator<=(const MyIterator& x) {	return _p <= x._p;	}
 			T&			operator*() {	return *_p;	}
-			T&			operator->() {	return *_p;	}
+			T*			operator->() {	return &operator*();	}
 
 			MyIterator&	operator++() {	++_p; return *this;	}
 			MyIterator	operator++(int) {
@@ -39,15 +39,18 @@ namespace ft
 				return tmp;
 			}
 
-			MyIterator&	operator-(MyIterator &x) {	_p - x._p; return *this;	}
-			MyIterator&	operator-(int n) {	return _p - n;	}
-
 			MyIterator&	operator+=(int n) {	_p += n; return *this;	}
 			MyIterator&	operator-=(int n) {	_p -= n; return *this;	}
+
+			MyIterator	operator-(MyIterator &x) {	return _p - x._p;	}
+			MyIterator	operator-(int n) {	return _p - n;	}
 
 			MyIterator	operator+(int n) {	return (_p + n);	}
 			template <class Iterator>
 			friend Iterator	operator+(int n, Iterator &it);
+
+			T&			operator[](int n) {	return *(_p + n);	}	
+
 
 		private:
 			T	*_p;

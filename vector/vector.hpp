@@ -58,7 +58,6 @@ namespace ft
 			}
 
 			vector&	operator= (const vector& x) {
-				std::cout << "assignation: x.size = " << x._size << std::endl;
 				_size = 0;
 				_capacity = _capacity < x.size() ? x.size() : _capacity; 
 
@@ -71,7 +70,7 @@ namespace ft
 				* Destructor
 			*/
 
-			~vector() {};
+			~vector() {	_alloc.deallocate(_arr, _capacity);	};
 
 			/*
 				* Iterators
@@ -105,19 +104,9 @@ namespace ft
 			void			resize(size_type n, value_type val = value_type())
 			{
 				if (n < _size)
-				{
-					// erase _arr's element untill _size == n
-				}
-				else if (n > _size)
-				{
-					if (n > _capacity)
-					{
-						// REALOCATION
-							// - save current _arr elems in a tmp
-							// - copy the tmp elems in the realocated _arr
-					}
-					// insert val in _arr until _size == n
-				}
+					_size = n;
+				while (n > _size)
+					push_back(val);
 			}
 			
 			size_type		capacity() const {	return _capacity;	}
@@ -128,92 +117,105 @@ namespace ft
 				if (n > max_size())
 					throw std::length_error("allocator<T>::allocate(size_t n) 'n' exceeds maximum supported size");
 				if (n > _capacity)
-				{
-					_capacity = n;
-					// reallocate to n
-				}
+					reallocate(n);
 			}
 
 			/*
 				* Element Access
 			*/
 
-			reference		operator[] (size_type n)
+			reference		operator[](size_type n)
 			{
 				return _arr[n];
 			}
-			const_reference	operator[] (size_type n) const
+			const_reference	operator[](size_type n) const
 			{
 				return _arr[n];
 			}
 
-			reference		at (size_type n)
+			reference		at(size_type n)
 			{
 				if (n >= _size)
 					throw std::out_of_range("vector");
 				return _arr[n];
 			}
-			const_reference	at (size_type n) const
+			const_reference	at(size_type n) const
 			{
 				if (n >= _size)
 					throw std::out_of_range("vector");
 				return _arr[n];
 			}
 
-			reference		front()
-			{
-				return _arr[0];
-			}
-			const_reference	front() const
-			{
-				return _arr[0];
-			}
+			reference		front() {	return _arr[0];	}
+			const_reference	front() const {	return _arr[0];	}
 
-			reference		back()
-			{
-				return _arr[_size - 1];
-			}
-			const_reference	back() const
-			{
-				return _arr[_size - 1];
-			}
+			reference		back() {	return _arr[_size - 1];	}
+			const_reference	back() const {	return _arr[_size - 1];	}
 
 			/*
 				* Modifiers
 			*/
 
 			template <class InputIterator>
-				void		assign (InputIterator first, InputIterator last)
+				void		assign(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
 				{
-					// assign with Iterator
+					_size = 0;
+					for (; first != last; first++)
+						push_back(*first);
 				}
-			void			assign (size_type n, const value_type& val)
+			void			assign(size_type n, const value_type& val)
 			{
-				// Erase the existing elements
-				// insert val n times, change the size accordinglly
-				// if -and only if- the new vector size surpasses the current vector capacity.
-					// REALOCATION
+				_size = 0;
+				while (n > _size)
+					push_back(val);
 			}
 
 			void			push_back(const value_type& val)
 			{
 				_size++;
 				if (_size > _capacity)
-				{
 					reallocate();
-				}
 				_arr[_size - 1] = val;
 			}
 
-			void			pop_back()
-			{
-				_size--;
-				// erase the lase element
-			}
+			void			pop_back() {	_size--; _alloc.destroy(_arr + _size);	}
 
-			// insert
+			iterator		insert(iterator position, const value_type& val) {	put_val(position, val);	return position;	}
+			void			insert(iterator position, size_type n, const value_type& val)
+			{
+				size_type total_size = _size + n;
+				while (total_size > _size)
+					put_val(position, val);
+			}
+			template <class InputIterator>
+   				void 		insert (
+					   			iterator position,
+				   				InputIterator first,
+								InputIterator last,
+								typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator()
+								)
+				{
+					for (; first != last; first++, position++)
+						put_val(position, *first);
+				}
 
 			// erase
+
+			iterator erase(iterator position)
+			{
+				erase_one(position);
+				return position;
+			}
+
+			iterator erase(iterator first, iterator last)
+			{
+				iterator ret = first;
+				for (; first != last; first++)
+					erase_one(first);
+				return first;
+			}
+			// iterator
+
 
 			void			swap(vector& x)
 			{
@@ -240,19 +242,38 @@ namespace ft
 			size_type		_size;
 			size_type		_capacity;
 
-			void			reallocate()
+			void			reallocate(int n = 0)
 			{
-				value_type *tmp = std::move(_arr);
-				// value_type *tmp = _arr;
+				value_type *tmp = new value_type[_size];
+				std::copy(_arr, _arr + _size, tmp);
+				for (int i = 0; i < _size; i++)
+					_alloc.destroy(_arr + i);
 
-				if (_capacity)
+				if (n)
+					_capacity = n;
+				else if (_capacity)
 					_capacity *= 2;
 				else
 					_capacity = 1;
 
 				_arr = _alloc.allocate(_capacity);
-				_arr = std::move(tmp);
-				// _arr = tmp;
+				std::copy(tmp, tmp + _size, _arr);
+				delete [] tmp;
+			}
+
+			void			put_val(iterator pos, T val)
+			{
+				push_back(val);
+				iterator last = end() - 1; 
+				for (; pos != end() - 1; pos++)
+					std::swap(*pos, *last);
+			}
+
+			void			erase_one(iterator pos)
+			{
+				for (; pos != _arr + _size; pos++)
+					std::swap(*pos, *(pos + 1));
+				pop_back();
 			}
 	};
 }
