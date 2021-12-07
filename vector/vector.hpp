@@ -94,6 +94,8 @@ namespace ft
 				return const_iterator(_arr + _size);
 			}
 
+			// Reverse Iterator's functions
+
 			/*
 				* Capacity
 			*/
@@ -221,28 +223,17 @@ namespace ft
 
 			void			swap(vector& x)
 			{
-				size_type len1 = x.size();
-				size_type len2 = _size;
-				pointer tmp1 = new value_type[len1];
-				pointer tmp2 = new value_type[len2];
-				
-				int i = 0;
-				for (iterator it = x.begin(); it != x.end(); it++, i++)
-					tmp1[i] = *it;
-				
-				i = 0;
-				for (iterator it = begin(); it != end(); it++, i++)
-					tmp2[i] = *it;
+				pointer tmp = _arr;
+				size_type len = _size;
+				size_type cap = _capacity;
 
-				_capacity = 0;
-				x.clear();
-				clear();
+				_arr = x._arr;
+				_size = x._size;
+				_capacity = x._capacity;
 
-				for (int i = 0; i < len1; i++)
-					push_back(tmp1[i]);
-
-				for (int i = 0; i < len2; i++)
-					x.push_back(tmp2[i]);
+				x._arr = tmp;
+				x._size = len;
+				x._capacity = cap;
 			}
 
 			void			clear()
