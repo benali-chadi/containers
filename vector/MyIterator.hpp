@@ -12,7 +12,7 @@ namespace ft
           class Pointer = T*, class Reference = T&>
 		struct iterator {
 			typedef T			value_type;
-			typedef Distance	diffrence_type;
+			typedef Distance	difference_type;
 			typedef Pointer		pointer;
 			typedef Reference	reference;
 			typedef Category	iterator_category;
@@ -22,7 +22,7 @@ namespace ft
 	class MyIterator: public iterator<std::random_access_iterator_tag, T>
 	{
 		public:
-			typedef typename iterator<std::random_access_iterator_tag, T>::diffrence_type		diffrence_type;
+			typedef typename iterator<std::random_access_iterator_tag, T>::difference_type		difference_type;
 			typedef typename iterator<std::random_access_iterator_tag, T>::value_type			value_type;
 			typedef typename iterator<std::random_access_iterator_tag, T>::pointer				pointer;
 			typedef typename iterator<std::random_access_iterator_tag, T>::reference			reference;
