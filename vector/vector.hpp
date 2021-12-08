@@ -76,23 +76,11 @@ namespace ft
 				* Iterators
 			*/
 			
-			iterator		begin()
-			{
-				return iterator(_arr);
-			}
-			const_iterator	begin() const
-			{
-				return const_iterator(_arr);
-			}
+			iterator		begin() {	return iterator(_arr);	}
+			const_iterator	begin() const {	return const_iterator(_arr);	}
 
-			iterator		end()
-			{
-				return iterator(_arr + _size);
-			}
-			const_iterator	end() const
-			{
-				return const_iterator(_arr + _size);
-			}
+			iterator		end() {	return iterator(_arr + _size);	}
+			const_iterator	end() const {	return const_iterator(_arr + _size);	}
 
 			// Reverse Iterator's functions
 

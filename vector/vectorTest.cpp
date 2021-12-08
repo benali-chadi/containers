@@ -95,7 +95,7 @@ int main()
 		v2.push_back(i + 120);
 	}
 
-	v2.swap(v2);
+	v2.swap(v);
 
 	std::cout << "size = " << v.size() << " capacity = " << v.capacity() << std::endl;
 	std::cout << "size = " << v2.size() << " capacity = " << v2.capacity() << std::endl;
