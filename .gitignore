@@ -1,1 +1,3 @@
-ft_containers_tests
+/ft_containers_tests
+/.vscode
+*.out
