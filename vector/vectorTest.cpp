@@ -83,36 +83,52 @@ int main()
 	
 	// // for (std::vector<int>::iterator d = v.begin(); d != v.end(); d++)
 	// // 	std::cout << *d << std::endl;
-	ft::Vector<int> v;
-	ft::Vector<int> v2;
+	// ft::Vector<int> v;
+	// ft::Vector<int> v2;
 
-	for (int i = 0; i < 10; i++)
-	{
-		v.push_back(i);
-	}
-	for (int i = 0; i < 3; i++)
-	{
-		v2.push_back(i + 120);
-	}
+	// for (int i = 0; i < 10; i++)
+	// {
+	// 	v.push_back(i);
+	// }
+	// for (int i = 0; i < 3; i++)
+	// {
+	// 	v2.push_back(i + 120);
+	// }
 
-	v2.swap(v);
+	// v2.swap(v);
 
-	std::cout << "size = " << v.size() << " capacity = " << v.capacity() << std::endl;
-	std::cout << "size = " << v2.size() << " capacity = " << v2.capacity() << std::endl;
+	// std::cout << "size = " << v.size() << " capacity = " << v.capacity() << std::endl;
+	// std::cout << "size = " << v2.size() << " capacity = " << v2.capacity() << std::endl;
 	
-	std::cout << "vector v" << std::endl; 
-	ft::Vector<int>::iterator it = v.begin();
-	for (; it != v.end(); it++)
-	{
-		std::cout << *it << std::endl;
-	}
+	// std::cout << "vector v" << std::endl; 
+	// ft::Vector<int>::iterator it = v.begin();
+	// for (; it != v.end(); it++)
+	// {
+	// 	std::cout << *it << std::endl;
+	// }
 
-	std::cout << "vector v2" << std::endl;
-	ft::Vector<int>::iterator it2 = v2.begin();
-	for (; it2 != v2.end(); it2++)
-	{
-		std::cout << *it2 << std::endl;
-	}
+	// std::cout << "vector v2" << std::endl;
+	// ft::Vector<int>::iterator it2 = v2.begin();
+	// for (; it2 != v2.end(); it2++)
+	// {
+	// 	std::cout << *it2 << std::endl;
+	// }
+	// {
+	// 	std::vector<std::string> v(1e5, "fill constructor test");
+	// 	std::cout << v[0] << std::endl;
+	// 	ft::Vector<std::string> v2(1e5, "fill constructor test");
+	// 	std::cout << v2[0] << std::endl;
+	// }
 
+	// std::vector<std::string> v(10, "range constructor test");
+	ft::Vector<std::string> my_v(10, "fill constructor test");
+	ft::Vector<std::string> my_v1(my_v.begin(), my_v.end());
+	std::string my_res;
+
+	std::cout << my_v1.capacity() << " " << my_v1.size() << std::endl;
+	for (ft::Vector<std::string>::iterator it = my_v.begin(); it != my_v.end(); ++it) // fill my_res from ft::vector
+            my_res += *it;
+	
+	std::cout << my_res << std::endl;
 	return 0;
 }

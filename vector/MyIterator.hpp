@@ -33,7 +33,8 @@ namespace ft
 			MyIterator(const MyIterator &x): _p(x._p) {}
 
 			~MyIterator() {}
-
+			
+			operator MyIterator<const T> () const { return MyIterator<const T>(_p); }
 			MyIterator&	operator=(const MyIterator& x) {	_p = x._p;	return *this;	}
 			bool		operator==(const MyIterator& x) {	return _p == x._p;	}
 			bool		operator!=(const MyIterator& x) {	return _p != x._p;	}
@@ -60,7 +61,7 @@ namespace ft
 			MyIterator&	operator+=(int n) {	_p += n; return *this;	}
 			MyIterator&	operator-=(int n) {	_p -= n; return *this;	}
 
-			MyIterator	operator-(MyIterator &x) {	return _p - x._p;	}
+			difference_type	operator-(MyIterator &x) {	return _p - x._p;	}
 			MyIterator	operator-(int n) {	return _p - n;	}
 
 			MyIterator	operator+(int n) {	return (_p + n);	}
@@ -75,9 +76,13 @@ namespace ft
 
 	};
 
-	template <class Iterator>
-	Iterator	operator+(int n, Iterator &it) {
-		return (it.p + n);
+	template <class Iterator, typename T>
+	Iterator	operator+(
+					typename iterator<std::random_access_iterator_tag, T>::difference_type n,
+					Iterator &it
+					)
+	{
+		return (it._p + n);
 	}
 }
 

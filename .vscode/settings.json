@@ -61,6 +61,14 @@
 		"ctime": "cpp",
 		"cwchar": "cpp",
 		"cwctype": "cpp",
-		"iosfwd": "cpp"
+		"iosfwd": "cpp",
+		"__tree": "cpp",
+		"deque": "cpp",
+		"iomanip": "cpp",
+		"map": "cpp",
+		"numeric": "cpp",
+		"random": "cpp",
+		"set": "cpp",
+		"stack": "cpp"
 	}
 }

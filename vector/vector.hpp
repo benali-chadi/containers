@@ -37,7 +37,7 @@ namespace ft
 							const allocator_type& alloc = allocator_type()): _alloc(alloc), _size(n), _capacity(n)
 			{
 				_arr = _alloc.allocate(n);
-				for (int i = 0; i < n; i++)
+				for (size_type i = 0; i < n; i++)
 					_arr[i] = val;
 			}
 			template <class InputIterator>												// Range
@@ -47,11 +47,12 @@ namespace ft
 								typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator()
 							): _alloc(alloc)
 				{
-					_arr = _alloc.allocate(0);
-					_capacity = 0;
-					for (; first != last; first++)
+					_capacity = last - first;
+					_size = _capacity;
+					_arr = _alloc.allocate(_capacity);
+					for (int i = 0; first != last; first++, i++)
 					{
-						push_back(*first);
+						_arr[i] = *first;
 					}
 				}
 			Vector 			(const Vector& x)											//Copy
@@ -65,7 +66,7 @@ namespace ft
 				_size = 0;
 				_capacity = _capacity < x.size() ? x.size() : _capacity; 
 
-				for (int i = 0; i < x.size(); i++)
+				for (size_type i = 0; i < x.size(); i++)
 					push_back(x._arr[i]);
 				return *this;
 			}
@@ -252,7 +253,7 @@ namespace ft
 			{
 				value_type *tmp = new value_type[_size];
 				std::copy(_arr, _arr + _size, tmp);
-				for (int i = 0; i < _size; i++)
+				for (size_type i = 0; i < _size; i++)
 					_alloc.destroy(_arr + i);
 
 				if (n)
