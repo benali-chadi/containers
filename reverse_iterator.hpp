@@ -150,7 +150,7 @@ namespace ft {
 		{
 			typename reverse_iterator<Iterator>::iterator_type tmp1 = lhs.base();
 			typename reverse_iterator<Iterator>::iterator_type tmp2 = rhs.base();
-			return (tmp1 - tmp2);
+			return (tmp2 - tmp1);
 		}
 }
 

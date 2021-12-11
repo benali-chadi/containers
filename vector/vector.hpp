@@ -32,7 +32,7 @@ namespace ft
 			*/
 
 			explicit Vector	(const allocator_type& alloc = allocator_type()):			// Default
-				_alloc(alloc), _size(0), _capacity(0) {	_arr = _alloc.allocate(0);	}
+				_alloc(alloc), _size(0), _capacity(0) {	/*_arr = _alloc.allocate(0);*/	}
 			explicit Vector	(size_type n, const value_type& val = value_type(), 		// Fill
 							const allocator_type& alloc = allocator_type()): _alloc(alloc), _size(n), _capacity(n)
 			{
@@ -64,9 +64,12 @@ namespace ft
 
 			Vector&	operator= (const Vector& x) {
 				_size = 0;
+				reallocate(x.size());
 
 				for (size_type i = 0; i < x.size(); i++)
+				{
 					push_back(x._arr[i]);
+				}
 				return *this;
 			}
 			
@@ -74,7 +77,7 @@ namespace ft
 				* Destructor
 			*/
 
-			~Vector() {	_alloc.deallocate(_arr, _capacity);	};
+			~Vector() {	if (_capacity) _alloc.deallocate(_arr, _capacity);	};
 
 			/*
 				* Iterators
@@ -86,11 +89,11 @@ namespace ft
 			iterator				end() {	return iterator(_arr + _size);	}
 			const_iterator			end() const {	return const_iterator(_arr + _size);	}
 
-			reverse_iterator		rbegin() {	return reverse_iterator(end());	}
-			const_reverse_iterator	rbegin() const {	return const_reverse_iterator(end());	}
+			reverse_iterator		rbegin() {	return reverse_iterator(_arr + _size);	}
+			const_reverse_iterator	rbegin() const {	return const_reverse_iterator(_arr + _size);	}
 
-			reverse_iterator 		rend() {	return reverse_iterator(begin());	}
-			const_reverse_iterator 	rend() const {	return const_reverse_iterator(begin());	}
+			reverse_iterator 		rend() {	return reverse_iterator(_arr);	}
+			const_reverse_iterator 	rend() const {	return const_reverse_iterator(_arr);	}
 
 			// Reverse Iterator's functions
 
@@ -105,6 +108,8 @@ namespace ft
 			{
 				if (n < _size)
 					_size = n;
+				if (n > _capacity)
+					reallocate(n);
 				while (n > _size)
 					push_back(val);
 			}
@@ -160,12 +165,19 @@ namespace ft
 				void				assign(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
 				{
 					_size = 0;
+					
+					size_type len = last - first;
+					if (len > _capacity)
+						reallocate(len);
 					for (; first != last; first++)
 						push_back(*first);
 				}
 			void					assign(size_type n, const value_type& val)
 			{
 				_size = 0;
+				
+				if (n > _capacity)
+					reallocate(n);
 				while (n > _size)
 					push_back(val);
 			}
@@ -252,13 +264,13 @@ namespace ft
 			{
 				if (!_capacity)
 				{
-					_capacity = 1;
+					_capacity = n ? n : 1;
 					_arr = _alloc.allocate(_capacity);
 					return ;
 				}
 				value_type *tmp = new value_type[_size];
 				std::copy(_arr, _arr + _size, tmp);
-				for (size_type i = 0; i < _size; i++)
+				for (size_type i = 0; i < _capacity; i++)
 					_alloc.destroy(_arr + i);
 
 				if (n)

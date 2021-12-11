@@ -150,14 +150,15 @@ int main()
 	// 	ualarm(0, 0);
 	// 	/*----------------------------------------------------*/
 	// }
-	std::string ft_res;
 	ft::Vector<std::string> ft_v1;
-	ft::Vector<std::string> ft_v2(10, "string2");
-	ft_v1 = ft_v2;
 
-	for (ft::Vector<std::string>::iterator it = ft_v1.begin(); it != ft_v1.end(); ++it) // fill ft_res from ft_v1
-            ft_res += *it;
+	ft_v1.push_back("hello");
+	ft_v1.reserve(30);
+	for (size_t i = 0; i < 100; ++i)
+        ft_v1.push_back("string");
+
 	
-	std::cout << ft_res << std::endl;
+	std::cout << "v1 : size = " << ft_v1.size() << " capacity = " << ft_v1.capacity() << std::endl;
+
 	return 0;
 }
