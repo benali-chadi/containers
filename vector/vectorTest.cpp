@@ -3,10 +3,28 @@
 #include <algorithm>
 #include "Vector.hpp"
 
+#include <ctime>
+#include <iomanip>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/time.h>
+#define TIME_FAC 3
+
+time_t get_time(void)
+{
+    struct timeval time_now;
+
+    gettimeofday(&time_now, NULL);
+    time_t msecs_time = (time_now.tv_sec * 1e3) + (time_now.tv_usec / 1e3);
+    return (msecs_time);
+}
+
 // using namespace std;
 
 int main()
 {
+	typedef ft::Vector<char>::iterator myIterator;
+	typedef std::vector<char>::iterator iterator;
 	// std::vector<int> foo (3,100);	// three ints with a value of 100
 	// std::vector<int> bar (1, 15);	// five ints with a value of 200
 
@@ -114,21 +132,32 @@ int main()
 	// 	std::cout << *it2 << std::endl;
 	// }
 	// {
-	// 	std::vector<std::string> v(1e5, "fill constructor test");
-	// 	std::cout << v[0] << std::endl;
-	// 	ft::Vector<std::string> v2(1e5, "fill constructor test");
-	// 	std::cout << v2[0] << std::endl;
+	// 	time_t start, end, diff;
+	// 	/*------------------ std::vectors ---------------------*/
+	// 	std::vector<std::string> v1(1e4, "string1");
+	// 	std::vector<std::string> v2(1e6, "string2");
+	// 	start = get_time();
+	// 	v1 = v2;
+	// 	end = get_time();
+	// 	diff = end - start;
+	// 	diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
+	// 	/*-----------------------------------------------------*/
+	// 	/*------------------ ft::vectors ---------------------*/
+	// 	ft::Vector<std::string> ft_v1(1e4, "string1");
+	// 	ft::Vector<std::string> ft_v2(1e6, "string2");
+	// 	ualarm(diff * 1e3, 0);
+	// 	ft_v1 = ft_v2;
+	// 	ualarm(0, 0);
+	// 	/*----------------------------------------------------*/
 	// }
+	std::string ft_res;
+	ft::Vector<std::string> ft_v1;
+	ft::Vector<std::string> ft_v2(10, "string2");
+	ft_v1 = ft_v2;
 
-	// std::vector<std::string> v(10, "range constructor test");
-	ft::Vector<std::string> my_v(10, "fill constructor test");
-	ft::Vector<std::string> my_v1(my_v.begin(), my_v.end());
-	std::string my_res;
-
-	std::cout << my_v1.capacity() << " " << my_v1.size() << std::endl;
-	for (ft::Vector<std::string>::iterator it = my_v.begin(); it != my_v.end(); ++it) // fill my_res from ft::vector
-            my_res += *it;
+	for (ft::Vector<std::string>::iterator it = ft_v1.begin(); it != ft_v1.end(); ++it) // fill ft_res from ft_v1
+            ft_res += *it;
 	
-	std::cout << my_res << std::endl;
+	std::cout << ft_res << std::endl;
 	return 0;
 }

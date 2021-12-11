@@ -57,14 +57,13 @@ namespace ft
 				}
 			Vector 			(const Vector& x)											//Copy
 			{
-				_capacity = 0;
-				_arr = _alloc.allocate(0);
+				_capacity = x.size() ? x.size() : 0;
+				_arr = _alloc.allocate(_capacity);
 				*this = x;
 			}
 
 			Vector&	operator= (const Vector& x) {
 				_size = 0;
-				_capacity = _capacity < x.size() ? x.size() : _capacity; 
 
 				for (size_type i = 0; i < x.size(); i++)
 					push_back(x._arr[i]);
@@ -251,6 +250,12 @@ namespace ft
 
 			void					reallocate(int n = 0)
 			{
+				if (!_capacity)
+				{
+					_capacity = 1;
+					_arr = _alloc.allocate(_capacity);
+					return ;
+				}
 				value_type *tmp = new value_type[_size];
 				std::copy(_arr, _arr + _size, tmp);
 				for (size_type i = 0; i < _size; i++)
@@ -260,8 +265,8 @@ namespace ft
 					_capacity = n;
 				else if (_capacity)
 					_capacity *= 2;
-				else
-					_capacity = 1;
+				// else
+				// 	_capacity = 1;
 
 				_arr = _alloc.allocate(_capacity);
 				std::copy(tmp, tmp + _size, _arr);
