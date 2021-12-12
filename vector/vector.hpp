@@ -260,8 +260,10 @@ namespace ft
 			size_type		_size;
 			size_type		_capacity;
 
-			void					reallocate(int n = 0)
+			void					reallocate(size_type n = 0)
 			{
+				if (n > max_size())
+					throw std::length_error("allocator<T>::allocate(size_t n) 'n' exceeds maximum supported size");
 				if (!_capacity)
 				{
 					_capacity = n ? n : 1;
@@ -273,10 +275,11 @@ namespace ft
 				for (size_type i = 0; i < _capacity; i++)
 					_alloc.destroy(_arr + i);
 
-				if (n)
-					_capacity = n;
-				else if (_capacity)
-					_capacity *= 2;
+				_capacity = n ? n : _capacity * 2;
+				// if (n)
+				// 	_capacity = n;
+				// else if (_capacity)
+				// 	_capacity *= 2;
 				// else
 				// 	_capacity = 1;
 

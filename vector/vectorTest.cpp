@@ -23,8 +23,8 @@ time_t get_time(void)
 
 int main()
 {
-	typedef ft::Vector<char>::iterator myIterator;
-	typedef std::vector<char>::iterator iterator;
+	// typedef ft::Vector<char>::iterator myIterator;
+	// typedef std::vector<char>::iterator iterator;
 	// std::vector<int> foo (3,100);	// three ints with a value of 100
 	// std::vector<int> bar (1, 15);	// five ints with a value of 200
 
@@ -132,33 +132,45 @@ int main()
 	// 	std::cout << *it2 << std::endl;
 	// }
 	// {
-	// 	time_t start, end, diff;
-	// 	/*------------------ std::vectors ---------------------*/
-	// 	std::vector<std::string> v1(1e4, "string1");
-	// 	std::vector<std::string> v2(1e6, "string2");
-	// 	start = get_time();
-	// 	v1 = v2;
-	// 	end = get_time();
-	// 	diff = end - start;
-	// 	diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
-	// 	/*-----------------------------------------------------*/
-	// 	/*------------------ ft::vectors ---------------------*/
-	// 	ft::Vector<std::string> ft_v1(1e4, "string1");
-	// 	ft::Vector<std::string> ft_v2(1e6, "string2");
-	// 	ualarm(diff * 1e3, 0);
-	// 	ft_v1 = ft_v2;
-	// 	ualarm(0, 0);
-	// 	/*----------------------------------------------------*/
-	// }
-	ft::Vector<std::string> ft_v1;
-
-	ft_v1.push_back("hello");
-	ft_v1.reserve(30);
-	for (size_t i = 0; i < 100; ++i)
-        ft_v1.push_back("string");
-
+{
+            time_t start, end, diff;
+            // test 1: test with capacity greater than or equal the size + the new element (reallocation must'nt happen)
+            /*------------------ std::vectors ---------------------*/
+            {
+                std::vector<std::string> v1(1e6, "string2");
+                v1.reserve(1e6 + 1);
+                start = get_time();
+                v1.push_back("string1");
+                end = get_time();
+                diff = end - start;
+                diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
+                /*------------------ ft::vectors ---------------------*/
+                ft::Vector<std::string> ft_v1(1e6, "string2");
+                ft_v1.reserve(1e6 + 1);
+                ualarm(diff * 1e3, 0);
+                ft_v1.push_back("string1");
+                ualarm(0, 0);
+            }
+            /*--------------------------------------------------------------------------------------*/
+            // test 2: test with capacity lesser than the size + the new element (reallocation must happen)
+            /*------------------ std::vectors ---------------------*/
+            {
+                std::vector<std::string> v1(1e6, "string2");
+                start = get_time();
+                v1.push_back("string1");
+                end = get_time();
+                diff = end - start;
+                diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
+                /*------------------ ft::vectors ---------------------*/
+                ft::Vector<std::string> ft_v1(1e6, "string2");
+                ualarm(diff * 1e3, 0);
+                ft_v1.push_back("string1");
+                ualarm(0, 0);
+            }
+            /*--------------------------------------------------------------------------------------*/
+        }
 	
-	std::cout << "v1 : size = " << ft_v1.size() << " capacity = " << ft_v1.capacity() << std::endl;
-
+	// std::cout << "v1 : size = " << ft_v.size() << " capacity = " << ft_v.capacity() << std::endl;
+	// std::cout << "s1 = " << s1 << std::endl;
 	return 0;
 }
