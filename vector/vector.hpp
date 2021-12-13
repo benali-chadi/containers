@@ -38,7 +38,7 @@ namespace ft
 			{
 				_arr = _alloc.allocate(n);
 				for (size_type i = 0; i < n; i++)
-					_arr[i] = val;
+					_alloc.construct(_arr + i, val);
 			}
 			template <class InputIterator>												// Range
 				Vector		(
@@ -51,9 +51,7 @@ namespace ft
 					_size = _capacity;
 					_arr = _alloc.allocate(_capacity);
 					for (int i = 0; first != last; first++, i++)
-					{
-						_arr[i] = *first;
-					}
+						_alloc.construct(_arr + i, *first);
 				}
 			Vector 			(const Vector& x)											//Copy
 			{
@@ -187,17 +185,45 @@ namespace ft
 				_size++;
 				if (_size > _capacity)
 					reallocate();
-				_arr[_size - 1] = val;
+				_alloc.construct(_arr + (_size - 1), val);
 			}
 
 			void					pop_back() {	_size--; _alloc.destroy(_arr + _size);	}
 
-			iterator				insert(iterator position, const value_type& val) {	put_val(position, val);	return position;	}
+			iterator				insert(iterator position, const value_type& val) {
+				size_type dist = std::distance(begin(), position);
+			
+				push_back(val);
+				position = begin() + dist;
+				iterator last = end() - 1; 
+			
+				for (; position != end() - 1; position++)
+					std::swap(*position, *last);	
+			
+			
+				return begin() + dist;
+			}
 			void					insert(iterator position, size_type n, const value_type& val)
 			{
-				size_type total_size = _size + n;
-				while (total_size > _size)
-					put_val(position, val);
+				size_type dist = std::distance(begin(), position);
+
+				if (_size + n > _capacity)
+				{
+					if (n <= _size)
+						reallocate();
+					else
+						reallocate(_size + n);
+				}
+				position = begin() + dist;
+
+				Vector tmp(position, end());
+				for (; n; position++, n--, dist++)
+				{
+					_alloc.construct(_arr + dist, val);
+					_size++;
+				}
+				for (iterator it = tmp.begin(); it != tmp.end(); it++, dist++)
+					_alloc.construct(_arr + dist, *it);
 			}
 			template <class InputIterator>
    				void 				insert (
@@ -207,24 +233,63 @@ namespace ft
 										typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator()
 									)
 				{
-					for (; first != last; first++, position++)
-						put_val(position, *first);
+					size_type dist = std::distance(begin(), position);
+					size_type range = std::distance(first, last);
+
+					if (_size + range > _capacity)
+					{
+						if (range <= _size)
+							reallocate();
+						else
+							reallocate(_size + range);
+					}
+					
+					position = begin() + dist;
+					Vector tmp(position, end());
+					for (; first != last; first++, dist++)
+					{
+						_alloc.construct(_arr + dist, *first);
+						_size++;
+					}
+					for (iterator it = tmp.begin(); it != tmp.end(); it++, dist++)
+						_alloc.construct(_arr + dist, *it);
 				}
 
 			iterator 				erase(iterator position)
 			{
-				erase_one(position);
-				return position;
+				iterator initial_pos = position;
+
+				for (; position != end() - 1; position++)
+					std::swap(*position, *(position + 1));
+				pop_back();
+				return initial_pos;
 			}
 
 			iterator 				erase(iterator first, iterator last)
 			{
 				iterator ret = first;
-				for (; first != last; last--)
+				size_type dist = std::distance(begin(), first);
+				if (last == end())
 				{
-					erase_one(first);
+					for (;first != last; first++, dist++)
+					{
+						_alloc.destroy(_arr + dist);
+						_size--;
+					}
 				}
-				return first;
+				else
+				{
+					size_type i = 0;
+					for (; first != last; first++, dist++)
+					{
+						if ((last + i) < end())
+							std::swap(*first, *(last + i));
+						_alloc.destroy(_arr + dist);
+						_size--;
+					}
+				}
+				
+				return ret;
 			}
 
 			void					swap(Vector& x)
@@ -264,43 +329,23 @@ namespace ft
 			{
 				if (n > max_size())
 					throw std::length_error("allocator<T>::allocate(size_t n) 'n' exceeds maximum supported size");
+				
 				if (!_capacity)
 				{
 					_capacity = n ? n : 1;
 					_arr = _alloc.allocate(_capacity);
 					return ;
 				}
-				value_type *tmp = new value_type[_size];
-				std::copy(_arr, _arr + _size, tmp);
+
+				pointer	tmp = _arr;
 				for (size_type i = 0; i < _capacity; i++)
 					_alloc.destroy(_arr + i);
 
 				_capacity = n ? n : _capacity * 2;
-				// if (n)
-				// 	_capacity = n;
-				// else if (_capacity)
-				// 	_capacity *= 2;
-				// else
-				// 	_capacity = 1;
 
 				_arr = _alloc.allocate(_capacity);
-				std::copy(tmp, tmp + _size, _arr);
-				delete [] tmp;
-			}
-
-			void					put_val(iterator pos, T val)
-			{
-				push_back(val);
-				iterator last = end() - 1; 
-				for (; pos != end() - 1; pos++)
-					std::swap(*pos, *last);
-			}
-
-			void					erase_one(iterator pos)
-			{
-				for (; pos != _arr + _size; pos++)
-					std::swap(*pos, *(pos + 1));
-				pop_back();
+				for (size_type i = 0; i < _size; i++)
+					_alloc.construct(_arr + i, tmp[i]);
 			}
 	};
 

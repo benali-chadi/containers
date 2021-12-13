@@ -61,7 +61,7 @@ namespace ft
 			MyIterator&	operator+=(int n) {	_p += n; return *this;	}
 			MyIterator&	operator-=(int n) {	_p -= n; return *this;	}
 
-			difference_type	operator-(MyIterator &x) {	return _p - x._p;	}
+			difference_type	operator-(MyIterator &x) {	;return _p - x._p;	}
 			MyIterator	operator-(int n) {	return _p - n;	}
 
 			MyIterator	operator+(int n) {	return (_p + n);	}
