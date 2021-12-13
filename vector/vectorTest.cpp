@@ -131,13 +131,19 @@ int main()
 	// }
 	// {
 	
-	// typedef ft::Vector<std::string>::iterator myIterator;
+	// typedef ft::Vector<int>::iterator myIterator;
 	// typedef std::vector<std::string>::iterator iterator;
 	
-	ft::Vector<std::string> ft_v1(1e6, "string2");
-    ft_v1.erase(ft_v1.begin(), ft_v1.end());
 	
-	std::cout << "v1 : size = " << ft_v1.size() << " capacity = " << ft_v1.capacity() << std::endl;
+	ft::Vector<int> my_v;
+
+	for (int i = 0; i < 5; i++)
+	{
+		my_v.push_back(i + 1);
+	}
+	ft::Vector<int>::reverse_iterator rit(my_v.rbegin());
+
+	std::cout << *rit << std::endl;
 	// for (iterator it = ft_v1.begin(); it != ft_v1.end(); it++)
 	// 	std::cout << *it << std::endl;
 	// std::cout << "s1 = " << s1 << std::endl;

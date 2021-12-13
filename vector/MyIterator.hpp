@@ -58,17 +58,15 @@ namespace ft
 				return tmp;
 			}
 
-			MyIterator&	operator+=(int n) {	_p += n; return *this;	}
-			MyIterator&	operator-=(int n) {	_p -= n; return *this;	}
+			MyIterator&	operator+=(difference_type n) {	_p += n; return *this;	}
+			MyIterator&	operator-=(difference_type n) {	_p -= n; return *this;	}
 
 			difference_type	operator-(MyIterator &x) {	;return _p - x._p;	}
-			MyIterator	operator-(int n) {	return _p - n;	}
+			MyIterator	operator-(difference_type n) {	return _p - n;	}
 
-			MyIterator	operator+(int n) {	return (_p + n);	}
-			template <class Iterator>
-			friend Iterator	operator+(int n, Iterator &it);
+			MyIterator	operator+(difference_type n) {	return (_p + n);	}
 
-			reference	operator[](int n) {	return *(_p + n);	}	
+			reference	operator[](difference_type n) {	return *(_p + n);	}	
 
 
 		private:
@@ -76,14 +74,14 @@ namespace ft
 
 	};
 
-	template <class Iterator, typename T>
-	Iterator	operator+(
-					typename iterator<std::random_access_iterator_tag, T>::difference_type n,
-					Iterator &it
+	template <class T>
+		MyIterator<T>	operator+(
+					typename MyIterator<T>::difference_type n,
+					MyIterator<T> &it
 					)
-	{
-		return (it._p + n);
-	}
+		{
+			return it + n;
+		}
 }
 
 #endif

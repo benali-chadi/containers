@@ -49,8 +49,9 @@ namespace ft {
 				reverse_iterator () {}
 				explicit reverse_iterator (iterator_type it) {	_iter = it - 1;	}
 				template <class Iter>
-					reverse_iterator (const reverse_iterator<Iter>& rev_it) {	*this = rev_it;	}
+					reverse_iterator (const reverse_iterator<Iter>& rev_it) {	_iter = rev_it.base();	}
 				
+				// void			operator
 				iterator_type 		base() const {	return _iter;	}
 
 				reference			operator*() const 
