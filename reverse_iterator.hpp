@@ -47,18 +47,13 @@ namespace ft {
 				typedef typename	iterator_traits<Iterator>::reference			reference;
 
 				reverse_iterator () {}
-				explicit reverse_iterator (iterator_type it) {	_iter = it - 1;	}
+				explicit reverse_iterator (iterator_type it): _iter(it) {}
 				template <class Iter>
 					reverse_iterator (const reverse_iterator<Iter>& rev_it) {	_iter = rev_it.base();	}
 				
 				// void			operator
 				iterator_type 		base() const {	return _iter;	}
 
-				reference			operator*() const 
-				{	
-					iterator_type tmp = _iter;
-					return *(tmp);
-				}
 				reverse_iterator	operator+(difference_type n) const
 				{
 					iterator_type tmp = _iter;
@@ -69,11 +64,9 @@ namespace ft {
 					iterator_type tmp = _iter;
 					return reverse_iterator(tmp + n);
 				}
+				reference			operator*() const {	return *(base() - 1);	}
 				pointer				operator->() const {	return &(operator*());	}
-				reference			operator[](difference_type n) const {
-					iterator_type tmp = _iter;
-					return *(tmp - n);
-				}
+				reference			operator[](difference_type n) const {	return *(base() - (n + 1));	}
 				reverse_iterator&	operator+=(difference_type n) {	_iter -= n; return *this;	}
 				reverse_iterator&	operator-=(difference_type n) {	_iter += n; return *this;	}
 
@@ -116,22 +109,22 @@ namespace ft {
 	template <class Iterator>
   		bool operator<  (const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
 		{
-			return lhs.base() < rhs.base();
+			return rhs.base() < lhs.base();
 		}
 	template <class Iterator>
   		bool operator<= (const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
 		{
-			return lhs.base() <= rhs.base();
+			return rhs.base() <= lhs.base();
 		}
 	template <class Iterator>
   		bool operator> (const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
 		{
-			return lhs.base() > rhs.base();
+			return rhs.base() > lhs.base();
 		}
 	template <class Iterator>
   		bool operator>= (const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs)
 		{
-			return lhs.base() >= rhs.base();
+			return rhs.base() >= lhs.base();
 		}
 	
 	/*	Operators	*/

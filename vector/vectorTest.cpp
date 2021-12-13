@@ -135,15 +135,19 @@ int main()
 	// typedef std::vector<std::string>::iterator iterator;
 	
 	
-	ft::Vector<int> my_v;
+	ft::Vector<std::string> ft_v1(10, "string2");
+	std::vector<std::string> v2(10, "string2");
+	std::string res, ft_res;
 
-	for (int i = 0; i < 5; i++)
+	for (ft::Vector<std::string>::reverse_iterator rit = ft_v1.rbegin(); rit != ft_v1.rend(); ++rit) // fill ft_res from ft_v1
 	{
-		my_v.push_back(i + 1);
+		std::cout << *rit << std::endl;
+		ft_res += *rit;
 	}
-	ft::Vector<int>::reverse_iterator rit(my_v.rbegin());
-
-	std::cout << *rit << std::endl;
+	for (std::vector<std::string>::reverse_iterator rit = v2.rbegin(); rit != v2.rend(); ++ rit)
+		res += *rit;
+	
+	std::cout << res << "\n" << ft_res << std::endl;
 	// for (iterator it = ft_v1.begin(); it != ft_v1.end(); it++)
 	// 	std::cout << *it << std::endl;
 	// std::cout << "s1 = " << s1 << std::endl;

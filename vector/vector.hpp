@@ -337,15 +337,17 @@ namespace ft
 					return ;
 				}
 
-				pointer	tmp = _arr;
-				for (size_type i = 0; i < _capacity; i++)
-					_alloc.destroy(_arr + i);
+				pointer		tmp = _arr;
+				size_type	cap = _capacity;
 
 				_capacity = n ? n : _capacity * 2;
 
 				_arr = _alloc.allocate(_capacity);
 				for (size_type i = 0; i < _size; i++)
 					_alloc.construct(_arr + i, tmp[i]);
+
+				for (size_type i = 0; i < cap; i++)
+					_alloc.destroy(tmp + i);
 			}
 	};
 
