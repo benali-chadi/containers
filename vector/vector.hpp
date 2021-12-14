@@ -53,9 +53,13 @@ namespace ft
 					for (int i = 0; first != last; first++, i++)
 						_alloc.construct(_arr + i, *first);
 				}
-			Vector 			(const Vector& x)											//Copy
+			Vector 			(const Vector& x): _size(0), _capacity(0)						//Copy
 			{
-				_capacity = x.size() ? x.size() : 0;
+				if (!x.size())
+				{
+					return	;
+				}
+				_capacity = x.size();
 				_arr = _alloc.allocate(_capacity);
 				*this = x;
 			}
@@ -182,9 +186,9 @@ namespace ft
 
 			void					push_back(const value_type& val)
 			{
-				_size++;
-				if (_size > _capacity)
+				if (_size + 1 > _capacity)
 					reallocate();
+				_size++;
 				_alloc.construct(_arr + (_size - 1), val);
 			}
 
