@@ -2,6 +2,7 @@
 # define STACK_HPP
 
 # include "../vector/Vector.hpp"
+
 namespace ft {
 
 	template <class T, class Container = Vector<T> >
