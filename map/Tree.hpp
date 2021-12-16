@@ -75,16 +75,16 @@ namespace ft {
 						node *tmp = search(newNode);
 						if (tmp)
 						{
-							node *n = new node(newNode);
-							n->parent = tmp;
+							// node *n = new node(newNode);
+							newNode.parent = tmp;
 						// Place the node
 							if (tmp->key > newNode.key)
-								tmp->left = n;
+								tmp->left = &newNode;
 							else
-								tmp->right = n;
+								tmp->right = &newNode;
 							
-							if (tmp != root)
-								check(n);
+							// if (tmp != root)
+								check(&newNode);
 						}
 					}
 				}
@@ -115,12 +115,22 @@ namespace ft {
 					node *tmp = parent->right;
 					char c = parent->color;
 
+					// change the colors and make the parent in the middle
+
 					parent->right = grand_parent;
 					parent->color = grand_parent->color;
+					
 					parent->parent = grand_parent->parent;
+					
+					// If the grand parent isn't root change its parent's right to the parent
+					if (grand_parent != root)
+						grand_parent->parent->left = parent;
+					
 					grand_parent->parent = parent;
 					grand_parent->color = c;
-					grand_parent->right = tmp;
+					
+					// if there was any elements in the right of the parent
+					grand_parent->left = tmp;
 					
 					if (root == grand_parent)
 						root = parent;
@@ -133,15 +143,25 @@ namespace ft {
 					node *tmp = parent->left;
 					char c = parent->color;
 
-					
+					// change the colors and make the parent in the middle
+
 					parent->left = grand_parent;
 					parent->color = grand_parent->color;
+					
 					parent->parent = grand_parent->parent;
+
+					// If the grand parent isn't root change its parent's right to the parent
+					if (grand_parent != root)
+						grand_parent->parent->right = parent;
+
 					grand_parent->parent = parent;
 					grand_parent->color = c;
+					
+					// if there was any elements in the left of the parent
 					grand_parent->right = tmp;
+
 					if (root == grand_parent)
-						root = parent;	
+						root = parent;
 				}
 
 				void	rotate(node *n)
@@ -166,19 +186,21 @@ namespace ft {
 					{
 						node *tmp = n->right;
 						n->right = parent;
-						n->parent = parent->parent;
+						n->parent = grand_parent;
 						parent->parent = n;
 						parent->left = tmp;
-						rrr(n);
+						grand_parent->right = n;
+						rrr(parent);
 					}
 					else if (n == parent->right && parent == grand_parent->left) // Rotation left right
 					{
 						node *tmp = n->left;
 						n->left = parent;
-						n->parent = parent->parent;
+						n->parent = grand_parent;
 						parent->parent = n;
 						parent->right = tmp;
-						rll(n);
+						grand_parent->left = n;
+						rll(parent);
 					}
 				}
 
@@ -192,28 +214,22 @@ namespace ft {
 				void	check(node *newNode)
 				{
 					node *parent = newNode->parent;
-					node *sibling = get_sibling(parent);
-					
-					if (parent->color == 'B')
+					if (parent == root || parent->color == 'B')
 						return ;
-					else // There is a red red conflict
+					node *sibling = get_sibling(parent);
+
+					if (!sibling || sibling->color == 'B')
+						rotate(newNode); // Rotate and recolor
+					else
 					{
-						if (!sibling || sibling->color == 'B')
+						// Recolor the parent and the sibling 
+						parent->color = 'B';
+						sibling->color = 'B';
+						if (parent->parent != root)
 						{
-							// Rotate and recolor
-							rotate(newNode);
-						}
-						else
-						{
-							// Recolor the parent and the sibling 
-							parent->color = parent->color == 'B' ? 'R' : 'B';
-							sibling->color = sibling->color == 'B' ? 'R' : 'B';
-							if (parent->parent != root)
-							{
-								// if the parent's parent is not the root then recolre it and recheck
-								parent->parent->color = parent->parent->color == 'B' ? 'R' : 'B';
-								check(parent);
-							}
+							// if the parent's parent is not the root then recolore it and recheck
+							parent->parent->color = parent->parent->color == 'B' ? 'R' : 'B';
+							check(parent->parent);
 						}
 					}
 				}
