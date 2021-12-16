@@ -10,6 +10,16 @@ namespace ft {
 			struct node *parent;
 			struct node	*left;
 			struct node *right;
+
+			node(T1 key, T2 value): key(key), value(value) {}
+			node (struct node const &n) {
+				key = n.key;
+				value = n.value;
+				color = n.color;
+				parent = 0;
+				left = 0;
+				right = 0;
+			}
 		};
 	
 	template <class T1, class T2>
@@ -23,16 +33,30 @@ namespace ft {
 				{
 					node *tmp = root;
 
-					while (tmp)
+					while (tmp && (tmp->right != 0 || tmp->left != 0))
 					{
 						if (n.key > tmp->key)
+						{
+							if (!tmp->right)
+								return tmp;
 							tmp = tmp->right;
+						}
 						else if (n.key < tmp->key)
+						{
+							if (!tmp->left)
+								return tmp;
 							tmp  = tmp->left;
+						}
 						else
 							return 0;
 					}
-					return tmp->parent;
+					return tmp;
+				}
+
+				void	traverse()
+				{
+					node *tmp = root;
+					print(tmp);
 				}
 
 				void	insert (node newNode)
@@ -43,30 +67,24 @@ namespace ft {
 						newNode.left = 0;
 						newNode.right = 0;
 						newNode.parent = root;
-						root = newNode;	
+						root = &newNode;	
 					}
 					else
 					{
 						newNode.color = 'R';
-						newNode.left = 0;
-						newNode.right = 0;
 						node *tmp = search(newNode);
 						if (tmp)
 						{
+							node *n = new node(newNode);
+							n->parent = tmp;
 						// Place the node
-							if (tmp.key > newNode.key)
-								tmp.left = &newNode;
+							if (tmp->key > newNode.key)
+								tmp->left = n;
 							else
-								tmp.right = &newNode;
-						// Check:
-							// - if the parent is black then exit
-							// - if the parent is red, check the parent's sibling:
-								// - if the color is BLACK or NULL then rotate and recolor
-								// - if the color is RED
-									// - Recolor the parent and its sibling
-									// - check if the parent's parent is not the root
-										// - if true: recolor and recheck (the same above conditions)
-
+								tmp->right = n;
+							
+							if (tmp != root)
+								check(n);
 						}
 					}
 				}
@@ -74,6 +92,18 @@ namespace ft {
 			private:
 				node	*root;
 				
+
+				void	print(node *n)
+				{
+					if (n == 0)
+						return ;
+					print(n->left);
+					if (n == root)
+						std::cout << "this is root\n";
+					std::cout << n->key << " color = " << n->color << std::endl;
+					print(n->right);
+				}
+
 				/*
 					* Rotations
 				*/
@@ -83,19 +113,34 @@ namespace ft {
 					node *parent = n->parent;
 					node *grand_parent = parent->parent;
 					node *tmp = parent->right;
+					char c = parent->color;
 
 					parent->right = grand_parent;
+					parent->color = grand_parent->color;
+					parent->parent = grand_parent->parent;
+					grand_parent->parent = parent;
+					grand_parent->color = c;
 					grand_parent->right = tmp;
-					if (*root == grand_parent)
+					
+					if (root == grand_parent)
 						root = parent;
 				}
 
 				void	rrr(node *n) // Right right rotation
 				{
+					node *parent = n->parent;
+					node *grand_parent = parent->parent;
 					node *tmp = parent->left;
+					char c = parent->color;
+
+					
 					parent->left = grand_parent;
+					parent->color = grand_parent->color;
+					parent->parent = grand_parent->parent;
+					grand_parent->parent = parent;
+					grand_parent->color = c;
 					grand_parent->right = tmp;
-					if (*root == grand_parent)
+					if (root == grand_parent)
 						root = parent;	
 				}
 
@@ -121,6 +166,8 @@ namespace ft {
 					{
 						node *tmp = n->right;
 						n->right = parent;
+						n->parent = parent->parent;
+						parent->parent = n;
 						parent->left = tmp;
 						rrr(n);
 					}
@@ -128,37 +175,43 @@ namespace ft {
 					{
 						node *tmp = n->left;
 						n->left = parent;
+						n->parent = parent->parent;
+						parent->parent = n;
 						parent->right = tmp;
-						lll(n);
+						rll(n);
 					}
 				}
 
-				node	*sibling(node *n)
+				node	*get_sibling(node *n)
 				{
-					if (n == n.parent.left)
-						return n.parent.left;
-					return n.parent.right;
+					if (n == n->parent->left)
+						return n->parent->right;
+					return n->parent->left;
 				}
 
 				void	check(node *newNode)
 				{
-					node *parent = newNode.parent;
-					node *sibling = sibling(parent);
-					if (parent == 'B')
+					node *parent = newNode->parent;
+					node *sibling = get_sibling(parent);
+					
+					if (parent->color == 'B')
 						return ;
 					else // There is a red red conflict
 					{
-						if (sibling.color == 'B')
+						if (!sibling || sibling->color == 'B')
+						{
 							// Rotate and recolor
+							rotate(newNode);
+						}
 						else
 						{
 							// Recolor the parent and the sibling 
-							parent.color = parent.color == 'B' ? 'R' : 'B';
-							sibling.color = sibling.color == 'B' ? 'R' : 'B';
-							if (parent.parent != *root)
+							parent->color = parent->color == 'B' ? 'R' : 'B';
+							sibling->color = sibling->color == 'B' ? 'R' : 'B';
+							if (parent->parent != root)
 							{
 								// if the parent's parent is not the root then recolre it and recheck
-								parent.parent.color = parent.parent.color == 'B' ? 'R' : 'B';
+								parent->parent->color = parent->parent->color == 'B' ? 'R' : 'B';
 								check(parent);
 							}
 						}
