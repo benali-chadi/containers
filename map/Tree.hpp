@@ -66,42 +66,21 @@ namespace ft {
 				void	erase(T1 key)
 				{
 					// search the position of key
-					node *n = search_to_erase(key);
+					node	*n = search_to_erase(key);
+					// node	*right = n->right;
+					// node	*left = n->left;
 
 					if (n)
 					{
-						// if node key is a leaf node
-						if (n->right == 0 && n->left == 0)
-						{
-							// if its red, delete it
-							if (n->color == 'R')
-								remove(n);
-							// if its black
-							else
-							{
-								// the checks
-
-							}
-						}
-						// if node key has one child
-						else if (n->right == 0 || n->left == 0)
-						{
-							node	*toDelete = n->right ? in_order_succ(n->right) : in_order_pred(n->left);
-							// swap its key with its leaf node
-							n->key = toDelete->key;
-							toDelete->key = key;
-							// the checks on leaf node
-						}
-						// if node key has two children
+						n = get_leaf_node(n);
+						std::cout << "n parent key = " << n->parent->key << std::endl;
+						// if the leaf is red, delete it
+						if (n->color == 'R')
+							remove(n);
 						else
 						{
-							// search for the in-order predecessor (the largest element in the left side of the node)
-							node	*toDelete = in_order_pred(n->left);
-							// swap its key with the IOP
-							n->key = toDelete->key;
-							toDelete->key = key;
-							// the checks the leaf node
-
+							node_is_black(n);
+							remove(n);
 						}
 					}
 				}
@@ -116,6 +95,8 @@ namespace ft {
 					print(n->left);
 					if (n == root)
 						std::cout << "this is root\n";
+					// if (n->key == 4)
+					// 	std::cout << "4's parent key = " << n->parent->key << std::endl;
 					std::cout << n->key << " color = " << n->color << std::endl;
 					print(n->right);
 				}
@@ -124,9 +105,8 @@ namespace ft {
 					* Rotations
 				*/
 
-				void	rll(node *n) // Left left rotation
+				void	rll(node *parent) // Left left rotation
 				{
-					node *parent = n->parent;
 					node *grand_parent = parent->parent;
 					node *tmp = parent->right;
 					char c = parent->color;
@@ -147,14 +127,15 @@ namespace ft {
 					
 					// if there was any elements in the right of the parent
 					grand_parent->left = tmp;
+					if (tmp)
+						tmp->parent = grand_parent;
 					
 					if (root == grand_parent)
 						root = parent;
 				}
 
-				void	rrr(node *n) // Right right rotation
+				void	rrr(node *parent) // Right right rotation
 				{
-					node *parent = n->parent;
 					node *grand_parent = parent->parent;
 					node *tmp = parent->left;
 					char c = parent->color;
@@ -175,6 +156,8 @@ namespace ft {
 					
 					// if there was any elements in the left of the parent
 					grand_parent->right = tmp;
+					if (tmp)
+						tmp->parent = grand_parent;
 
 					if (root == grand_parent)
 						root = parent;
@@ -190,9 +173,9 @@ namespace ft {
 					*/
 
 					if (n == parent->left && parent == grand_parent->left) // Rotation left left
-						rll(n);
+						rll(parent);
 					else if (n == parent->right && parent == grand_parent->right) // Rotation right right
-						rrr(n);
+						rrr(parent);
 
 					/*
 						* Double Rotation 
@@ -206,7 +189,7 @@ namespace ft {
 						parent->parent = n;
 						parent->left = tmp;
 						grand_parent->right = n;
-						rrr(parent);
+						rrr(n);
 					}
 					else if (n == parent->right && parent == grand_parent->left) // Rotation left right
 					{
@@ -216,7 +199,7 @@ namespace ft {
 						parent->parent = n;
 						parent->right = tmp;
 						grand_parent->left = n;
-						rll(parent);
+						rll(n);
 					}
 				}
 
@@ -294,23 +277,63 @@ namespace ft {
 						else if (tmp->key < key)
 							tmp = tmp->right;
 						
-						else (tmp->key == key)
+						else
 							return tmp;
 					}
 					return 0;
 				}
 
+				node	*get_leaf_node(node *n)
+				{
+					node	*tmp = n;
+					while (tmp && (tmp->right != 0 || tmp->left != 0))
+					{
+						if (tmp->right == 0 || tmp->left == 0)
+						{
+							node	*toDelete = tmp->right ? in_order_succ(tmp->right) : in_order_pred(tmp->left);
+							// swap its key with its leaf node
+							T1	key = tmp->key;
+							tmp->key = toDelete->key;
+							toDelete->key = key;
+							
+							tmp = toDelete;
+						}
+						else
+						{
+							// search for the in-order predecessor (the largest element in the left side of the node)
+							node	*toDelete = in_order_pred(n->left);
+							std::cout << "toDelete key = " << toDelete->key << " parent key = " << toDelete->parent->key << std::endl;
+							// swap its key with the IOP
+							T1	key = n->key;
+							n->key = toDelete->key;
+							toDelete->key = key;
+
+							tmp = toDelete;
+						}
+					}
+
+					return tmp;
+				}
+
 				void	remove(node *n)
 				{
 					if (n == n->parent->left)
+					{
 						n->parent->left = 0;
+						// if (left)
+						// 	left->parent = n->parent;
+					}
 					else
+					{
 						n->parent->right = 0;
+						// if (right)
+						// 	right->parent = parent;
+					}
 				}
 
 				node	*in_order_pred(node *n)
 				{
-					node	*tmp = root;
+					node	*tmp = n;
 
 					while (tmp->right != 0)
 						tmp = tmp->right;
@@ -320,7 +343,7 @@ namespace ft {
 
 				node	*in_order_succ(node *n)
 				{
-					node	*tmp = root;
+					node	*tmp = n;
 
 					while (tmp ->left != 0)
 						tmp = tmp->left;
@@ -328,6 +351,87 @@ namespace ft {
 					return tmp;
 				}
 
+				char	get_direction(node *n)
+				{
+
+					if (n == n->parent->left)
+						return 'L';
+					else
+						return 'R';
+				}
+
+				void	node_is_black(node *n)
+				{
+					std::cout << "node is black\n";
+					node	*parent = n->parent;
+					char	n_direction = get_direction(n);
+
+					if (parent == root)
+					{
+						std::cout << "parent = " << parent << " parent key = " << n->key << " root = " << root << std::endl;
+						return ;
+					}
+					
+					node	*sibling = get_sibling(n);
+
+					// the sibling's color is red
+					if (sibling && sibling->color == 'R')
+					{
+						std::cout << "sibling red\n";
+						if (n_direction == 'L')
+							rll(parent);
+						else
+							rrr(parent);
+
+						node_is_black(n);
+					}
+					// the sibling is black (or null) and its children are both black (or null)
+					else if (!sibling || (sibling->color == 'B' &&
+									(!sibling->left || sibling->left->color == 'B') &&
+									(!sibling->right || sibling->right->color == 'B') ))
+					{
+						std::cout << "sibling black, both children black\n";
+						if (sibling)
+							sibling->color = 'R';
+						if (parent->color == 'R')
+							parent->color = 'B';
+						else
+							node_is_black(parent);
+					}
+					// the sibling is black and one or both of the children are red
+					else
+					{
+						std::cout << "sibling black, one or both children red\n";
+						// the case of the red child is far from the node, opposite directions
+						if ((sibling->left && get_direction(sibling->left) != n_direction && sibling->left->color == 'R') || 
+							(sibling->right && get_direction(sibling->right) != n_direction && sibling->right->color == 'R'))
+						{
+							std::cout << "sibling black, red child far\n";
+							if (sibling->left && get_direction(sibling->left) != n_direction && sibling->left->color == 'R')
+								sibling->left->color = 'B';
+							else
+								sibling->right->color = 'B';
+							
+							// swap in the direction of the node, the colors will be swaped inside rll or rrr
+							if (n_direction == 'L')
+								rrr(sibling);
+							else
+								rll(sibling);
+						}
+						// the case of the red child is close to the node, same direction
+						else
+						{
+							std::cout << "sibling black, red child close\n";
+							// Rotate in the opposite direction of the node, the colors will be swapped inside rrr or rll
+							if (n_direction == 'L')
+								rll(sibling);
+							else
+								rrr(sibling);
+							node_is_black(n);
+						}
+							
+					}
+				}
 		};
 }
 

@@ -16,6 +16,7 @@ int main()
 	rbt.insert(node(8, 3));
 	rbt.insert(node(10, 3));
 	
+	rbt.erase(5);
 
 	rbt.traverse();
 	return 0;
