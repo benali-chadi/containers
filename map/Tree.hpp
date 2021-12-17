@@ -28,31 +28,6 @@ namespace ft {
 				typedef struct node<T1, T2>	node;
 
 				Tree(): root(0) {}
-
-				node	*search(node n)
-				{
-					node *tmp = root;
-
-					while (tmp && (tmp->right != 0 || tmp->left != 0))
-					{
-						if (n.key > tmp->key)
-						{
-							if (!tmp->right)
-								return tmp;
-							tmp = tmp->right;
-						}
-						else if (n.key < tmp->key)
-						{
-							if (!tmp->left)
-								return tmp;
-							tmp  = tmp->left;
-						}
-						else
-							return 0;
-					}
-					return tmp;
-				}
-
 				void	traverse()
 				{
 					node *tmp = root;
@@ -72,23 +47,64 @@ namespace ft {
 					else
 					{
 						newNode.color = 'R';
-						node *tmp = search(newNode);
+						node *tmp = search_to_insert(newNode);
 						if (tmp)
 						{
-							// node *n = new node(newNode);
 							newNode.parent = tmp;
-						// Place the node
+							
+							// Place the node
 							if (tmp->key > newNode.key)
 								tmp->left = &newNode;
 							else
 								tmp->right = &newNode;
-							
-							// if (tmp != root)
-								check(&newNode);
+
+							check(&newNode);
 						}
 					}
 				}
+				
+				void	erase(T1 key)
+				{
+					// search the position of key
+					node *n = search_to_erase(key);
 
+					if (n)
+					{
+						// if node key is a leaf node
+						if (n->right == 0 && n->left == 0)
+						{
+							// if its red, delete it
+							if (n->color == 'R')
+								remove(n);
+							// if its black
+							else
+							{
+								// the checks
+
+							}
+						}
+						// if node key has one child
+						else if (n->right == 0 || n->left == 0)
+						{
+							node	*toDelete = n->right ? in_order_succ(n->right) : in_order_pred(n->left);
+							// swap its key with its leaf node
+							n->key = toDelete->key;
+							toDelete->key = key;
+							// the checks on leaf node
+						}
+						// if node key has two children
+						else
+						{
+							// search for the in-order predecessor (the largest element in the left side of the node)
+							node	*toDelete = in_order_pred(n->left);
+							// swap its key with the IOP
+							n->key = toDelete->key;
+							toDelete->key = key;
+							// the checks the leaf node
+
+						}
+					}
+				}
 			private:
 				node	*root;
 				
@@ -211,6 +227,34 @@ namespace ft {
 					return n->parent->left;
 				}
 
+				/*
+					* Insert helpers
+				*/
+
+				node	*search_to_insert(node n)
+				{
+					node *tmp = root;
+
+					while (tmp && (tmp->right != 0 || tmp->left != 0))
+					{
+						if (n.key > tmp->key)
+						{
+							if (!tmp->right)
+								return tmp;
+							tmp = tmp->right;
+						}
+						else if (n.key < tmp->key)
+						{
+							if (!tmp->left)
+								return tmp;
+							tmp  = tmp->left;
+						}
+						else
+							return 0;
+					}
+					return tmp;
+				}
+
 				void	check(node *newNode)
 				{
 					node *parent = newNode->parent;
@@ -233,6 +277,57 @@ namespace ft {
 						}
 					}
 				}
+
+				/*
+					* Erase helpers
+				*/
+
+				node	*search_to_erase(T1 key)
+				{
+					node	*tmp = root;
+
+					while (tmp)
+					{
+						if (tmp->key > key)
+							tmp = tmp->left;
+						
+						else if (tmp->key < key)
+							tmp = tmp->right;
+						
+						else (tmp->key == key)
+							return tmp;
+					}
+					return 0;
+				}
+
+				void	remove(node *n)
+				{
+					if (n == n->parent->left)
+						n->parent->left = 0;
+					else
+						n->parent->right = 0;
+				}
+
+				node	*in_order_pred(node *n)
+				{
+					node	*tmp = root;
+
+					while (tmp->right != 0)
+						tmp = tmp->right;
+					
+					return tmp;
+				}
+
+				node	*in_order_succ(node *n)
+				{
+					node	*tmp = root;
+
+					while (tmp ->left != 0)
+						tmp = tmp->left;
+					
+					return tmp;
+				}
+
 		};
 }
 
