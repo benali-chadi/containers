@@ -49,12 +49,13 @@ namespace ft
 
 				iterator	begin()
 				{
-					return iterator(in_order_succ(root));
+					return in_order_succ(root);
 				}
 
 				iterator	end()
 				{
-					return iterator(in_order_pred(root) + 1);
+					std::cout << "end = " << in_order_pred(root) + 1 << std::endl;
+					return (in_order_pred(root) + 1);
 				}
 
 				/*
@@ -138,59 +139,84 @@ namespace ft
 
 					while (tmp && tmp->left != 0)
 						tmp = tmp->left;
-					if(tmp)
-					std::cout << "tmp key = " << tmp->key << std::endl;
 					return tmp;
 				}
 
-				node	*find_bigger_parent(node *parent, node *r, T1 key)
+				node	*find_bigger_parent(node *parent, T1 key)
 				{
-					while (parent != r)
+					while (parent != root)
 					{
 						if (!cmpr(parent->key, key))
 							return parent;
 						parent = parent->parent;
 					}
+
+					// if the parent's key is less than the key return the end() address
+					if (cmpr(parent->key, key))
+						return 0;
+
 					return parent;
 				}
 
-				node	*find_smaller_parent(node *parent, node *r, T1 key)
+				node	*find_smaller_parent(node *parent, T1 key)
 				{
-					while (parent != r)
+					while (parent != root)
 					{
 						if (cmpr(parent->key, key))
 							return parent;
 						parent = parent->parent;
 					}
+
+					// if the parent's key is bigger than the key return the end() address
+					if (!cmpr(parent->key, key))
+						return 0;
+					
 					return parent;	
 				}
 
-				node	*increment(node *p, node *r)
+				node	*increment(node *p)
 				{
-					node	*tmp = in_order_pred(p->right);
+					node	*tmp = in_order_succ(p->right);
 
 					if (tmp)
 						return tmp;
-					
-					return find_bigger_parent(p->parent, r, p->key);
+	
+					tmp = find_bigger_parent(p->parent, p->key);
+					if (tmp)
+						return tmp;
+					return p + 1;
 				}
 
-				node	*decrement(node *p, node *r)
+				node	*decrement(node *p)
 				{
-					node	*tmp = in_order_succ(p->left);
+					std::cout << "HEEERE\n";
+					if (!p->key)
+						std::cout << "okokok\n";
+					node	*tmp = in_order_pred(p->left);
 
 					if (tmp)
 						return tmp;
 
-					return find_smaller_parent(p->parent, r, p->key);
+					tmp = find_smaller_parent(p->parent, p->key);
+					if (tmp)
+						return tmp;
+					return p - 1;
 				}
 
-				node	*get_root(node *p)
+				node	*get_root(node *p)  // getting the root of the iterator
 				{
 					node *tmp = p;
-					while (tmp->parent != 0)
+
+					if (tmp->color != 'R' && tmp->color != 'B')
+						return tmp;
+					while (tmp && tmp->parent != 0)
 						tmp = tmp->parent;
 					return tmp;
+				}
+
+				void	set_root(node *r)
+				{
+					root = r;
 				}
 
 			private:

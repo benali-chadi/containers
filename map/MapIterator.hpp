@@ -27,8 +27,15 @@ namespace ft
 			*/
 
 			MapIterator		() {}
-			MapIterator		(const MapIterator &x): _p(x._p) {}
-			MapIterator		(pointer x): _p(x) {}
+			MapIterator		(const MapIterator &x): _p(x._p)
+			{
+				pointer r = helper.get_root(_p);
+				helper.set_root(r);
+			}
+			MapIterator		(pointer x): _p(x) {
+				pointer r = helper.get_root(_p);
+				helper.set_root(r);	
+			}
 
 			MapIterator&	operator=(const MapIterator &x){ _p = x._p;	return *this;	}
 
@@ -49,7 +56,7 @@ namespace ft
 			
 			MapIterator&	operator++()
 			{
-				_p = helper.increment(_p, helper.get_root(_p));	
+				_p = helper.increment(_p);
 				
 				return *this;
 			}
@@ -61,7 +68,7 @@ namespace ft
 			}
 			MapIterator&	operator--()
 			{
-				_p = helper.decrement(_p, helper.get_root(_p));
+				_p = helper.decrement(_p);
 				
 				return *this;	
 			}
