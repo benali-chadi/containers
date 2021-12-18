@@ -1,17 +1,28 @@
-#ifndef TREE_HPP
-#define TREE_HPP
+#ifndef RBT_TREE_HPP
+#define RBT_TREE_HPP
 
-namespace ft {
+# include "../utils/pair.hpp"
+# include "MapIterator.hpp"
+# include "../reverse_iterator.hpp"
+
+namespace ft
+{
 	template <class T1, class T2>
 		struct node {
 			T1			key;
 			T2			value;
-			char		color;
-			struct node *parent;
-			struct node	*left;
-			struct node *right;
+			char			color;
+			struct node 	*parent;
+			struct node		*left;
+			struct node 	*right;
 
-			node(T1 key, T2 value): key(key), value(value) {}
+			node(ft::pair<T1, T2> p) {
+				key = p.first;
+				value = p.second;
+				parent = 0;
+				left = 0;
+				right = 0;
+			}
 			node (struct node const &n) {
 				key = n.key;
 				value = n.value;
@@ -22,19 +33,41 @@ namespace ft {
 			}
 		};
 	
-	template <class T1, class T2>
-		class RBT_Tree{
+	template <class T1, class T2, class Compare>
+		class RBT {
 			public:
-				typedef struct node<T1, T2>	node;
+				typedef struct node<T1, T2>								node;
+				typedef ft::MapIterator<node, T1, T2, Compare>			iterator;
+				typedef ft::MapIterator<const node, T1, T2, Compare>	const_iterator;
 
-				RBT_Tree(): root(0) {}
+				RBT(): root(0) {}
+				RBT(node *r): root(r) {}
+
+				/*
+					Iterators
+				*/
+
+				iterator	begin()
+				{
+					return iterator(in_order_succ(root));
+				}
+
+				iterator	end()
+				{
+					return iterator(in_order_pred(root) + 1);
+				}
+
+				/*
+					* Member functions
+				*/
+
 				void	traverse()
 				{
 					node *tmp = root;
 					print(tmp);
 				}
 
-				void	insert (node newNode)
+				bool	insert (node newNode)
 				{
 					if (!root)
 					{
@@ -42,25 +75,25 @@ namespace ft {
 						newNode.left = 0;
 						newNode.right = 0;
 						newNode.parent = root;
-						root = &newNode;	
+						root = &newNode;
+						return true;	
 					}
-					else
+					newNode.color = 'R';
+					node *tmp = search_to_insert(newNode);
+					if (tmp)
 					{
-						newNode.color = 'R';
-						node *tmp = search_to_insert(newNode);
-						if (tmp)
-						{
-							newNode.parent = tmp;
-							
-							// Place the node
-							if (tmp->key > newNode.key)
-								tmp->left = &newNode;
-							else
-								tmp->right = &newNode;
+						newNode.parent = tmp;
+						
+						// Place the node
+						if (!cmpr(tmp->key,newNode.key))
+							tmp->left = &newNode;
+						else
+							tmp->right = &newNode;
 
-							check(&newNode);
-						}
+						check(&newNode);
+						return true;
 					}
+					return false;
 				}
 				
 				void	erase(T1 key)
@@ -82,12 +115,88 @@ namespace ft {
 						}
 					}
 				}
-			
+
 				node	*find(T1 key) {	return search_to_erase(key);	}
+				
+				/*
+					Iterator Helper functions
+				*/
+
+				node	*in_order_pred(node *n)
+				{
+					node	*tmp = n;
+
+					while (tmp && tmp->right != 0)
+						tmp = tmp->right;
+					
+					return tmp;
+				}
+
+				node	*in_order_succ(node *n)
+				{
+					node	*tmp = n;
+
+					while (tmp && tmp->left != 0)
+						tmp = tmp->left;
+					if(tmp)
+					std::cout << "tmp key = " << tmp->key << std::endl;
+					return tmp;
+				}
+
+				node	*find_bigger_parent(node *parent, node *r, T1 key)
+				{
+					while (parent != r)
+					{
+						if (!cmpr(parent->key, key))
+							return parent;
+						parent = parent->parent;
+					}
+					return parent;
+				}
+
+				node	*find_smaller_parent(node *parent, node *r, T1 key)
+				{
+					while (parent != r)
+					{
+						if (cmpr(parent->key, key))
+							return parent;
+						parent = parent->parent;
+					}
+					return parent;	
+				}
+
+				node	*increment(node *p, node *r)
+				{
+					node	*tmp = in_order_pred(p->right);
+
+					if (tmp)
+						return tmp;
+					
+					return find_bigger_parent(p->parent, r, p->key);
+				}
+
+				node	*decrement(node *p, node *r)
+				{
+					node	*tmp = in_order_succ(p->left);
+
+					if (tmp)
+						return tmp;
+
+					return find_smaller_parent(p->parent, r, p->key);
+				}
+
+				node	*get_root(node *p)
+				{
+					node *tmp = p;
+					while (tmp->parent != 0)
+						tmp = tmp->parent;
+					return tmp;
+				}
 
 			private:
+
 				node	*root;
-				
+				Compare	cmpr;
 
 				void	print(node *n)
 				{
@@ -224,13 +333,13 @@ namespace ft {
 
 					while (tmp && (tmp->right != 0 || tmp->left != 0))
 					{
-						if (n.key > tmp->key)
+						if (!cmpr(n.key, tmp->key))
 						{
 							if (!tmp->right)
 								return tmp;
 							tmp = tmp->right;
 						}
-						else if (n.key < tmp->key)
+						else if (cmpr(n.key, tmp->key))
 						{
 							if (!tmp->left)
 								return tmp;
@@ -275,14 +384,13 @@ namespace ft {
 
 					while (tmp)
 					{
-						if (tmp->key > key)
+						if (tmp->key == key)
+							return tmp;
+						if (!cmpr(tmp->key, key))
 							tmp = tmp->left;
 						
-						else if (tmp->key < key)
+						else if (cmpr(tmp->key, key))
 							tmp = tmp->right;
-						
-						else
-							return tmp;
 					}
 					return 0;
 				}
@@ -328,25 +436,7 @@ namespace ft {
 						n->parent->right = 0;
 				}
 
-				node	*in_order_pred(node *n)
-				{
-					node	*tmp = n;
-
-					while (tmp->right != 0)
-						tmp = tmp->right;
-					
-					return tmp;
-				}
-
-				node	*in_order_succ(node *n)
-				{
-					node	*tmp = n;
-
-					while (tmp ->left != 0)
-						tmp = tmp->left;
-					
-					return tmp;
-				}
+				
 
 				char	get_direction(node *n)
 				{

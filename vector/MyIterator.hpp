@@ -2,24 +2,14 @@
 # define MYITERATOR_HPP
 
 // #include <iterator>
+#include "../utils/utils.hpp"
 #include <iostream>
 #include <cstddef>
 
 namespace ft
 {
-
-	template <class Category, class T, class Distance = ptrdiff_t,
-          class Pointer = T*, class Reference = T&>
-		struct iterator {
-			typedef T			value_type;
-			typedef Distance	difference_type;
-			typedef Pointer		pointer;
-			typedef Reference	reference;
-			typedef Category	iterator_category;
-		};
-
 	template <class T>
-	class MyIterator: public iterator<std::random_access_iterator_tag, T>
+	class MyIterator: public ft::iterator<std::random_access_iterator_tag, T>
 	{
 		public:
 			typedef typename iterator<std::random_access_iterator_tag, T>::difference_type		difference_type;
@@ -28,14 +18,27 @@ namespace ft
 			typedef typename iterator<std::random_access_iterator_tag, T>::reference			reference;
 			typedef typename iterator<std::random_access_iterator_tag, T>::iterator_category	iterator_category;
 
-			MyIterator() {}
-			MyIterator(pointer x): _p(x) {}
-			MyIterator(const MyIterator &x): _p(x._p) {}
+			/*
+				* Constructors
+			*/
 
-			~MyIterator() {}
+			MyIterator	() {}
+			MyIterator	(const MyIterator &x): _p(x._p) {}
+			MyIterator	(pointer x): _p(x) {}
+
+			MyIterator&	operator=(const MyIterator& x) {	_p = x._p;	return *this;	}
+			
+			/*
+				* Destructors
+			*/
+
+			~MyIterator	() {}
+
+			/*
+				* Operators
+			*/
 			
 			operator MyIterator<const T> () const { return MyIterator<const T>(_p); }
-			MyIterator&	operator=(const MyIterator& x) {	_p = x._p;	return *this;	}
 			bool		operator==(const MyIterator& x) {	return _p == x._p;	}
 			bool		operator!=(const MyIterator& x) {	return _p != x._p;	}
 			bool		operator>(const MyIterator& x) {	return _p > x._p;	}

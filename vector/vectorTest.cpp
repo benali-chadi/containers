@@ -135,19 +135,26 @@ int main()
 	// typedef std::vector<std::string>::iterator iterator;
 	
 	
-	ft::Vector<std::string> ft_v1(10, "string2");
-	std::vector<std::string> v2(10, "string2");
-	std::string res, ft_res;
+	// ft::Vector<std::string> ft_v1(10, "string2");
+	// std::vector<std::string> v2(10, "string2");
+	// std::string res, ft_res;
 
-	for (ft::Vector<std::string>::reverse_iterator rit = ft_v1.rbegin(); rit != ft_v1.rend(); ++rit) // fill ft_res from ft_v1
-	{
-		std::cout << *rit << std::endl;
-		ft_res += *rit;
-	}
-	for (std::vector<std::string>::reverse_iterator rit = v2.rbegin(); rit != v2.rend(); ++ rit)
-		res += *rit;
+	// for (ft::Vector<std::string>::reverse_iterator rit = ft_v1.rbegin(); rit != ft_v1.rend(); ++rit) // fill ft_res from ft_v1
+	// {
+	// 	std::cout << *rit << std::endl;
+	// 	ft_res += *rit;
+	// }
+	// for (std::vector<std::string>::reverse_iterator rit = v2.rbegin(); rit != v2.rend(); ++ rit)
+	// 	res += *rit;
 	
-	std::cout << res << "\n" << ft_res << std::endl;
+	// std::cout << res << "\n" << ft_res << std::endl;
+	ft::Vector<int> v;
+	ft::Vector<int>::const_iterator c_it;
+
+	for (int i = 0; i < 5; i++)
+		v.push_back(i + 1);
+	c_it = v.begin();
+	std::cout << *c_it << std::endl;
 	// for (iterator it = ft_v1.begin(); it != ft_v1.end(); it++)
 	// 	std::cout << *it << std::endl;
 	// std::cout << "s1 = " << s1 << std::endl;
