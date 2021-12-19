@@ -59,11 +59,11 @@ namespace ft
 					return iterator(0, root);
 				}
 
-				reverse_iterator	rbegin() {	return reverse_iterator(iterator(in_order_pred(root), root));	}
+				reverse_iterator	rbegin() {	return reverse_iterator(iterator(0, root));	}
 
 				reverse_iterator	rend() {
 					// return in_order_succ(root);
-					return reverse_iterator(iterator(0, root));
+					return reverse_iterator(iterator(in_order_succ(root), root));
 				}
 
 				/*
@@ -201,18 +201,15 @@ namespace ft
 				{
 					if (!p)
 						return in_order_pred(root);
-					node	*tmp = !check_end(p) ? in_order_pred(p->left) : 0;
+					node	*tmp = in_order_pred(p->left);
 
-					std::cout << "in order pred\n";
 					if (tmp)
 						return tmp;
 
-					tmp = !check_end(p) ? find_smaller_parent(p->parent, p->key) : 0;
-					std::cout << "in smaller par\n";
+					tmp = find_smaller_parent(p->parent, p->key);
 					if (tmp)
 						return tmp;
 					
-					std::cout << "is end\n";
 					return 0;
 				}
 
@@ -555,7 +552,7 @@ namespace ft
 
 				bool	check_end(node *n)
 				{
-					if (!n || n == (in_order_pred(root) + 1))
+					if (!n)
 						return true;
 					return false;
 				}

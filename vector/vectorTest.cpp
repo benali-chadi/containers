@@ -148,13 +148,24 @@ int main()
 	// 	res += *rit;
 	
 	// std::cout << res << "\n" << ft_res << std::endl;
-	ft::Vector<int> v;
-	ft::Vector<int>::const_iterator c_it;
+	// ft::Vector<int> v;
 
-	for (int i = 0; i < 5; i++)
-		v.push_back(i + 1);
-	c_it = v.begin();
-	std::cout << *c_it << std::endl;
+	// for (int i = 0; i < 5; i++)
+	// 	v.push_back(i + 1);
+	// ft::Vector<int>::reverse_iterator rit(v.end());
+	// rit = v.rbegin();
+	// for (;rit != v.rend(); rit++)
+	// 	std::cout << *(rit.base()) << std::endl;
+	ft::Vector<int> v(4, 5);
+	ft::Vector<int>::reverse_iterator my_rit2(v.end());
+	ft::Vector<int>::const_reverse_iterator c_it, c_ob(v.end());
+	c_it = my_rit2;
+	std::cout << "c_it = " << &(*c_it) << " rit = " << &(*my_rit2) << std::endl;
+	if (&(*my_rit2) == &(*c_it) && (&(*my_rit2) == &(*c_ob)))
+		std::cout << "true\n";
+	else
+		std::cout << "false\n";
+
 	// for (iterator it = ft_v1.begin(); it != ft_v1.end(); it++)
 	// 	std::cout << *it << std::endl;
 	// std::cout << "s1 = " << s1 << std::endl;

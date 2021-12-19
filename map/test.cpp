@@ -39,11 +39,11 @@ int main()
 
 	// rbt.traverse();
 	// rbt.traverse();
-	RBT::reverse_iterator it(rbt.rbegin());
-	// std::cout << "begin = " << *(it) << std::endl;
-	RBT::reverse_iterator itr(rbt.rend());
+	RBT::reverse_iterator it = rbt.rbegin();
+	RBT::reverse_iterator itr = rbt.rend();
 	// --itr;
 		// std::cout << "end = " << *itr << std::endl;
+	// std::cout << it->value << std::endl;
 	// std::cout << *itr << std::endl;
 	for (; it != itr; it++)
 	{
