@@ -25,10 +25,10 @@ int main()
 	rbt.insert(ft::make_pair(5, 5));
 	rbt.insert(ft::make_pair(1, 1));
 	rbt.insert(ft::make_pair(6, 6));
-	// rbt.insert(ft::make_pair(4, 4));
-	// rbt.insert(ft::make_pair(7, 7));
-	// rbt.insert(ft::make_pair(8, 8));
-	// rbt.insert(ft::make_pair(10, 10));
+	rbt.insert(ft::make_pair(4, 4));
+	rbt.insert(ft::make_pair(7, 7));
+	rbt.insert(ft::make_pair(8, 8));
+	rbt.insert(ft::make_pair(10, 10));
 
 	// std::cout << rbt.here(rbt.giveIt(), 10) << std::endl;	
 	// rbt.erase(5);
@@ -39,16 +39,16 @@ int main()
 
 	// rbt.traverse();
 	// rbt.traverse();
-	// RBT::iterator it = rbt.begin();
-	// // std::cout << "begin = " << *(it) << std::endl;
-	// RBT::iterator itr = rbt.end();
+	RBT::reverse_iterator it(rbt.rbegin());
+	// std::cout << "begin = " << *(it) << std::endl;
+	RBT::reverse_iterator itr(rbt.rend());
 	// --itr;
 		// std::cout << "end = " << *itr << std::endl;
-
-	// for (; it != itr; it++)
-	// {
-	// 	std::cout << *it << std::endl;
-	// }
+	// std::cout << *itr << std::endl;
+	for (; it != itr; it++)
+	{
+		std::cout << it->value << std::endl;
+	}
 	// --itr;
 	// for (; itr != it; itr--)
 	// {
@@ -58,19 +58,22 @@ int main()
 	// itr--;
 	// 	std::cout << *itr << std::endl;
 
-	std::map<int, int> m;
+	// std::map<int, int> m;
 
-	m.insert(std::pair<int, int>(2, 3));
-	m.insert(std::pair<int, int>(1, 4));
-	m.insert(std::pair<int, int>(5, 6));
+	// m.insert(std::pair<int, int>(2, 3));
+	// m.insert(std::pair<int, int>(1, 4));
+	// m.insert(std::pair<int, int>(5, 6));
 
-	std::map<int,int>::iterator it = m.begin();
-	std::map<int,int>::iterator itr = m.end(); 
+	// // std::map<int,int>::iterator it = m.begin();
+	// std::map<int,int>::iterator itr = m.end();
+	// std::map<int,int>::iterator test(itr);
 
-	// std::cout << itr->first << std::endl;
-	--itr;
-	for (; itr != it; itr--)
-		std::cout << itr->first << std::endl;
+	// --test;
+
+	// std::cout << test->first << std::endl;
+	// --itr;
+	// for (; itr != it; itr--)
+	// 	std::cout << itr->first << std::endl;
 	
 	// std::pair<int, int> pr = *it;
 	// std::cout << pr.first << std::endl;

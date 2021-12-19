@@ -91,11 +91,11 @@ namespace ft
 			iterator				end() {	return iterator(_arr + _size);	}
 			const_iterator			end() const {	return const_iterator(_arr + _size);	}
 
-			reverse_iterator		rbegin() {	return reverse_iterator(_arr + _size);	}
-			const_reverse_iterator	rbegin() const {	return const_reverse_iterator(_arr + _size);	}
+			reverse_iterator		rbegin() {	return reverse_iterator(_arr + (_size - 1));	}
+			const_reverse_iterator	rbegin() const {	return const_reverse_iterator(_arr + (_size - 1));	}
 
-			reverse_iterator 		rend() {	return reverse_iterator(_arr);	}
-			const_reverse_iterator 	rend() const {	return const_reverse_iterator(_arr);	}
+			reverse_iterator 		rend() {	return reverse_iterator(_arr - 1);	}
+			const_reverse_iterator 	rend() const {	return const_reverse_iterator(_arr - 1);	}
 
 			// Reverse Iterator's functions
 

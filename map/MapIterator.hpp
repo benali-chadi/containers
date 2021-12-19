@@ -33,11 +33,17 @@ namespace ft
 				helper.set_root(r);
 			}
 			MapIterator		(pointer x): _p(x) {
-				pointer r = helper.get_root(_p);
-				if (x == r && (helper.in_order_pred(_p) != r && helper.in_order_succ(_p) != r))
-					_p = 0;
 
-				helper.set_root(r);	
+				// pointer r = helper.get_root(_p);
+				// if (x == r && (helper.in_order_pred(r) != r && helper.in_order_succ(r) != r))
+				// 	_p = 0;
+				helper = x.helper;
+				// helper.set_root(r);
+			}
+			MapIterator		(pointer x, pointer root)
+			{
+				_p = x;
+				helper.set_root(root);
 			}
 
 			MapIterator&	operator=(const MapIterator &x){ _p = x._p;	return *this;	}
@@ -54,7 +60,7 @@ namespace ft
 
 			bool			operator==(const MapIterator& x) {	return _p == x._p;	}
 			bool			operator!=(const MapIterator& x) {	return _p != x._p;	}
-			T1				&operator*() {	return _p->value;	}
+			reference		&operator*() {	return *_p;	}
 			pointer			operator->() {	return &operator*();	}
 			
 			MapIterator&	operator++()
@@ -85,6 +91,7 @@ namespace ft
 		private:
 			pointer _p;
 			ft::RBT<key, T1, Compare> helper;
+
 	};
 }
 

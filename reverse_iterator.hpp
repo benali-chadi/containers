@@ -64,9 +64,9 @@ namespace ft {
 					iterator_type tmp = _iter;
 					return reverse_iterator(tmp + n);
 				}
-				reference			operator*() const {	return *(base() - 1);	}
+				reference			operator*() const {	return *(base());	}
 				pointer				operator->() const {	return &(operator*());	}
-				reference			operator[](difference_type n) const {	return *(base() - (n + 1));	}
+				reference			operator[](difference_type n) const {	return *(base() - (n));	}
 				reverse_iterator&	operator+=(difference_type n) {	_iter -= n; return *this;	}
 				reverse_iterator&	operator-=(difference_type n) {	_iter += n; return *this;	}
 

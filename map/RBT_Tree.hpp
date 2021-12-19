@@ -49,18 +49,21 @@ namespace ft
 					Iterators
 				*/
 
-				iterator	begin() {	return in_order_succ(root);	}
+				iterator	begin() {	
+				
+					return iterator(in_order_succ(root), root);
+				}
 
 				iterator	end() {
 					// return in_order_pred(root);
-					return root;
+					return iterator(0, root);
 				}
 
-				iterator	rbegin() {	return in_order_succ(root);	}
+				reverse_iterator	rbegin() {	return reverse_iterator(iterator(in_order_pred(root), root));	}
 
-				iterator	rend() {
+				reverse_iterator	rend() {
 					// return in_order_succ(root);
-					return root;
+					return reverse_iterator(iterator(0, root));
 				}
 
 				/*
@@ -176,7 +179,7 @@ namespace ft
 					if (!cmpr(parent->key, key))
 						return 0;
 					
-					return parent;	
+					return parent;
 				}
 
 				node	*increment(node *p)
