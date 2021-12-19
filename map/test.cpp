@@ -39,31 +39,38 @@ int main()
 
 	// rbt.traverse();
 	// rbt.traverse();
-	RBT::iterator it = rbt.begin();
+	// RBT::iterator it = rbt.begin();
 	// // std::cout << "begin = " << *(it) << std::endl;
-	RBT::iterator itr = rbt.end();
+	// RBT::iterator itr = rbt.end();
 	// --itr;
-	// 	std::cout << "end = " << *itr << std::endl;
+		// std::cout << "end = " << *itr << std::endl;
 
-	// itr--;
-	for (; it != itr; it++)
-		std::cout << *it << std::endl;
+	// for (; it != itr; it++)
+	// {
+	// 	std::cout << *it << std::endl;
+	// }
+	// --itr;
+	// for (; itr != it; itr--)
+	// {
+	// 	std::cout << *itr << std::endl;
+	// }
 	// // for (; it != rbt.end(); it++)
 	// itr--;
 	// 	std::cout << *itr << std::endl;
 
-	// std::map<int, int> m;
+	std::map<int, int> m;
 
-	// m.insert(std::pair<int, int>(2, 3));
-	// m.insert(std::pair<int, int>(1, 4));
-	// m.insert(std::pair<int, int>(5, 6));
+	m.insert(std::pair<int, int>(2, 3));
+	m.insert(std::pair<int, int>(1, 4));
+	m.insert(std::pair<int, int>(5, 6));
 
-	// // std::map<int,int>::iterator it = m.begin();
-	// std::map<int,int>::iterator itr = m.end(); 
+	std::map<int,int>::iterator it = m.begin();
+	std::map<int,int>::iterator itr = m.end(); 
 
 	// std::cout << itr->first << std::endl;
-	// for (; it != itr; it++)
-	// 	std::cout << it->first << std::endl;
+	--itr;
+	for (; itr != it; itr--)
+		std::cout << itr->first << std::endl;
 	
 	// std::pair<int, int> pr = *it;
 	// std::cout << pr.first << std::endl;

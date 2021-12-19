@@ -39,6 +39,8 @@ namespace ft
 				typedef struct node<T1, T2>								node;
 				typedef ft::MapIterator<node, T1, T2, Compare>			iterator;
 				typedef ft::MapIterator<const node, T1, T2, Compare>	const_iterator;
+				typedef	ft::reverse_iterator<iterator>					reverse_iterator;
+				typedef	ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 				RBT(): root(0) {}
 				RBT(node *r): root(r) {}
@@ -47,15 +49,18 @@ namespace ft
 					Iterators
 				*/
 
-				iterator	begin()
-				{
-					return in_order_succ(root);
+				iterator	begin() {	return in_order_succ(root);	}
+
+				iterator	end() {
+					// return in_order_pred(root);
+					return root;
 				}
 
-				iterator	end()
-				{
-					std::cout << "end = " << in_order_pred(root) + 1 << std::endl;
-					return (in_order_pred(root) + 1);
+				iterator	rbegin() {	return in_order_succ(root);	}
+
+				iterator	rend() {
+					// return in_order_succ(root);
+					return root;
 				}
 
 				/*
@@ -176,6 +181,8 @@ namespace ft
 
 				node	*increment(node *p)
 				{
+					if (!p)
+						return in_order_succ(root);
 					node	*tmp = in_order_succ(p->right);
 
 					if (tmp)
@@ -184,32 +191,35 @@ namespace ft
 					tmp = find_bigger_parent(p->parent, p->key);
 					if (tmp)
 						return tmp;
-					return p + 1;
+					return 0;
 				}
 
 				node	*decrement(node *p)
 				{
-					std::cout << "HEEERE\n";
-					if (!p->key)
-						std::cout << "okokok\n";
-					node	*tmp = in_order_pred(p->left);
+					if (!p)
+						return in_order_pred(root);
+					node	*tmp = !check_end(p) ? in_order_pred(p->left) : 0;
 
+					std::cout << "in order pred\n";
 					if (tmp)
 						return tmp;
 
-					tmp = find_smaller_parent(p->parent, p->key);
+					tmp = !check_end(p) ? find_smaller_parent(p->parent, p->key) : 0;
+					std::cout << "in smaller par\n";
 					if (tmp)
 						return tmp;
-					return p - 1;
+					
+					std::cout << "is end\n";
+					return 0;
 				}
 
 				node	*get_root(node *p)  // getting the root of the iterator
 				{
 					node *tmp = p;
 
-					if (tmp->color != 'R' && tmp->color != 'B')
-						return tmp;
-					while (tmp && tmp->parent != 0)
+					// if (tmp->color != 'R' && tmp->color != 'B')
+					// 	return tmp;
+					while (tmp && tmp->parent)
 						tmp = tmp->parent;
 					return tmp;
 				}
@@ -534,6 +544,17 @@ namespace ft
 						}
 							
 					}
+				}
+
+				/*
+					* Other Iterator helpers
+				*/
+
+				bool	check_end(node *n)
+				{
+					if (!n || n == (in_order_pred(root) + 1))
+						return true;
+					return false;
 				}
 		};
 }

@@ -34,6 +34,9 @@ namespace ft
 			}
 			MapIterator		(pointer x): _p(x) {
 				pointer r = helper.get_root(_p);
+				if (x == r && (helper.in_order_pred(_p) != r && helper.in_order_succ(_p) != r))
+					_p = 0;
+
 				helper.set_root(r);	
 			}
 
