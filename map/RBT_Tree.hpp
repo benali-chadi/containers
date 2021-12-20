@@ -9,23 +9,23 @@ namespace ft
 {
 	template <class T1, class T2>
 		struct node {
-			T1			key;
-			T2			value;
+			T1				first;
+			T2				second;
 			char			color;
 			struct node 	*parent;
 			struct node		*left;
 			struct node 	*right;
 
-			node(ft::pair<T1, T2> p) {
-				key = p.first;
-				value = p.second;
+			node(const ft::pair<const T1, T2> p) {
+				first = p.first;
+				second = p.second;
 				parent = 0;
 				left = 0;
 				right = 0;
 			}
 			node (struct node const &n) {
-				key = n.key;
-				value = n.value;
+				first = n.first;
+				second = n.second;
 				color = n.color;
 				parent = 0;
 				left = 0;
@@ -49,19 +49,19 @@ namespace ft
 					Iterators
 				*/
 
-				iterator	begin() {	
+				iterator					begin() {	
 				
 					return iterator(in_order_succ(root), root);
 				}
 
-				iterator	end() {
+				iterator					end() {
 					// return in_order_pred(root);
 					return iterator(0, root);
 				}
 
-				reverse_iterator	rbegin() {	return reverse_iterator(iterator(0, root));	}
+				reverse_iterator			rbegin() {	return reverse_iterator(iterator(0, root));	}
 
-				reverse_iterator	rend() {
+				reverse_iterator			rend() {
 					// return in_order_succ(root);
 					return reverse_iterator(iterator(in_order_succ(root), root));
 				}
@@ -70,13 +70,13 @@ namespace ft
 					* Member functions
 				*/
 
-				void	traverse()
+				void						traverse()
 				{
 					node *tmp = root;
 					print(tmp);
 				}
 
-				bool	insert (node newNode)
+				ft::pair<iterator, bool>	insert (node newNode)
 				{
 					if (!root)
 					{
@@ -85,7 +85,7 @@ namespace ft
 						newNode.right = 0;
 						newNode.parent = root;
 						root = &newNode;
-						return true;	
+						return ft::make_pair(&newNode, true);;	
 					}
 					newNode.color = 'R';
 					node *tmp = search_to_insert(newNode);
@@ -94,21 +94,22 @@ namespace ft
 						newNode.parent = tmp;
 						
 						// Place the node
-						if (!cmpr(tmp->key,newNode.key))
+						if (!cmpr(tmp->first,newNode.first))
 							tmp->left = &newNode;
 						else
 							tmp->right = &newNode;
 
 						check(&newNode);
-						return true;
+						return ft::make_pair(&newNode, true);
 					}
-					return false;
+					tmp = search_to_erase(newNode.first);
+					return ft::make_pair(tmp, false);
 				}
 				
-				void	erase(T1 key)
+				bool						erase(T1 first)
 				{
 					// search the position of key
-					node	*n = search_to_erase(key);
+					node	*n = search_to_erase(first);
 
 					if (n)
 					{
@@ -122,16 +123,18 @@ namespace ft
 							node_is_black(n);
 							remove(n);
 						}
+						return true;
 					}
+					return false;
 				}
 
-				node	*find(T1 key) {	return search_to_erase(key);	}
+				node						*find(T1 first) {	return search_to_erase(first);	}
 				
 				/*
 					Iterator Helper functions
 				*/
 
-				node	*in_order_pred(node *n)
+				node						*in_order_pred(node *n)
 				{
 					node	*tmp = n;
 
@@ -141,7 +144,7 @@ namespace ft
 					return tmp;
 				}
 
-				node	*in_order_succ(node *n)
+				node						*in_order_succ(node *n)
 				{
 					node	*tmp = n;
 
@@ -150,39 +153,41 @@ namespace ft
 					return tmp;
 				}
 
-				node	*find_bigger_parent(node *parent, T1 key)
+				node						*find_bigger_parent(node *parent, T1 first)
 				{
+					std::cout << "HEEERE\n";
+					std::cout << "parent = " << parent << std::endl;
 					while (parent != root)
 					{
-						if (!cmpr(parent->key, key))
+						if (!cmpr(parent->first, first))
 							return parent;
 						parent = parent->parent;
 					}
 
 					// if the parent's key is less than the key return the end() address
-					if (cmpr(parent->key, key))
+					if (cmpr(parent->first, first))
 						return 0;
 
 					return parent;
 				}
 
-				node	*find_smaller_parent(node *parent, T1 key)
+				node						*find_smaller_parent(node *parent, T1 first)
 				{
 					while (parent != root)
 					{
-						if (cmpr(parent->key, key))
+						if (cmpr(parent->first, first))
 							return parent;
 						parent = parent->parent;
 					}
 
 					// if the parent's key is bigger than the key return the end() address
-					if (!cmpr(parent->key, key))
+					if (!cmpr(parent->first, first))
 						return 0;
 					
 					return parent;
 				}
 
-				node	*increment(node *p)
+				node						*increment(node *p)
 				{
 					if (!p)
 						return in_order_succ(root);
@@ -191,13 +196,13 @@ namespace ft
 					if (tmp)
 						return tmp;
 	
-					tmp = find_bigger_parent(p->parent, p->key);
+					tmp = find_bigger_parent(p->parent, p->first);
 					if (tmp)
 						return tmp;
 					return 0;
 				}
 
-				node	*decrement(node *p)
+				node						*decrement(node *p)
 				{
 					if (!p)
 						return in_order_pred(root);
@@ -206,14 +211,14 @@ namespace ft
 					if (tmp)
 						return tmp;
 
-					tmp = find_smaller_parent(p->parent, p->key);
+					tmp = find_smaller_parent(p->parent, p->first);
 					if (tmp)
 						return tmp;
 					
 					return 0;
 				}
 
-				node	*get_root(node *p)  // getting the root of the iterator
+				node						*get_root(node *p)  // getting the root of the iterator
 				{
 					node *tmp = p;
 
@@ -224,10 +229,7 @@ namespace ft
 					return tmp;
 				}
 
-				void	set_root(node *r)
-				{
-					root = r;
-				}
+				void						set_root(node *r) {	root = r;	}
 
 			private:
 
@@ -241,7 +243,7 @@ namespace ft
 					print(n->left);
 					if (n == root)
 						std::cout << "this is root\n";
-					std::cout << n->key << " color = " << n->color << std::endl;
+					std::cout << n->first << " color = " << n->color << std::endl;
 					print(n->right);
 				}
 
@@ -364,18 +366,18 @@ namespace ft
 				{
 					node *tmp = root;
 
-					if (tmp->key == n.key)
+					if (tmp->first == n.first)
 						return 0;
 
 					while (tmp && (tmp->right != 0 || tmp->left != 0))
 					{
-						if (!cmpr(n.key, tmp->key))
+						if (!cmpr(n.first, tmp->first))
 						{
 							if (!tmp->right)
 								return tmp;
 							tmp = tmp->right;
 						}
-						else if (cmpr(n.key, tmp->key))
+						else if (cmpr(n.first, tmp->first))
 						{
 							if (!tmp->left)
 								return tmp;
@@ -414,18 +416,18 @@ namespace ft
 					* Erase helpers
 				*/
 
-				node	*search_to_erase(T1 key)
+				node	*search_to_erase(T1 first)
 				{
 					node	*tmp = root;
 
 					while (tmp)
 					{
-						if (tmp->key == key)
+						if (tmp->first == first)
 							return tmp;
-						if (!cmpr(tmp->key, key))
+						if (!cmpr(tmp->first, first))
 							tmp = tmp->left;
 						
-						else if (cmpr(tmp->key, key))
+						else if (cmpr(tmp->first, first))
 							tmp = tmp->right;
 					}
 					return 0;
@@ -440,9 +442,9 @@ namespace ft
 						{
 							node	*toDelete = tmp->right ? in_order_succ(tmp->right) : in_order_pred(tmp->left);
 							// swap its key with the IOP or IOS
-							T1	key = tmp->key;
-							tmp->key = toDelete->key;
-							toDelete->key = key;
+							T1	first = tmp->first;
+							tmp->first = toDelete->first;
+							toDelete->first = first;
 							
 							tmp = toDelete;
 						}
@@ -451,9 +453,9 @@ namespace ft
 							// search for the in-order predecessor (the largest element in the left side of the node)
 							node	*toDelete = in_order_pred(n->left);
 							// swap its key with the IOP
-							T1	key = tmp->key;
-							tmp->key = toDelete->key;
-							toDelete->key = key;
+							T1	first = tmp->first;
+							tmp->first = toDelete->first;
+							toDelete->first = first;
 
 							tmp = toDelete;
 						}

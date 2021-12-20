@@ -2,14 +2,11 @@
 # define MAPITERATOR_HPP
 
 # include "../utils/utils.hpp"
-// # include "RBT_Tree.hpp"
 
-namespace ft{
-	template <class T1, class T2, class Compare>
-		class RBT;
-}
 namespace ft
 {
+	template <class T1, class T2, class Compare>
+		class RBT;
 	template <class T, typename key, typename T1, class Compare>
 	class MapIterator: public ft::iterator<std::bidirectional_iterator_tag, T>
 	{
@@ -37,7 +34,7 @@ namespace ft
 				// pointer r = helper.get_root(_p);
 				// if (x == r && (helper.in_order_pred(r) != r && helper.in_order_succ(r) != r))
 				// 	_p = 0;
-				helper = x.helper;
+				helper.set_root(helper.get_root(x));
 				// helper.set_root(r);
 			}
 			MapIterator		(pointer x, pointer root)

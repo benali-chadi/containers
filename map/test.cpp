@@ -1,14 +1,15 @@
 #include <iostream>
-#include "RBT_Tree.hpp"
+// #include "RBT_Tree.hpp"
 #include "../utils/pair.hpp"
-#include "MapIterator.hpp"
+// #include "MapIterator.hpp"
+#include "map.hpp"
 #include <cstdio>
 #include <map>
 
 int main()
 {
 	// typedef ft::node<int, int> node;
-	typedef ft::RBT<int, int, std::less<int> > RBT;
+	typedef ft::Map<int, int> RBT;
 	RBT rbt;
 
 	// rbt.insert(2, 3);
@@ -39,15 +40,15 @@ int main()
 
 	// rbt.traverse();
 	// rbt.traverse();
-	RBT::reverse_iterator it = rbt.rbegin();
-	RBT::reverse_iterator itr = rbt.rend();
+	RBT::iterator it = rbt.begin();
+	RBT::iterator itr = rbt.end();
 	// --itr;
 		// std::cout << "end = " << *itr << std::endl;
 	// std::cout << it->value << std::endl;
 	// std::cout << *itr << std::endl;
 	for (; it != itr; it++)
 	{
-		std::cout << it->value << std::endl;
+		std::cout << it->second << std::endl;
 	}
 	// --itr;
 	// for (; itr != it; itr--)
