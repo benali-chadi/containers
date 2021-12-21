@@ -7,28 +7,44 @@
 
 namespace ft
 {
-	template <	class key,
+	template <	
+				class key,
 				class T,
 				class Compare = std::less<key>,
 				class Alloc = std::allocator<ft::pair<const key, T> >
-			>
+			 >
 		class Map {
 			public:
-				typedef				key																key_type;
-				typedef 			T																mapped_type;
-				typedef				pair<const key_type, mapped_type>								value_type;
-				typedef				Compare															key_compare;
-				typedef				Alloc															allocator_type;
-				typedef	typename	allocator_type::reference										reference;
-				typedef	typename	allocator_type::const_reference									const_reference;
-				typedef	typename	allocator_type::pointer											pointer;
-				typedef	typename	allocator_type::const_pointer									const_pointer;
-				typedef typename	ft::RBT<key_type, mapped_type, Compare>::iterator				iterator;
-				typedef typename	ft::RBT<key_type, mapped_type, Compare>::const_iterator			const_iterator;
-				typedef typename	ft::RBT<key_type, mapped_type, Compare>::reverse_iterator		reverse_iterator;
-				typedef typename	ft::RBT<key_type, mapped_type, Compare>::const_reverse_iterator	const_reverse_iterator;
-				typedef				std::ptrdiff_t													difference_type;
-				typedef				size_t															size_type;
+				typedef				key																		key_type;
+				typedef 			T																		mapped_type;
+				typedef				ft::pair<const key_type, mapped_type>									value_type;
+				typedef				Compare																	key_compare;
+				typedef				Alloc																	allocator_type;
+				typedef	typename	allocator_type::reference												reference;
+				typedef	typename	allocator_type::const_reference											const_reference;
+				typedef	typename	allocator_type::pointer													pointer;
+				typedef	typename	allocator_type::const_pointer											const_pointer;
+				typedef typename	ft::RBT<key_type, mapped_type, Compare, Alloc>::iterator				iterator;
+				typedef typename	ft::RBT<key_type, mapped_type, Compare, Alloc>::const_iterator			const_iterator;
+				typedef typename	ft::RBT<key_type, mapped_type, Compare, Alloc>::reverse_iterator		reverse_iterator;
+				typedef typename	ft::RBT<key_type, mapped_type, Compare, Alloc>::const_reverse_iterator	const_reverse_iterator;
+				typedef				std::ptrdiff_t															difference_type;
+				typedef				size_t																	size_type;
+				typedef				class value_compare: std::binary_function<value_type, value_type, bool>
+				{
+					friend class map;
+					protected:
+						Compare comp;
+						value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
+					public:
+						typedef bool result_type;
+						typedef value_type first_argument_type;
+						typedef value_type second_argument_type;
+						bool operator() (const value_type& x, const value_type& y) const
+						{
+							return comp(x.first, y.first);
+						}
+				}																							value_compare;
 
 				/*
 					* Contructors
@@ -102,21 +118,16 @@ namespace ft
 
 				mapped_type&				operator[](const key_type& k)
 				{
-					return m_tree.search_to_erase(k)->second;
+					return m_tree.find(k)->second;
 				}
 				
 				/*
 					* Modifiers
 				*/
 
-				ft::pair<iterator, bool>	insert(const value_type& val)
+				ft::pair<iterator, bool>	insert(const value_type val)
 				{
-					// iterator					tmp;
-					// tmp->first = val.first;
-					// tmp->second = val.second;
-					// std::cout << "tmp first = " << tmp->first;
 					ft::pair<iterator, bool>	ret = m_tree.insert(val);
-					std::cout << "ok\n";
 					
 					if (ret.second)
 						_size++;
@@ -125,6 +136,8 @@ namespace ft
 				}
 				iterator					insert(iterator position, const value_type& val)
 				{
+					
+					
 					ft::pair<iterator, bool>	ret = insert(val);
 					position = ret.first;
 
@@ -156,17 +169,51 @@ namespace ft
 				}
 				void						erase(iterator first, iterator last)
 				{
-					for (; first != last; first++)
-						erase(first);
+					key_type	keys[_size];
+					size_type	old_size = _size;
+
+					// Geting keys
+					for (size_type i = 0; first != last; first++, i++)
+						keys[i] = first->first;
+
+					for (size_type i = 0; i < old_size; i++)
+					{
+						std::cout << keys[i] << std::endl;
+						erase(keys[i]);
+					}
 				}
+
+
+				// swap
+
+				void						clear()	{	erase(begin(), end());	}
 				
+				/*
+					* Observers
+				*/
+
+				key_compare					key_comp() const {	return _compare;	}
+				value_compare				value_comp() const {	return value_compare();	}
+
+				/*
+					* Operations
+				*/
 				
+				iterator					find(const key_type& k) {	return m_tree.find(k);	}
+				const_iterator				find(const key_type& k) const {	return m_tree.find(k);	}
+
+				size_type					count(const key_type& k)
+				{
+					if (find(k))
+						return 1;
+					return 0;
+				}
 
 			private:
-				Alloc									_alloc;
-				key_compare								_compare;
-				size_type								_size;
-				ft::RBT<key_type, mapped_type, Compare>	m_tree;
+				Alloc											_alloc;
+				key_compare										_compare;
+				size_type										_size;
+				ft::RBT<key_type, mapped_type, Compare, Alloc>	m_tree;
 		};
 }
 

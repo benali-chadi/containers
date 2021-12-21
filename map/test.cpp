@@ -9,7 +9,8 @@
 int main()
 {
 	// typedef ft::node<int, int> node;
-	typedef ft::Map<int, int> RBT;
+	typedef ft::Map<std::string, int> RBT;
+	// typedef ft::RBT<int, int, std::less<int> > RBT;
 	RBT rbt;
 
 	// rbt.insert(2, 3);
@@ -21,16 +22,17 @@ int main()
 	// rbt.insert(7, 4);
 	// rbt.insert(8, 3);
 	// rbt.insert(10, 3);
-	rbt.insert(ft::make_pair(2, 2));
-	rbt.insert(ft::make_pair(3, 3));
-	rbt.insert(ft::make_pair(5, 5));
-	rbt.insert(ft::make_pair(1, 1));
-	rbt.insert(ft::make_pair(6, 6));
-	rbt.insert(ft::make_pair(4, 4));
-	rbt.insert(ft::make_pair(7, 7));
-	rbt.insert(ft::make_pair(8, 8));
-	rbt.insert(ft::make_pair(10, 10));
+	rbt.insert(ft::make_pair("'2'", 2));
+	rbt.insert(ft::make_pair("'3'", 3));
+	rbt.insert(ft::make_pair("'5'", 5));
+	rbt.insert(ft::make_pair("'1'", 1));
+	rbt.insert(ft::make_pair("'6'", 6));
+	rbt.insert(ft::make_pair("'4'", 4));
+	rbt.insert(ft::make_pair("'7'", 7));
+	rbt.insert(ft::make_pair("'8'", 8));
+	rbt.insert(ft::make_pair("'9'", 10));
 
+	std::cout << "size = " << rbt.size() << std::endl;
 	// std::cout << rbt.here(rbt.giveIt(), 10) << std::endl;	
 	// rbt.erase(5);
 	// rbt.erase(7);
@@ -40,12 +42,25 @@ int main()
 
 	// rbt.traverse();
 	// rbt.traverse();
+	std::cout << rbt["'5'"] << std::endl;
 	RBT::iterator it = rbt.begin();
 	RBT::iterator itr = rbt.end();
+	// it++;
+	// std::cout << "begin = " << it->first << std::endl; 
 	// --itr;
 		// std::cout << "end = " << *itr << std::endl;
 	// std::cout << it->value << std::endl;
 	// std::cout << *itr << std::endl;
+	for (; it != itr; it++)
+	{
+		std::cout << it->second << std::endl;
+	}
+
+	rbt.clear();
+	std::cout << "size = " << rbt.size() << std::endl;
+	
+	it = rbt.begin();
+	itr = rbt.end();
 	for (; it != itr; it++)
 	{
 		std::cout << it->second << std::endl;

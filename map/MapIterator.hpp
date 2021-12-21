@@ -5,9 +5,9 @@
 
 namespace ft
 {
-	template <class T1, class T2, class Compare>
+	template <class T1, class T2, class Compare, class Alloc>
 		class RBT;
-	template <class T, typename key, typename T1, class Compare>
+	template <class T, typename key, typename T1, class Compare, class Alloc>
 	class MapIterator: public ft::iterator<std::bidirectional_iterator_tag, T>
 	{
 		public:
@@ -87,7 +87,7 @@ namespace ft
 		
 		private:
 			pointer _p;
-			ft::RBT<key, T1, Compare> helper;
+			ft::RBT<key, T1, Compare, Alloc> helper;
 
 	};
 }

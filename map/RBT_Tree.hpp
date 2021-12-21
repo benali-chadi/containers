@@ -9,22 +9,34 @@ namespace ft
 {
 	template <class T1, class T2>
 		struct node {
-			T1				first;
+			T1		first;
 			T2				second;
 			char			color;
 			struct node 	*parent;
 			struct node		*left;
 			struct node 	*right;
 
-			node(const ft::pair<const T1, T2> p) {
-				first = p.first;
+			node() {
+				parent = 0;
+				left = 0;
+				right = 0;
+			}
+			node(const ft::pair<const T1, T2> p): first(p.first) {
+				// first = p.first;
 				second = p.second;
 				parent = 0;
 				left = 0;
 				right = 0;
 			}
-			node (struct node const &n) {
-				first = n.first;
+			node(const ft::pair<T1, T2> p): first(p.first) {
+				// first = p.first;
+				second = p.second;
+				parent = 0;
+				left = 0;
+				right = 0;
+			}
+			node (struct node const &n): first(n.first) {
+				// first = n.first;
 				second = n.second;
 				color = n.color;
 				parent = 0;
@@ -33,14 +45,21 @@ namespace ft
 			}
 		};
 	
-	template <class T1, class T2, class Compare>
+	template <	
+				class T1,
+				class T2,
+				class Compare,
+				class Alloc
+			 >
 		class RBT {
 			public:
-				typedef struct node<T1, T2>								node;
-				typedef ft::MapIterator<node, T1, T2, Compare>			iterator;
-				typedef ft::MapIterator<const node, T1, T2, Compare>	const_iterator;
-				typedef	ft::reverse_iterator<iterator>					reverse_iterator;
-				typedef	ft::reverse_iterator<const_iterator>			const_reverse_iterator;
+				typedef struct 		node<T1, T2>										node;
+				typedef				ft::pair<const T1, T2>								value_type;
+				typedef 			ft::MapIterator<node, T1, T2, Compare, Alloc>		iterator;
+				typedef 			ft::MapIterator<const node, T1, T2, Compare, Alloc>	const_iterator;
+				typedef				ft::reverse_iterator<iterator>						reverse_iterator;
+				typedef				ft::reverse_iterator<const_iterator>				const_reverse_iterator;
+				typedef	typename	Alloc::template rebind<node>::other					m_Alloc;
 
 				RBT(): root(0) {}
 				RBT(node *r): root(r) {}
@@ -50,7 +69,7 @@ namespace ft
 				*/
 
 				iterator					begin() {	
-				
+
 					return iterator(in_order_succ(root), root);
 				}
 
@@ -76,33 +95,37 @@ namespace ft
 					print(tmp);
 				}
 
-				ft::pair<iterator, bool>	insert (node newNode)
+				ft::pair<iterator, bool>	insert (value_type p)
 				{
+					node		*newNode = _alloc.allocate(1);
+					newNode->first = p.first;
+					newNode->second = p.second;
+					newNode->left = 0;
+					newNode->right = 0;
 					if (!root)
 					{
-						newNode.color = 'B';
-						newNode.left = 0;
-						newNode.right = 0;
-						newNode.parent = root;
-						root = &newNode;
-						return ft::make_pair(&newNode, true);;	
+						newNode->color = 'B';
+						newNode->parent = root;
+						root = newNode;
+						return ft::make_pair(newNode, true);;	
 					}
-					newNode.color = 'R';
-					node *tmp = search_to_insert(newNode);
+					newNode->color = 'R';
+					node *tmp = search_to_insert(*newNode);
 					if (tmp)
 					{
-						newNode.parent = tmp;
+						newNode->parent = tmp;
 						
 						// Place the node
-						if (!cmpr(tmp->first,newNode.first))
-							tmp->left = &newNode;
+						if (!cmpr(tmp->first,newNode->first))
+							tmp->left = newNode;
 						else
-							tmp->right = &newNode;
+							tmp->right = newNode;
 
-						check(&newNode);
-						return ft::make_pair(&newNode, true);
+						check(newNode);
+						return ft::make_pair(newNode, true);
 					}
-					tmp = search_to_erase(newNode.first);
+					tmp = search_to_erase(newNode->first);
+					_alloc.destroy(newNode);
 					return ft::make_pair(tmp, false);
 				}
 				
@@ -123,6 +146,7 @@ namespace ft
 							node_is_black(n);
 							remove(n);
 						}
+						_alloc.destroy(n);
 						return true;
 					}
 					return false;
@@ -155,8 +179,6 @@ namespace ft
 
 				node						*find_bigger_parent(node *parent, T1 first)
 				{
-					std::cout << "HEEERE\n";
-					std::cout << "parent = " << parent << std::endl;
 					while (parent != root)
 					{
 						if (!cmpr(parent->first, first))
@@ -196,7 +218,7 @@ namespace ft
 					if (tmp)
 						return tmp;
 	
-					tmp = find_bigger_parent(p->parent, p->first);
+					tmp = p->parent ? find_bigger_parent(p->parent, p->first) : 0;
 					if (tmp)
 						return tmp;
 					return 0;
@@ -211,7 +233,7 @@ namespace ft
 					if (tmp)
 						return tmp;
 
-					tmp = find_smaller_parent(p->parent, p->first);
+					tmp = p->parent ? find_smaller_parent(p->parent, p->first) : 0;
 					if (tmp)
 						return tmp;
 					
@@ -235,6 +257,7 @@ namespace ft
 
 				node	*root;
 				Compare	cmpr;
+				m_Alloc	_alloc;
 
 				void	print(node *n)
 				{
@@ -349,8 +372,6 @@ namespace ft
 					}
 				}
 
-				
-
 				/*
 					* Insert helpers
 				*/
@@ -367,7 +388,9 @@ namespace ft
 					node *tmp = root;
 
 					if (tmp->first == n.first)
+					{
 						return 0;
+					}
 
 					while (tmp && (tmp->right != 0 || tmp->left != 0))
 					{
