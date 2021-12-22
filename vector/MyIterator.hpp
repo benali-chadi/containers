@@ -71,6 +71,10 @@ namespace ft
 
 			reference	operator[](difference_type n) {	return *(_p + n);	}	
 
+			operator iterator<iterator_category, const T>(){
+				return iterator<iterator_category, const T>(_p);
+    	    }
+
 
 		private:
 			pointer _p;

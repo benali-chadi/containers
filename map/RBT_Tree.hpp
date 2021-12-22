@@ -7,10 +7,11 @@
 
 namespace ft
 {
-	template <class T1, class T2>
+	template <class T>
 		struct node {
-			T1		first;
-			T2				second;
+			// T1		first;
+			// T2				second;
+			T				data;
 			char			color;
 			struct node 	*parent;
 			struct node		*left;
@@ -21,42 +22,40 @@ namespace ft
 				left = 0;
 				right = 0;
 			}
-			node(const ft::pair<const T1, T2> p): first(p.first) {
+			node(const T &p) //first(p.first) {
+			{
 				// first = p.first;
-				second = p.second;
+				// second = p.second;
+				data = p;
 				parent = 0;
 				left = 0;
 				right = 0;
 			}
-			node(const ft::pair<T1, T2> p): first(p.first) {
-				// first = p.first;
-				second = p.second;
-				parent = 0;
-				left = 0;
-				right = 0;
-			}
-			node (struct node const &n): first(n.first) {
+			node (struct node const &n) //first(n.first) {
+			{
 				// first = n.first;
-				second = n.second;
+				// second = n.second;
+				data = n.data;
 				color = n.color;
 				parent = 0;
 				left = 0;
 				right = 0;
 			}
+
 		};
 	
 	template <	
 				class T1,
-				class T2,
+				// class T2,
 				class Compare,
 				class Alloc
 			 >
 		class RBT {
 			public:
-				typedef struct 		node<T1, T2>										node;
-				typedef				ft::pair<const T1, T2>								value_type;
-				typedef 			ft::MapIterator<node, T1, T2, Compare, Alloc>		iterator;
-				typedef 			ft::MapIterator<const node, T1, T2, Compare, Alloc>	const_iterator;
+				typedef				T1													value_type;
+				typedef struct 		node<value_type>									node;
+				typedef 			ft::MapIterator<node, T1, Compare, Alloc>			iterator;
+				typedef 			ft::MapIterator<node, const T1, Compare, Alloc>		const_iterator;
 				typedef				ft::reverse_iterator<iterator>						reverse_iterator;
 				typedef				ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 				typedef	typename	Alloc::template rebind<node>::other					m_Alloc;
@@ -68,22 +67,17 @@ namespace ft
 					Iterators
 				*/
 
-				iterator					begin() {	
+				iterator					begin() {	return iterator(in_order_succ(root), root);	}
+				const_iterator				begin() const {	return iterator(in_order_succ(root), root);	}
 
-					return iterator(in_order_succ(root), root);
-				}
-
-				iterator					end() {
-					// return in_order_pred(root);
-					return iterator(0, root);
-				}
-
+				iterator					end() {	return iterator(0, root);	}
+				const_iterator				end() const {	return iterator(0, root);	}
+				
 				reverse_iterator			rbegin() {	return reverse_iterator(iterator(0, root));	}
+				const_reverse_iterator		rbegin() const {	return reverse_iterator(iterator(0, root));	}
 
-				reverse_iterator			rend() {
-					// return in_order_succ(root);
-					return reverse_iterator(iterator(in_order_succ(root), root));
-				}
+				reverse_iterator			rend() {	return reverse_iterator(iterator(in_order_succ(root), root));	}
+				const_reverse_iterator		rend() const {	return reverse_iterator(iterator(in_order_succ(root), root));	}
 
 				/*
 					* Member functions
@@ -98,10 +92,12 @@ namespace ft
 				ft::pair<iterator, bool>	insert (value_type p)
 				{
 					node		*newNode = _alloc.allocate(1);
-					newNode->first = p.first;
-					newNode->second = p.second;
+					// newNode->first = p.first;
+					// newNode->second = p.second;
+					newNode->data(p);
 					newNode->left = 0;
 					newNode->right = 0;
+
 					if (!root)
 					{
 						newNode->color = 'B';
@@ -116,7 +112,7 @@ namespace ft
 						newNode->parent = tmp;
 						
 						// Place the node
-						if (!cmpr(tmp->first,newNode->first))
+						if (!cmpr(tmp->data.first,newNode->data.first))
 							tmp->left = newNode;
 						else
 							tmp->right = newNode;
@@ -124,15 +120,15 @@ namespace ft
 						check(newNode);
 						return ft::make_pair(newNode, true);
 					}
-					tmp = search_to_erase(newNode->first);
+					tmp = search_to_erase(newNode->data);
 					_alloc.destroy(newNode);
 					return ft::make_pair(tmp, false);
 				}
 				
-				bool						erase(T1 first)
+				bool						erase(value_type p)
 				{
 					// search the position of key
-					node	*n = search_to_erase(first);
+					node	*n = search_to_erase(p);
 
 					if (n)
 					{
@@ -152,7 +148,7 @@ namespace ft
 					return false;
 				}
 
-				node						*find(T1 first) {	return search_to_erase(first);	}
+				node						*find(value_type p) {	return search_to_erase(p);	}
 				
 				/*
 					Iterator Helper functions
@@ -177,33 +173,33 @@ namespace ft
 					return tmp;
 				}
 
-				node						*find_bigger_parent(node *parent, T1 first)
+				node						*find_bigger_parent(node *parent, value_type p)
 				{
 					while (parent != root)
 					{
-						if (!cmpr(parent->first, first))
+						if (!cmpr(parent->data.first, p.first))
 							return parent;
 						parent = parent->parent;
 					}
 
 					// if the parent's key is less than the key return the end() address
-					if (cmpr(parent->first, first))
+					if (cmpr(parent->data.first, p.first))
 						return 0;
 
 					return parent;
 				}
 
-				node						*find_smaller_parent(node *parent, T1 first)
+				node						*find_smaller_parent(node *parent, value_type p)
 				{
 					while (parent != root)
 					{
-						if (cmpr(parent->first, first))
+						if (cmpr(parent->data.first, p.first))
 							return parent;
 						parent = parent->parent;
 					}
 
 					// if the parent's key is bigger than the key return the end() address
-					if (!cmpr(parent->first, first))
+					if (!cmpr(parent->data.first, p.first))
 						return 0;
 					
 					return parent;
@@ -218,7 +214,7 @@ namespace ft
 					if (tmp)
 						return tmp;
 	
-					tmp = p->parent ? find_bigger_parent(p->parent, p->first) : 0;
+					tmp = p->parent ? find_bigger_parent(p->parent, p->data) : 0;
 					if (tmp)
 						return tmp;
 					return 0;
@@ -233,7 +229,7 @@ namespace ft
 					if (tmp)
 						return tmp;
 
-					tmp = p->parent ? find_smaller_parent(p->parent, p->first) : 0;
+					tmp = p->parent ? find_smaller_parent(p->parent, p->data) : 0;
 					if (tmp)
 						return tmp;
 					
@@ -266,7 +262,7 @@ namespace ft
 					print(n->left);
 					if (n == root)
 						std::cout << "this is root\n";
-					std::cout << n->first << " color = " << n->color << std::endl;
+					std::cout << n->data.first << " color = " << n->color << std::endl;
 					print(n->right);
 				}
 
@@ -387,20 +383,20 @@ namespace ft
 				{
 					node *tmp = root;
 
-					if (tmp->first == n.first)
+					if (tmp->data.first == n.data.first)
 					{
 						return 0;
 					}
 
 					while (tmp && (tmp->right != 0 || tmp->left != 0))
 					{
-						if (!cmpr(n.first, tmp->first))
+						if (!cmpr(n.data.first, tmp->data.first))
 						{
 							if (!tmp->right)
 								return tmp;
 							tmp = tmp->right;
 						}
-						else if (cmpr(n.first, tmp->first))
+						else if (cmpr(n.data.first, tmp->data.first))
 						{
 							if (!tmp->left)
 								return tmp;
@@ -439,18 +435,18 @@ namespace ft
 					* Erase helpers
 				*/
 
-				node	*search_to_erase(T1 first)
+				node	*search_to_erase(value_type p)
 				{
 					node	*tmp = root;
 
 					while (tmp)
 					{
-						if (tmp->first == first)
+						if (tmp->data.first == p.first)
 							return tmp;
-						if (!cmpr(tmp->first, first))
+						if (!cmpr(tmp->data.first, p.first))
 							tmp = tmp->left;
 						
-						else if (cmpr(tmp->first, first))
+						else if (cmpr(tmp->data.first, p.first))
 							tmp = tmp->right;
 					}
 					return 0;
@@ -465,9 +461,9 @@ namespace ft
 						{
 							node	*toDelete = tmp->right ? in_order_succ(tmp->right) : in_order_pred(tmp->left);
 							// swap its key with the IOP or IOS
-							T1	first = tmp->first;
-							tmp->first = toDelete->first;
-							toDelete->first = first;
+							value_type	t = tmp->data;
+							tmp->data = toDelete->data;
+							toDelete->data = t;
 							
 							tmp = toDelete;
 						}
@@ -476,9 +472,9 @@ namespace ft
 							// search for the in-order predecessor (the largest element in the left side of the node)
 							node	*toDelete = in_order_pred(n->left);
 							// swap its key with the IOP
-							T1	first = tmp->first;
-							tmp->first = toDelete->first;
-							toDelete->first = first;
+							value_type	t = tmp->data;
+							tmp->data = toDelete->data;
+							toDelete->data = t;
 
 							tmp = toDelete;
 						}

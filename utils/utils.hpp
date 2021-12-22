@@ -78,5 +78,28 @@ namespace ft
 			typedef Reference	reference;
 			typedef Category	iterator_category;
 		};
+	
+	template <class InputIterator1, class InputIterator2, class Compare>
+		bool map_lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
+										InputIterator2 first2, InputIterator2 last2,
+										Compare comp)
+		{
+			for (; first1 != last1; first1++, first2++)
+			{
+				if (first2 == last2 || comp(first2->first, first1->first))
+						return false;
+				else if (comp(first2->first, first1->first))
+					return true;
+			}
+			return (first2 != last2);
+		}
+	template <class InputIterator1, class InputIterator2, class BinaryPredicate>
+		bool map_equal (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2)
+		{
+			for (; first1 != last1; first1++, first2++)
+				if (first1->first != first2->first)
+					return false;
+			return true;
+		}
 }
 #endif
