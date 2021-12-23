@@ -22,10 +22,10 @@ namespace ft
 				pair(const pair<U, V>& pr): first(pr.first), second(pr.second)
 				{
 				}
-			pair(const first_type &a, const second_type &b)		// Initialization
+			pair(const first_type &a, const second_type &b): first(a), second(b)		// Initialization
 			{
-				first = a;
-				second = b;
+				// first = a;
+				// second = b;
 			}
 
 			/*

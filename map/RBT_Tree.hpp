@@ -45,17 +45,18 @@ namespace ft
 		};
 	
 	template <	
-				class T1,
-				// class T2,
+				class key,
+				class T2,
 				class Compare,
 				class Alloc
 			 >
 		class RBT {
 			public:
-				typedef				T1													value_type;
-				typedef struct 		node<value_type>									node;
-				typedef 			ft::MapIterator<node, T1, Compare, Alloc>			iterator;
-				typedef 			ft::MapIterator<node, const T1, Compare, Alloc>		const_iterator;
+				typedef				ft::pair<const key, T2>								value_type;
+				typedef				ft::pair<key, T2>									m_value_type;
+				typedef struct 		node<m_value_type>									node;
+				typedef 			ft::MapIterator<node, key, T2, Compare, Alloc>	iterator;
+				typedef 			ft::MapIterator<node, const key, T2, Compare, Alloc>		const_iterator;
 				typedef				ft::reverse_iterator<iterator>						reverse_iterator;
 				typedef				ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 				typedef	typename	Alloc::template rebind<node>::other					m_Alloc;
@@ -94,7 +95,7 @@ namespace ft
 					node		*newNode = _alloc.allocate(1);
 					// newNode->first = p.first;
 					// newNode->second = p.second;
-					newNode->data(p);
+					newNode->data = p;
 					newNode->left = 0;
 					newNode->right = 0;
 
@@ -461,7 +462,7 @@ namespace ft
 						{
 							node	*toDelete = tmp->right ? in_order_succ(tmp->right) : in_order_pred(tmp->left);
 							// swap its key with the IOP or IOS
-							value_type	t = tmp->data;
+							m_value_type	t = tmp->data;
 							tmp->data = toDelete->data;
 							toDelete->data = t;
 							
@@ -472,7 +473,7 @@ namespace ft
 							// search for the in-order predecessor (the largest element in the left side of the node)
 							node	*toDelete = in_order_pred(n->left);
 							// swap its key with the IOP
-							value_type	t = tmp->data;
+							m_value_type	t = tmp->data;
 							tmp->data = toDelete->data;
 							toDelete->data = t;
 

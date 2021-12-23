@@ -24,10 +24,10 @@ namespace ft
 				typedef	typename	allocator_type::const_reference											const_reference;
 				typedef	typename	allocator_type::pointer													pointer;
 				typedef	typename	allocator_type::const_pointer											const_pointer;
-				typedef typename	ft::RBT<value_type, Compare, Alloc>::iterator				iterator;
-				typedef typename	ft::RBT<value_type, Compare, Alloc>::const_iterator			const_iterator;
-				typedef typename	ft::RBT<value_type, Compare, Alloc>::reverse_iterator		reverse_iterator;
-				typedef typename	ft::RBT<value_type, Compare, Alloc>::const_reverse_iterator	const_reverse_iterator;
+				typedef typename	ft::RBT<key, T, Compare, Alloc>::iterator				iterator;
+				typedef typename	ft::RBT<key, T, Compare, Alloc>::const_iterator			const_iterator;
+				typedef typename	ft::RBT<key, T, Compare, Alloc>::reverse_iterator		reverse_iterator;
+				typedef typename	ft::RBT<key, T, Compare, Alloc>::const_reverse_iterator	const_reverse_iterator;
 				typedef				std::ptrdiff_t															difference_type;
 				typedef				size_t																	size_type;
 				typedef				class value_compare: std::binary_function<value_type, value_type, bool>
@@ -164,14 +164,18 @@ namespace ft
 					if (ret)
 						_size--;
 				}
-				void										erase(const key_type& k)
+				size_type									erase(const key_type& k)
 				{
 					ft::pair<key_type, mapped_type> tmp;
 					tmp.first = k;
 					tmp.second = 0;
 					bool ret = m_tree.erase(tmp);
 					if (ret)
+					{
 						_size--;
+						return 1;
+					}
+					return 0;
 				}
 				void										erase(iterator first, iterator last)
 				{
@@ -318,7 +322,7 @@ namespace ft
 				Alloc											_alloc;
 				key_compare										_compare;
 				size_type										_size;
-				ft::RBT<value_type, Compare, Alloc>				m_tree;
+				ft::RBT<key, T, Compare, Alloc>				m_tree;
 		};
 
 		/*

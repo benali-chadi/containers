@@ -1,6 +1,6 @@
 #include <iostream>
 // #include "RBT_Tree.hpp"
-# include "../vector/Vector.hpp"
+# include "../vector/vector.hpp"
 #include "../utils/pair.hpp"
 // #include "MapIterator.hpp"
 #include "map.hpp"
@@ -58,17 +58,20 @@ int main()
 
 	// 	std::cout << p.first->first << " " << p.second->first << std::endl;
 	// std::cout << rbt.here(rbt.giveIt(), 10) << std::endl;	
-	rbt.erase(5);
-	rbt.erase(7);
-	rbt.erase(8);
-	rbt.erase(2);
-	rbt.erase(4);
+	// rbt.erase(5);
+	// rbt.erase(7);
+	// rbt.erase(8);
+	// rbt.erase(2);
+	// rbt.erase(4);
 
 	// rbt.traverse();
 	// rbt.traverse();
 	// std::cout << rbt[5] << std::endl;
 	RBT::iterator it = rbt.begin();
 	RBT::iterator itr = rbt.end();
+	// std::cout << rbt[1] << std::endl;
+	// it->second++;
+	// std::cout << rbt[1] << std::endl;
 	// // it++;
 	// // std::cout << "begin = " << it->first << std::endl; 
 	// // --itr;
@@ -77,7 +80,7 @@ int main()
 	// // std::cout << *itr << std::endl;
 	for (; it != itr; it++)
 	{
-		// std::cout << it->first << std::endl;
+		std::cout << it->first << std::endl;
 	}
 
 	// rbt.clear();
@@ -119,6 +122,7 @@ int main()
 	// std::cout << pr.first << std::endl;
 	// printf("%d\n", pr.second);
 
+	// std::system("leaks -u a.out");
 
 	// std::cout << "\n" << rbt.find(5)->left->key << std::endl;
 	return 0;

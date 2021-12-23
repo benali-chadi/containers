@@ -1,16 +1,17 @@
 #ifndef UTILS_HPP
 # define UTILS_HPP
 
-#include <algorithm>
 #include <iostream>
+#include <memory>
+#include <algorithm>
 
 namespace ft
 {
 	template <typename T> struct is_integral {	static const bool value = false;	};
 	template<> struct is_integral<bool> {	static const bool value = true;	};
 	template<> struct is_integral<char> {	static const bool value = true;	};
-	template<> struct is_integral<char16_t> {	static const bool value = true;	};
-	template<> struct is_integral<char32_t> {	static const bool value = true;	};
+	// template<> struct is_integral<char16_t> {	static const bool value = true;	};
+	// template<> struct is_integral<char32_t> {	static const bool value = true;	};
 	template<> struct is_integral<signed char> {	static const bool value = true;	};
 	template<> struct is_integral<short int> {	static const bool value = true;	};
 	template<> struct is_integral<int> {	static const bool value = true;	};
@@ -69,7 +70,7 @@ namespace ft
 			}
 			return (first2 != last2);
 		}
-	template <	class Category, class T, class Distance = ptrdiff_t,
+	template <	class Category, class T, class Distance = std::ptrdiff_t,
 				class Pointer = T*, class Reference = T&>
 		struct iterator {
 			typedef T			value_type;
