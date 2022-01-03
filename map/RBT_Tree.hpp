@@ -55,8 +55,8 @@ namespace ft
 				typedef				ft::pair<const key, T2>								value_type;
 				typedef				ft::pair<key, T2>									m_value_type;
 				typedef struct 		node<m_value_type>									node;
-				typedef 			ft::MapIterator<node, key, T2, Compare, Alloc>	iterator;
-				typedef 			ft::MapIterator<node, const key, T2, Compare, Alloc>		const_iterator;
+				typedef 			ft::MapIterator<node, value_type, key, T2, Compare, Alloc>	iterator;
+				typedef 			ft::MapIterator<node, const value_type, key, T2, Compare, Alloc>		const_iterator;
 				typedef				ft::reverse_iterator<iterator>						reverse_iterator;
 				typedef				ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 				typedef	typename	Alloc::template rebind<node>::other					m_Alloc;
@@ -104,7 +104,7 @@ namespace ft
 						newNode->color = 'B';
 						newNode->parent = root;
 						root = newNode;
-						return ft::make_pair(newNode, true);;	
+						return ft::make_pair(newNode, true);
 					}
 					newNode->color = 'R';
 					node *tmp = search_to_insert(*newNode);
@@ -122,7 +122,7 @@ namespace ft
 						return ft::make_pair(newNode, true);
 					}
 					tmp = search_to_erase(newNode->data);
-					_alloc.destroy(newNode);
+					// _alloc.destroy(newNode);
 					return ft::make_pair(tmp, false);
 				}
 				
@@ -140,16 +140,33 @@ namespace ft
 						// the node is BLACK!!
 						else
 						{
-							node_is_black(n);
+							n = node_is_black(n);
 							remove(n);
 						}
-						_alloc.destroy(n);
+						// _alloc.destroy(n);
 						return true;
 					}
 					return false;
 				}
 
 				node						*find(value_type p) {	return search_to_erase(p);	}
+				
+				bool						contains(key k)
+				{
+					node	*tmp = root;
+
+					while (tmp)
+					{
+						if (tmp->data.first == k)
+							return true;
+						if (!cmpr(tmp->data.first, k))
+							tmp = tmp->left;
+						
+						else if (cmpr(tmp->data.first, k))
+							tmp = tmp->right;
+					}
+					return false;
+				}
 				
 				/*
 					Iterator Helper functions
@@ -165,7 +182,7 @@ namespace ft
 					return tmp;
 				}
 
-				node						*in_order_succ(node *n)
+				node						*in_order_succ(node *n) const
 				{
 					node	*tmp = n;
 
@@ -384,27 +401,29 @@ namespace ft
 				{
 					node *tmp = root;
 
-					if (tmp->data.first == n.data.first)
-					{
-						return 0;
-					}
+					// if (tmp->data.first == n.data.first)
+					// {
+					// 	return 0;
+					// }
 
 					while (tmp && (tmp->right != 0 || tmp->left != 0))
 					{
-						if (!cmpr(n.data.first, tmp->data.first))
-						{
-							if (!tmp->right)
-								return tmp;
-							tmp = tmp->right;
-						}
-						else if (cmpr(n.data.first, tmp->data.first))
+						if (tmp->data.first == n.data.first)
+							return 0;
+						if (cmpr(n.data.first, tmp->data.first))
 						{
 							if (!tmp->left)
 								return tmp;
 							tmp  = tmp->left;
 						}
-						else
-							return 0;
+						else if (!cmpr(n.data.first, tmp->data.first))
+						{
+							if (!tmp->right)
+								return tmp;
+							tmp = tmp->right;
+						}
+						// else
+						// 	return 0;
 					}
 					return tmp;
 				}
@@ -444,11 +463,11 @@ namespace ft
 					{
 						if (tmp->data.first == p.first)
 							return tmp;
-						if (!cmpr(tmp->data.first, p.first))
-							tmp = tmp->left;
-						
 						else if (cmpr(tmp->data.first, p.first))
+							tmp = tmp->left;
+						else if (!cmpr(tmp->data.first, p.first))
 							tmp = tmp->right;
+						
 					}
 					return 0;
 				}
@@ -492,9 +511,8 @@ namespace ft
 						n->parent->left = 0;
 					else
 						n->parent->right = 0;
+					// _alloc.destroy(n);
 				}
-
-				
 
 				char	get_direction(node *n)
 				{
@@ -504,12 +522,12 @@ namespace ft
 						return 'R';
 				}
 
-				void	node_is_black(node *n)
+				node	*node_is_black(node *n)
 				{
 					node	*parent = n->parent;
 
 					if (parent == root)
-						return ;
+						return n;
 					
 					char	n_direction = get_direction(n);
 					node	*sibling = get_sibling(n);
@@ -564,8 +582,8 @@ namespace ft
 								rrr(sibling);
 							node_is_black(n);
 						}
-							
 					}
+					return n;
 				}
 
 				/*

@@ -11,15 +11,15 @@ namespace ft
 {
 	template <class key, class T2, class Compare, class Alloc>
 		class RBT;
-	template <class T, typename key, class T2, class Compare, class Alloc>
+	template <class T, typename value_type, typename key, class T2, class Compare, class Alloc>
 	class MapIterator: public ft::iterator<std::bidirectional_iterator_tag, T>
 	{
 		public:
-			typedef typename	iterator<std::bidirectional_iterator_tag, ft::pair<const key, T2> >::difference_type		difference_type;
-			typedef typename	iterator<std::bidirectional_iterator_tag, ft::pair<const key, T2> >::value_type			value_type;
-			typedef typename	iterator<std::bidirectional_iterator_tag, ft::pair<const key, T2> >::pointer				pointer;
-			typedef typename	iterator<std::bidirectional_iterator_tag, ft::pair<const key, T2> >::reference			reference;
-			typedef typename	iterator<std::bidirectional_iterator_tag, ft::pair<const key, T2> >::iterator_category	iterator_category;
+			typedef typename	iterator<std::bidirectional_iterator_tag, value_type >::difference_type		difference_type;
+			// typedef typename	iterator<std::bidirectional_iterator_tag, value_type >::value_type			value_type;
+			typedef typename	iterator<std::bidirectional_iterator_tag, value_type >::pointer				pointer;
+			typedef typename	iterator<std::bidirectional_iterator_tag, value_type >::reference			reference;
+			typedef typename	iterator<std::bidirectional_iterator_tag, value_type >::iterator_category	iterator_category;
 
 			typedef 			T*																	m_pointer;
 
@@ -30,8 +30,8 @@ namespace ft
 			*/
 
 			MapIterator		() {}
-			operator MapIterator<T, const key, T2, Compare, Alloc>() {
-    	        return MapIterator<T, const key, T2, Compare, Alloc>(_p);
+			operator MapIterator<T, const value_type, key, T2, Compare, Alloc>() {
+    	        return MapIterator<T, const value_type, key, T2, Compare, Alloc>(_p);
 	        }
 			MapIterator		(const MapIterator &x): _p(x._p)
 			{
@@ -68,12 +68,12 @@ namespace ft
 
 			bool			operator==(const MapIterator& x) {	return _p == x._p;	}
 			bool			operator!=(const MapIterator& x) {	return _p != x._p;	}
-			reference		&operator*() {
+			reference		&operator*() const {
 				// reference ret(static_cast<ft::pair<const key, T2> >(_p->data));
 
 				return (ft::pair<const key, T2>&)_p->data;
 			}
-			pointer			operator->() {	return &operator*();	}
+			pointer			operator->() const {	return &operator*();	}
 			
 			MapIterator&	operator++()
 			{
@@ -91,11 +91,11 @@ namespace ft
 			{
 				_p = helper.decrement(_p);
 				
-				return _p;	
+				return *this;	
 			}
 			MapIterator	operator--(int)
 			{
-				MapIterator tmp(this);
+				MapIterator tmp(*this);
 				operator--();
 				return tmp;
 			}

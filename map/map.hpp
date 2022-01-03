@@ -32,7 +32,7 @@ namespace ft
 				typedef				size_t																	size_type;
 				typedef				class value_compare: std::binary_function<value_type, value_type, bool>
 				{
-					friend class map;
+					friend class Map;
 					protected:
 						Compare comp;
 						value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
@@ -58,7 +58,7 @@ namespace ft
 					Map 								(	InputIterator first, InputIterator last,			// Range
 															const key_compare& comp = key_compare(),
 															const allocator_type& alloc = allocator_type()
-														): _compare(comp), _alloc(alloc), _size(0)
+														): _alloc(alloc), _compare(comp), _size(0)
 					{
 						for (; first != last; first++)
 						{
@@ -100,9 +100,7 @@ namespace ft
 				const_reverse_iterator						rbegin() const {	return m_tree.rbegin();	}
 
 				reverse_iterator							rend() {	return m_tree.rend();	}
-				const_reverse_iterator						rend() const {	return m_tree;	}
-
-
+				const_reverse_iterator						rend() const {	return m_tree.rend();	}
 
 				/*
 					* Capacity
@@ -120,7 +118,7 @@ namespace ft
 				{
 					ft::pair<key_type, mapped_type> tmp;
 					tmp.first = k;
-					tmp.second = 0;
+					// tmp.second = 0;
 					return m_tree.find(tmp)->data.second;
 				}
 				
@@ -131,7 +129,7 @@ namespace ft
 				ft::pair<iterator, bool>					insert(const value_type val)
 				{
 					ft::pair<iterator, bool>	ret = m_tree.insert(val);
-					
+
 					if (ret.second)
 						_size++;
 					
@@ -160,7 +158,7 @@ namespace ft
 
 				void										erase(iterator position)
 				{
-					bool ret = m_tree.erase(position->first);
+					bool ret = erase(position->first);
 					if (ret)
 						_size--;
 				}
@@ -168,7 +166,7 @@ namespace ft
 				{
 					ft::pair<key_type, mapped_type> tmp;
 					tmp.first = k;
-					tmp.second = 0;
+					// tmp.second = 0;
 					bool ret = m_tree.erase(tmp);
 					if (ret)
 					{
@@ -183,10 +181,14 @@ namespace ft
 					size_type	old_size = _size;
 
 					for (size_type i = 0; first != last; first++, i++)
+					{
 						keys[i] = first->first;
+					}
 
 					for (size_type i = 0; i < old_size; i++)
+					{
 						erase(keys[i]);
+					}
 				}
 
 				void										swap(Map& x)
@@ -202,7 +204,7 @@ namespace ft
 				*/
 
 				key_compare									key_comp() const {	return _compare;	}
-				value_compare								value_comp() const {	return value_compare();	}
+				value_compare								value_comp() const {	return value_compare(_compare);	}
 
 				/*
 					* Operations
@@ -211,21 +213,21 @@ namespace ft
 				iterator									find(const key_type& k) {
 					ft::pair<key_type, mapped_type> tmp;
 					tmp.first = k;
-					tmp.second = 0;
+					// tmp.second = 0;
 
 					return m_tree.find(tmp);
 				}
 				const_iterator								find(const key_type& k) const {
 					ft::pair<key_type, mapped_type> tmp;
 					tmp.first = k;
-					tmp.second = 0;
+					// tmp.second = 0;
 	
 					return m_tree.find(k);
 				}
 
 				size_type									count(const key_type& k)
 				{
-					if (find(k))
+					if (m_tree.contains(k))
 						return 1;
 					return 0;
 				}
@@ -234,38 +236,38 @@ namespace ft
 				{
 					for (iterator first = begin(); first != end(); first++)
 					{
-						if (first->data.first >= k)
+						if (first->first >= k)
 							return first;
 					}
-					return &(*(begin())) + 1;
+					return end();
 				}
 				const_iterator								lower_bound (const key_type& k) const
 				{
 					for (const_iterator first = begin(); first != end(); first++)
 					{
-						if (first->data.first >= k)
+						if (first->first >= k)
 							return first;
 					}
-					return &(*(begin())) + 1;
+					return end();
 				}
 
 				iterator									upper_bound(const key_type& k)
 				{
 					for (iterator first = begin(); first != end(); first++)
 					{
-						if (first->data.first > k)
+						if (first->first > k)
 							return first;
 					}
-					return &(*(begin())) + 1;
+					return end();
 				}
 				const_iterator								upper_bound (const key_type& k) const
 				{
 					for (const_iterator first = begin(); first != end(); first++)
 					{
-						if (first->data.first > k)
+						if (first->first > k)
 							return first;
 					}
-					return &(*(begin())) + 1;
+					return end();
 				}
 
 				ft::pair<const_iterator, const_iterator>	equal_range(const key_type& k) const
@@ -273,21 +275,21 @@ namespace ft
 					ft::pair<const_iterator, const_iterator> ret;
 					for (const_iterator first = begin(); first != end(); first++)
 					{
-						if (first->data.first == k)
+						if (first->first == k)
 						{
 							ret.first = first;
 							first++;
 							ret.second = first;
 							return ret;
 						}
-						if (first->data.first > k)
+						if (first->first > k)
 						{
 							ret.first = first;
 							ret.second = first;
 							return ret;
 						}
 					}
-					return ft::make_pair(&(*(begin())) + 1, &(*(begin())) + 1);
+					return ft::make_pair(end(), end());
 				}
 
 				pair<iterator,iterator>             equal_range (const key_type& k)
@@ -295,21 +297,21 @@ namespace ft
 					ft::pair<iterator, iterator> ret;
 					for (iterator first = begin(); first != end(); first++)
 					{
-						if (first->data.first == k)
+						if (first->first == k)
 						{
 							ret.first = first;
 							first++;
 							ret.second = first != end() ? first : ret.first;
 							return ret;
 						}
-						if (first->data.first > k)
+						if (first->first > k)
 						{
 							ret.first = first;
 							ret.second = first;
 							return ret;
 						}
 					}
-					return ft::make_pair(&(*(begin())) + 1, &(*(begin())) + 1);
+					return ft::make_pair(end(), end());
 				}
 
 				/*
@@ -349,7 +351,7 @@ namespace ft
 			bool	operator<(	const Map<Key,T,Compare,Alloc>& lhs,
 								const Map<Key,T,Compare,Alloc>& rhs)
 			{
-				return ft::map_lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+				return ft::map_lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(), lhs.key_comp());
 			}
 		template< class Key, class T, class Compare, class Alloc >
 			bool	operator<=(	const Map<Key,T,Compare,Alloc>& lhs,
@@ -369,8 +371,6 @@ namespace ft
 			{
 				return !operator<(lhs, rhs);
 			}
-		
-
 }
 
 #endif

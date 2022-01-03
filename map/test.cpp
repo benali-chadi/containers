@@ -7,51 +7,44 @@
 #include <cstdio>
 #include <map>
 
-
 int main()
 {
-	// ft::Map<int, char> My_map;
-	// for (size_t i = 0; i < 10; i++)
-	// 	My_map.insert(ft::make_pair(i, '1'));
-	
-	// ft::Map<int, char>::iterator my_it = My_map.begin();
-	// std::cout << my_it->first << " " << my_it->second << std::endl;
-	// ft::Map<int, char>::const_iterator c_it, c_ob(my_it);
-    // c_it = my_it;
+	ft::Map<int, std::string> ft_m;
+	for (size_t i = 0; i < 5; ++i)
+	{
+		ft_m.insert(ft::make_pair(i, "value"));
+	}
+	ft::Map<int, std::string>::iterator it = --ft_m.end();
+	for (; it != ft_m.begin(); --it)
+		std::cout << it->first << std::endl;
 	// typedef ft::node<int, int> node;
-	typedef ft::Map<int, int> RBT;
+	// typedef ft::Map<int, int> RBT;
+	// RBT My_map;
+	// for (size_t i = 0; i < 10; i++)
+	// 	My_map.insert(ft::make_pair(i, i + 1));
 	
-	
+	// RBT::iterator my_it = My_map.begin();
+	// std::cout << my_it->first << " " << my_it->second << std::endl;
+	// const RBT::iterator c_ob(my_it);
+	// my_it->second++;
+
+	// std::cout << My_map[0] << std::endl;
+	// std::cout << c_ob->first << std::endl;
+
+	// for (RBT::const_iterator cit = My_map.begin(); cit != My_map.end(); cit++)
+	// 	std::cout << cit->first << std::endl;
 	// typedef ft::RBT<int, int, ft::less<int> > RBT;
-	RBT rbt;
+	// RBT rbt;
 
-	// ft::Map<int, int> const m;
-
-	// m.insert(ft::make_pair(2,3));
-	// ft::Map<int,int>::iterator it = m.begin();
-	// std::cout << it->first << std::endl;
-	// ft::Vector<int> const v;
-
-	// ft::Vector<const int>::iterator it = v.begin();
-
-	// rbt.insert(2, 3);
-	// rbt.insert(3, 4);
-	// rbt.insert(5, 4);
-	// rbt.insert(1, 4);
-	// rbt.insert(6, 4);
-	// rbt.insert(4, 4);
-	// rbt.insert(7, 4);
-	// rbt.insert(8, 3);
-	// rbt.insert(10, 3);
-	rbt.insert(ft::make_pair(2, 2));
-	rbt.insert(ft::make_pair(3, 3));
-	rbt.insert(ft::make_pair(5, 5));
-	rbt.insert(ft::make_pair(1, 1));
-	rbt.insert(ft::make_pair(6, 6));
-	rbt.insert(ft::make_pair(4, 4));
-	rbt.insert(ft::make_pair(7, 7));
-	rbt.insert(ft::make_pair(8, 8));
-	rbt.insert(ft::make_pair(10, 10));
+	// rbt.insert(ft::make_pair(2, 2));
+	// rbt.insert(ft::make_pair(3, 3));
+	// rbt.insert(ft::make_pair(5, 5));
+	// rbt.insert(ft::make_pair(1, 1));
+	// rbt.insert(ft::make_pair(6, 6));
+	// rbt.insert(ft::make_pair(4, 4));
+	// rbt.insert(ft::make_pair(7, 7));
+	// rbt.insert(ft::make_pair(8, 8));
+	// rbt.insert(ft::make_pair(10, 10));
 
 	// std::cout << "size = " << rbt.size() << std::endl;
 	// ft::pair<RBT::iterator, RBT::iterator> p = rbt.equal_range(10);
@@ -67,8 +60,8 @@ int main()
 	// rbt.traverse();
 	// rbt.traverse();
 	// std::cout << rbt[5] << std::endl;
-	RBT::iterator it = rbt.begin();
-	RBT::iterator itr = rbt.end();
+	// RBT::iterator it = rbt.begin();
+	// RBT::iterator itr = rbt.end();
 	// std::cout << rbt[1] << std::endl;
 	// it->second++;
 	// std::cout << rbt[1] << std::endl;
@@ -78,10 +71,10 @@ int main()
 	// 	// std::cout << "end = " << *itr << std::endl;
 	// // std::cout << it->value << std::endl;
 	// // std::cout << *itr << std::endl;
-	for (; it != itr; it++)
-	{
-		std::cout << it->first << std::endl;
-	}
+	// for (; it != itr; it++)
+	// {
+	// 	std::cout << it->first << std::endl;
+	// }
 
 	// rbt.clear();
 	// std::cout << "size = " << rbt.size() << std::endl;
