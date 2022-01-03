@@ -64,6 +64,15 @@ namespace ft
 				RBT(): root(0) {}
 				RBT(node *r): root(r) {}
 
+				RBT&	operator=(const RBT& x)
+				{
+					root = x.root;
+					_alloc = x._alloc;
+					cmpr = x.cmpr;
+
+					return *this;
+				}
+
 				/*
 					Iterators
 				*/
@@ -264,6 +273,8 @@ namespace ft
 						tmp = tmp->parent;
 					return tmp;
 				}
+
+				node						*get_root2()	{	return root;}
 
 				void						set_root(node *r) {	root = r;	}
 

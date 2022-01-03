@@ -31,15 +31,15 @@ namespace ft
 
 			MapIterator		() {}
 			operator MapIterator<T, const value_type, key, T2, Compare, Alloc>() {
-    	        return MapIterator<T, const value_type, key, T2, Compare, Alloc>(_p);
-	        }
+				return MapIterator<T, const value_type, key, T2, Compare, Alloc>(_p, helper.get_root2());
+			}
 			MapIterator		(const MapIterator &x): _p(x._p)
 			{
-				m_pointer r = helper.get_root(_p);
-				helper.set_root(r);
+				helper = x.helper;
+				// m_pointer r = helper.get_root(_p);
+				// helper.set_root(r);
 			}
-			
-			
+
 			MapIterator		(m_pointer x): _p(x) {
 
 				// pointer r = helper.get_root(_p);
@@ -54,7 +54,11 @@ namespace ft
 				helper.set_root(root);
 			}
 
-			MapIterator&	operator=(const MapIterator &x){ _p = x._p;	return *this;	}
+			MapIterator&	operator=(const MapIterator &x){
+				_p = x._p;
+				helper = x.helper;
+				return *this;
+			}
 
 			/*
 				* Destructors
@@ -100,6 +104,10 @@ namespace ft
 				return tmp;
 			}
 
+			void	print_addr()
+			{
+				std::cout << "_p = " << _p << std::endl;
+			}
 			// 	template <class T, typename key, typename key, class Compare, class Alloc>
 
 

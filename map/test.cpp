@@ -14,9 +14,12 @@ int main()
 	{
 		ft_m.insert(ft::make_pair(i, "value"));
 	}
-	ft::Map<int, std::string>::iterator it = --ft_m.end();
-	for (; it != ft_m.begin(); --it)
-		std::cout << it->first << std::endl;
+	// ft::Map<int, std::string>::iterator it = --ft_m.end();
+	// for (; it != ft_m.begin(); --it)
+	// 	std::cout << it->first << std::endl;
+	ft::Map<int, std::string>::const_reverse_iterator rit(ft_m.end());
+	std::cout << rit->first << std::endl;
+
 	// typedef ft::node<int, int> node;
 	// typedef ft::Map<int, int> RBT;
 	// RBT My_map;
