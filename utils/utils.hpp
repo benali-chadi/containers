@@ -10,8 +10,8 @@ namespace ft
 	template <typename T> struct is_integral {	static const bool value = false;	};
 	template<> struct is_integral<bool> {	static const bool value = true;	};
 	template<> struct is_integral<char> {	static const bool value = true;	};
-	// template<> struct is_integral<char16_t> {	static const bool value = true;	};
-	// template<> struct is_integral<char32_t> {	static const bool value = true;	};
+	template<> struct is_integral<char16_t> {	static const bool value = true;	};
+	template<> struct is_integral<char32_t> {	static const bool value = true;	};
 	template<> struct is_integral<signed char> {	static const bool value = true;	};
 	template<> struct is_integral<short int> {	static const bool value = true;	};
 	template<> struct is_integral<int> {	static const bool value = true;	};
@@ -94,7 +94,7 @@ namespace ft
 			}
 			return (first2 != last2);
 		}
-	template <class InputIterator1, class InputIterator2, class BinaryPredicate>
+	template <class InputIterator1, class InputIterator2>
 		bool map_equal (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2)
 		{
 			for (; first1 != last1; first1++, first2++)
