@@ -10,15 +10,15 @@
 int main()
 {
 	ft::Map<int, std::string> ft_m;
-	for (size_t i = 0; i < 5; ++i)
+	for (size_t i = 0; i < 11; ++i)
 	{
 		ft_m.insert(ft::make_pair(i, "value"));
 	}
 	// ft::Map<int, std::string>::iterator it = --ft_m.end();
 	// for (; it != ft_m.begin(); --it)
 	// 	std::cout << it->first << std::endl;
-	ft::Map<int, std::string>::const_reverse_iterator rit(ft_m.end());
-	std::cout << rit->first << std::endl;
+	std::cout << ft_m[7] << std::endl;
+	// system("leaks a.out");
 
 	// typedef ft::node<int, int> node;
 	// typedef ft::Map<int, int> RBT;

@@ -116,23 +116,23 @@ namespace ft
 						return ft::make_pair(newNode, true);
 					}
 					newNode->color = 'R';
-					node *tmp = search_to_insert(*newNode);
+					
+					node *tmp = search_to_erase(newNode->data);
 					if (tmp)
-					{
-						newNode->parent = tmp;
-						
-						// Place the node
-						if (!cmpr(tmp->data.first,newNode->data.first))
-							tmp->left = newNode;
-						else
-							tmp->right = newNode;
+						return ft::make_pair(tmp, false);
+					
+					tmp = search_to_insert(*newNode);
+					newNode->parent = tmp;
+					
+					// Place the node
+					if (!cmpr(tmp->data.first,newNode->data.first))
+						tmp->left = newNode;
+					else
+						tmp->right = newNode;
 
-						check(newNode);
-						return ft::make_pair(newNode, true);
-					}
-					tmp = search_to_erase(newNode->data);
+					check(newNode);
+					return ft::make_pair(newNode, true);
 					// _alloc.destroy(newNode);
-					return ft::make_pair(tmp, false);
 				}
 				
 				bool						erase(value_type p)
@@ -412,10 +412,10 @@ namespace ft
 				{
 					node *tmp = root;
 
-					// if (tmp->data.first == n.data.first)
-					// {
-					// 	return 0;
-					// }
+					if (tmp->data.first == n.data.first)
+					{
+						return 0;
+					}
 
 					while (tmp && (tmp->right != 0 || tmp->left != 0))
 					{
@@ -427,7 +427,7 @@ namespace ft
 								return tmp;
 							tmp  = tmp->left;
 						}
-						else if (!cmpr(n.data.first, tmp->data.first))
+						else
 						{
 							if (!tmp->right)
 								return tmp;
@@ -474,11 +474,10 @@ namespace ft
 					{
 						if (tmp->data.first == p.first)
 							return tmp;
-						else if (cmpr(tmp->data.first, p.first))
+						else if (cmpr(p.first, tmp->data.first))
 							tmp = tmp->left;
-						else if (!cmpr(tmp->data.first, p.first))
+						else
 							tmp = tmp->right;
-						
 					}
 					return 0;
 				}

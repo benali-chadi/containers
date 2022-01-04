@@ -84,7 +84,7 @@ namespace ft
 				/*
 					* Destrucor
 				*/
-				~Map		() {	clear();	}
+				~Map		() {	/*clear();*/	}
 
 				/*
 					* Iterators
@@ -116,10 +116,14 @@ namespace ft
 
 				mapped_type&								operator[](const key_type& k)
 				{
-					ft::pair<key_type, mapped_type> tmp;
-					tmp.first = k;
-					// tmp.second = 0;
-					return m_tree.find(tmp)->data.second;
+					// ft::pair<key_type, mapped_type> tmp;
+					// tmp.first = k;
+					// // tmp.second = 0;
+					// return m_tree.find(tmp)->data.second;
+					// mapped_type &tmp = (*(insert(ft::make_pair(k, mapped_type())).first)).second;
+					// std::cout << "tmp = " << tmp << std::endl;
+					return (*(insert(ft::make_pair(k, mapped_type())).first)).second;
+					// return tmp;
 				}
 				
 				/*
@@ -132,7 +136,10 @@ namespace ft
 
 					if (ret.second)
 						_size++;
+					// std::cout << "after insert\n";
 					
+					// std::cout << "val = " << val.first << std::endl;
+					// std::cout << "ret = " << (ret.first)->second << std::endl;
 					return ret;
 				}
 				iterator									insert(iterator position, const value_type& val)
@@ -370,6 +377,13 @@ namespace ft
 								const Map<Key,T,Compare,Alloc>& rhs)
 			{
 				return !operator<(lhs, rhs);
+			}
+
+		template< class Key, class T, class Compare, class Alloc >
+			void swap( Map<Key,T,Compare,Alloc>& lhs,
+					Map<Key,T,Compare,Alloc>& rhs )
+			{
+				lhs.swap(rhs);
 			}
 }
 
