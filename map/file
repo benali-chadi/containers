@@ -1,2 +1,198 @@
-end = 0x7ffee0075728
-
+key = 0
+TRAVERSING...
+0 color = B
+1 color = B
+2 color = B
+this is root
+3 color = B
+4 color = B
+5 color = B
+6 color = B
+7 color = R
+8 color = B
+9 color = R
+10 color = B
+11 color = B
+12 color = B
+13 color = R
+14 color = B
+15 color = R
+tmp = 0x7febc5c02a90
+n1 = 0x7febc5c02a90
+n to remove = 0x7febc5c02a90
+key = 1
+TRAVERSING...
+1 color = B
+2 color = R
+3 color = B
+4 color = B
+5 color = R
+6 color = B
+this is root
+7 color = B
+8 color = B
+9 color = R
+10 color = B
+11 color = B
+12 color = B
+13 color = R
+14 color = B
+15 color = R
+tmp = 0x7febc5c02ad0
+n1 = 0x7febc5c02ad0
+n to remove = 0x7febc5c02b10
+key = 2
+TRAVERSING...
+2 color = B
+3 color = B
+4 color = B
+5 color = R
+6 color = B
+this is root
+7 color = B
+8 color = B
+9 color = R
+10 color = B
+11 color = B
+12 color = B
+13 color = R
+14 color = B
+15 color = R
+tmp = 0x7febc5c02ad0
+n1 = 0x7febc5c02ad0
+n to remove = 0x7febc5c02ad0
+key = 3
+TRAVERSING...
+3 color = B
+4 color = R
+this is root
+7 color = B
+3 color = B
+4 color = R
+5 color = B
+6 color = B
+tmp = 0x7febc5c02b50
+n1 = 0x7febc5c02b50
+n to remove = 0x7febc5c02b90
+key = 4
+TRAVERSING...
+4 color = B
+this is root
+7 color = B
+4 color = B
+5 color = B
+6 color = B
+tmp = 0x7febc5c02b50
+n1 = 0x7febc5c02b50
+n to remove = 0x7febc5c02b50
+key = 5
+TRAVERSING...
+4 color = R
+this is root
+7 color = B
+5 color = B
+6 color = R
+n1 = 0x0
+key = 6
+TRAVERSING...
+4 color = R
+this is root
+7 color = B
+5 color = B
+6 color = R
+n1 = 0x0
+key = 7
+TRAVERSING...
+4 color = R
+this is root
+7 color = B
+5 color = B
+6 color = R
+tmp = 0x7febc5c02c50
+n1 = 0x7febc5c02c50
+n to remove = 0x7febc5c02b50
+key = 8
+TRAVERSING...
+7 color = R
+this is root
+4 color = B
+5 color = B
+n1 = 0x0
+key = 9
+TRAVERSING...
+7 color = R
+this is root
+4 color = B
+5 color = B
+n1 = 0x0
+key = 10
+TRAVERSING...
+7 color = R
+this is root
+4 color = B
+5 color = B
+n1 = 0x0
+key = 11
+TRAVERSING...
+7 color = R
+this is root
+4 color = B
+5 color = B
+n1 = 0x0
+key = 12
+TRAVERSING...
+7 color = R
+this is root
+4 color = B
+5 color = B
+n1 = 0x0
+key = 13
+TRAVERSING...
+7 color = R
+this is root
+4 color = B
+5 color = B
+n1 = 0x0
+key = 14
+TRAVERSING...
+7 color = R
+this is root
+4 color = B
+5 color = B
+n1 = 0x0
+key = 15
+TRAVERSING...
+7 color = R
+this is root
+4 color = B
+5 color = B
+n1 = 0x0
+Process:         a.out [20461]
+Path:            /Volumes/VOLUME/*/a.out
+Load Address:    0x100f30000
+Identifier:      a.out
+Version:         ???
+Code Type:       X86-64
+Parent Process:  zsh [1745]
+
+Date/Time:       2022-01-05 02:17:27.717 +0100
+Launch Time:     2022-01-05 02:17:27.442 +0100
+OS Version:      Mac OS X 10.14.6 (18G103)
+Report Version:  7
+Analysis Tool:   /Applications/Xcode.app/Contents/Developer/usr/bin/leaks
+Analysis Tool Version:  Xcode 11.3.1 (11C505)
+----
+
+leaks Report Version: 4.0
+Process 20461: 180 nodes malloced for 19 KB
+Process 20461: 5 leaks for 320 total leaked bytes.
+
+    5 (320 bytes) << TOTAL >>
+
+      2 (128 bytes) ROOT LEAK: 0x7febc5c02a90 [64]
+         1 (64 bytes) 0x7febc5c02ad0 [64]
+
+      1 (64 bytes) ROOT LEAK: 0x7febc5c02b10 [64]
+      1 (64 bytes) ROOT LEAK: 0x7febc5c02b90 [64]
+      1 (64 bytes) ROOT LEAK: 0x7febc5c02c10 [64]
+

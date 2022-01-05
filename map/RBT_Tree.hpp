@@ -119,7 +119,10 @@ namespace ft
 					
 					node *tmp = search_to_erase(newNode->data);
 					if (tmp)
+					{
+						_alloc.destroy(newNode);
 						return ft::make_pair(tmp, false);
+					}
 					
 					tmp = search_to_insert(*newNode);
 					newNode->parent = tmp;
@@ -132,13 +135,15 @@ namespace ft
 
 					check(newNode);
 					return ft::make_pair(newNode, true);
-					// _alloc.destroy(newNode);
 				}
 				
 				bool						erase(value_type p)
 				{
+					std::cout << "TRAVERSING...\n";
+					traverse();
 					// search the position of key
 					node	*n = search_to_erase(p);
+					std::cout << "n1 = " << n << std::endl;
 
 					if (n)
 					{
@@ -149,12 +154,13 @@ namespace ft
 						// the node is BLACK!!
 						else
 						{
-							n = node_is_black(n);
+							node_is_black(n);
 							remove(n);
 						}
 						// _alloc.destroy(n);
 						return true;
 					}
+					// _alloc.destroy(n);
 					return false;
 				}
 
@@ -473,11 +479,18 @@ namespace ft
 					while (tmp)
 					{
 						if (tmp->data.first == p.first)
+						{
+							std::cout << "tmp = " << tmp << std::endl;
 							return tmp;
+						}
 						else if (cmpr(p.first, tmp->data.first))
+						{
 							tmp = tmp->left;
+						}
 						else
+						{
 							tmp = tmp->right;
+						}
 					}
 					return 0;
 				}
@@ -521,7 +534,8 @@ namespace ft
 						n->parent->left = 0;
 					else
 						n->parent->right = 0;
-					// _alloc.destroy(n);
+					std::cout << "n to remove = " << n << std::endl;
+					_alloc.destroy(n);
 				}
 
 				char	get_direction(node *n)
@@ -534,10 +548,10 @@ namespace ft
 
 				node	*node_is_black(node *n)
 				{
-					node	*parent = n->parent;
-
-					if (parent == root)
+					if (n == root)
 						return n;
+
+					node	*parent = n->parent;
 					
 					char	n_direction = get_direction(n);
 					node	*sibling = get_sibling(n);
@@ -545,11 +559,11 @@ namespace ft
 					// the sibling's color is red
 					if (sibling && sibling->color == 'R')
 					{
+						// parent->color = 'R';
 						if (n_direction == 'L')
-							rll(parent);
+							rrr(sibling);
 						else
-							rrr(parent);
-
+							rll(sibling);
 						node_is_black(n);
 					}
 					// the sibling is black (or null) and its children are both black (or null)
@@ -561,7 +575,7 @@ namespace ft
 							sibling->color = 'R';
 						if (parent->color == 'R')
 							parent->color = 'B';
-						else
+						else if (parent != root)
 							node_is_black(parent);
 					}
 					// the sibling is black and one or both of the children are red

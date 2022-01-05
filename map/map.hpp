@@ -171,10 +171,12 @@ namespace ft
 				}
 				size_type									erase(const key_type& k)
 				{
-					ft::pair<key_type, mapped_type> tmp;
-					tmp.first = k;
+					// ft::pair<key_type, mapped_type> tmp;
+					// tmp.first = k;
 					// tmp.second = 0;
-					bool ret = m_tree.erase(tmp);
+					// std::cout << "TRAVERSING..." << std::endl;
+					// m_tree.traverse();
+					bool ret = m_tree.erase(ft::make_pair(k, mapped_type()));
 					if (ret)
 					{
 						_size--;
@@ -194,6 +196,7 @@ namespace ft
 
 					for (size_type i = 0; i < old_size; i++)
 					{
+						std::cout << "key = " << keys[i] << std::endl;
 						erase(keys[i]);
 					}
 				}

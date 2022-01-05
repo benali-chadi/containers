@@ -10,15 +10,19 @@
 int main()
 {
 	ft::Map<int, std::string> ft_m;
-	for (size_t i = 0; i < 11; ++i)
+	for (size_t i = 0; i < 16; ++i)
 	{
 		ft_m.insert(ft::make_pair(i, "value"));
 	}
 	// ft::Map<int, std::string>::iterator it = --ft_m.end();
 	// for (; it != ft_m.begin(); --it)
 	// 	std::cout << it->first << std::endl;
-	std::cout << ft_m[7] << std::endl;
-	// system("leaks a.out");
+	// for (size_t i = 0; i < ft_m.size(); i++)
+	// 	std::cout << "i = " << i << " " << ft_m[i] << std::endl;
+	ft_m.erase(2);
+	ft_m.erase(3);
+	// ft_m.clear();
+	system("leaks a.out");
 
 	// typedef ft::node<int, int> node;
 	// typedef ft::Map<int, int> RBT;
@@ -117,8 +121,6 @@ int main()
 	// std::pair<int, int> pr = *it;
 	// std::cout << pr.first << std::endl;
 	// printf("%d\n", pr.second);
-
-	// std::system("leaks -u a.out");
 
 	// std::cout << "\n" << rbt.find(5)->left->key << std::endl;
 	return 0;
