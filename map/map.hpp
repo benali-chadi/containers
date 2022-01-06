@@ -75,16 +75,23 @@ namespace ft
 
 				Map&									operator=(const Map& x)									// Assignement operator
 				{
-					m_tree = x.m_tree;
 					_size = x._size;
+					m_tree.deep_copy(x.m_tree);
+					// insert(x.begin(), x.end());
+					
+					// m_tree.deep_copy(x.m_tree);
+					// // m_tree = x.m_tree;
+					// _size = x._size;
+					// _alloc = x._alloc;
+					// _compare = x._compare;
 
 					return *this;
 				}
-				
+
 				/*
 					* Destrucor
 				*/
-				~Map		() {	/*clear();*/	}
+				~Map		() {	clear();	}
 
 				/*
 					* Iterators
@@ -144,8 +151,6 @@ namespace ft
 				}
 				iterator									insert(iterator position, const value_type& val)
 				{
-					
-					
 					ft::pair<iterator, bool>	ret = insert(val);
 					position = ret.first;
 
@@ -155,25 +160,16 @@ namespace ft
 					void									insert(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
 					{
 						for (; first != last; first++)
-						{
-							ft::pair<key_type, mapped_type> tmp;
-							tmp.first = first->first;
-							tmp.second = first->second;
-							insert(tmp);
-						}
+							insert(ft::make_pair(first->first, first->second));
 					}
 
 				void										erase(iterator position)
 				{
-					bool ret = erase(position->first);
-					if (ret)
-						_size--;
+					erase(position->first);
 				}
 				size_type									erase(const key_type& k)
 				{
-					// ft::pair<key_type, mapped_type> tmp;
-					// tmp.first = k;
-					// tmp.second = 0;
+					// std::cout << "k = " << k << std::endl;
 					// std::cout << "TRAVERSING..." << std::endl;
 					// m_tree.traverse();
 					bool ret = m_tree.erase(ft::make_pair(k, mapped_type()));
@@ -196,18 +192,35 @@ namespace ft
 
 					for (size_type i = 0; i < old_size; i++)
 					{
-						std::cout << "key = " << keys[i] << std::endl;
+						// std::cout << "key = " << keys[i] << std::endl;
 						erase(keys[i]);
 					}
 				}
 
 				void										swap(Map& x)
 				{
+					Map tmp;
+					tmp.m_tree = m_tree;
+					tmp._size = _size;
+					tmp._compare = _compare;
+					tmp._alloc = _alloc;
+					
 					m_tree = x.m_tree;
 					_size = x._size;
+					_compare = x._compare;
+					_alloc = x._alloc;
+					
+					x.m_tree = tmp.m_tree;
+					x._size = tmp._size;
+					x._compare = tmp._compare;
+					x._alloc = tmp._alloc;
 				}
 
-				void										clear()	{	erase(begin(), end());	}
+				void										clear()	{	
+					m_tree.delete_tree();
+					_size = 0;
+					/*erase(begin(), end());*/
+				}
 				
 				/*
 					* Observers
@@ -342,8 +355,8 @@ namespace ft
 		*/
 
 		template < class Key, class T, class Compare, class Alloc >
-			bool	operator==(	const Map<Key, T, Compare, Alloc> lhs,
-								const Map<Key, T, Compare, Alloc> rhs)
+			bool	operator==(	const Map<Key, T, Compare, Alloc>& lhs,
+								const Map<Key, T, Compare, Alloc>& rhs)
 			{
 				if (lhs.size() != rhs.size())
 					return false;

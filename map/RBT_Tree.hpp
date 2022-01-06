@@ -64,13 +64,28 @@ namespace ft
 				RBT(): root(0) {}
 				RBT(node *r): root(r) {}
 
-				RBT&	operator=(const RBT& x)
+				RBT&	operator=(RBT const &x)
 				{
 					root = x.root;
 					_alloc = x._alloc;
 					cmpr = x.cmpr;
 
 					return *this;
+				}
+
+				void	delete_tree()
+				{
+					while (root != 0)
+						erase(in_order_pred(root)->data);
+				}
+				void	deep_copy(RBT const &x)
+				{
+					RBT tmp = x;
+					std::cout << "root = " << root << " x root = " << tmp.get_root2() << std::endl;
+					delete_tree();
+
+					for(const_iterator it = x.begin(); it != x.end(); it++)
+						insert(*it);
 				}
 
 				/*
@@ -120,7 +135,7 @@ namespace ft
 					node *tmp = search_to_erase(newNode->data);
 					if (tmp)
 					{
-						_alloc.destroy(newNode);
+						// _alloc.deallocate(newNode, 1);
 						return ft::make_pair(tmp, false);
 					}
 					
@@ -139,11 +154,12 @@ namespace ft
 				
 				bool						erase(value_type p)
 				{
-					std::cout << "TRAVERSING...\n";
-					traverse();
+					// std::cout << "TRAVERSING...\n";
+					// traverse();
 					// search the position of key
+					// std::cout << "p first = " << p.first << std::endl;
 					node	*n = search_to_erase(p);
-					std::cout << "n1 = " << n << std::endl;
+					// std::cout << "n1 = " << n << std::endl;
 
 					if (n)
 					{
@@ -154,7 +170,7 @@ namespace ft
 						// the node is BLACK!!
 						else
 						{
-							node_is_black(n);
+							n = node_is_black(n);
 							remove(n);
 						}
 						// _alloc.destroy(n);
@@ -280,7 +296,7 @@ namespace ft
 					return tmp;
 				}
 
-				node						*get_root2()	{	return root;}
+				node						*get_root2() {	return root;	}
 
 				void						set_root(node *r) {	root = r;	}
 
@@ -320,7 +336,12 @@ namespace ft
 					
 					// If the grand parent isn't root change its parent's right to the parent
 					if (grand_parent != root)
-						grand_parent->parent->left = parent;
+					{
+						if (get_direction(grand_parent) == 'L')
+							grand_parent->parent->left = parent;
+						else
+							grand_parent->parent->right = parent;
+					}
 					
 					grand_parent->parent = parent;
 					grand_parent->color = c;
@@ -349,7 +370,12 @@ namespace ft
 
 					// If the grand parent isn't root change its parent's right to the parent
 					if (grand_parent != root)
-						grand_parent->parent->right = parent;
+					{
+						if (get_direction(grand_parent) == 'L')
+							grand_parent->parent->left = parent;
+						else
+							grand_parent->parent->right = parent;
+					}
 
 					grand_parent->parent = parent;
 					grand_parent->color = c;
@@ -439,8 +465,6 @@ namespace ft
 								return tmp;
 							tmp = tmp->right;
 						}
-						// else
-						// 	return 0;
 					}
 					return tmp;
 				}
@@ -479,18 +503,11 @@ namespace ft
 					while (tmp)
 					{
 						if (tmp->data.first == p.first)
-						{
-							std::cout << "tmp = " << tmp << std::endl;
 							return tmp;
-						}
 						else if (cmpr(p.first, tmp->data.first))
-						{
 							tmp = tmp->left;
-						}
 						else
-						{
 							tmp = tmp->right;
-						}
 					}
 					return 0;
 				}
@@ -534,8 +551,8 @@ namespace ft
 						n->parent->left = 0;
 					else
 						n->parent->right = 0;
-					std::cout << "n to remove = " << n << std::endl;
-					_alloc.destroy(n);
+					// std::cout << "n to remove = " << n << std::endl;
+					_alloc.deallocate(n, 1);
 				}
 
 				char	get_direction(node *n)
@@ -601,9 +618,19 @@ namespace ft
 						{
 							// Rotate in the opposite direction of the node, the colors will be swapped inside rrr or rll
 							if (n_direction == 'L')
-								rll(sibling);
+							{
+								if (sibling->left && get_direction(sibling->left) == n_direction && sibling->left->color == 'R')
+									rll(sibling->left);
+								else
+									rll(sibling->right);
+							}
 							else
-								rrr(sibling);
+							{
+								if (sibling->left && get_direction(sibling->left) == n_direction && sibling->left->color == 'R')
+									rrr(sibling->left);
+								else
+									rrr(sibling->right);
+							}
 							node_is_black(n);
 						}
 					}

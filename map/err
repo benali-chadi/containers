@@ -1,0 +1,150 @@
+In file included from test.cpp:6:
+In file included from ./map.hpp:5:
+./RBT_Tree.hpp:67:25: error: 'const' qualifier may not be applied to a reference
+                                RBT&    operator=(RBT& const x)
+                                                       ^
+In file included from test.cpp:6:
+In file included from ./map.hpp:5:
+In file included from ./RBT_Tree.hpp:5:
+./MapIterator.hpp:38:12: error: no viable overloaded '='
+                                helper = x.helper;
+                                ~~~~~~ ^ ~~~~~~~~
+./../reverse_iterator.hpp:40:9: note: in instantiation of member function 'ft::MapIterator<ft::node<ft::pair<int, std::__1::basic_string<char> > >, ft::pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::MapIterator' requested here
+                class reverse_iterator {
+                      ^
+./RBT_Tree.hpp:67:10: note: candidate function not viable: 1st argument ('const ft::RBT<int, basic_string<char>, less<int>, allocator<pair<const int, basic_string<char> > > >') would lose const qualifier
+                                RBT&    operator=(RBT& const x)
+                                        ^
+In file included from test.cpp:6:
+./map.hpp:95:39: error: no matching constructor for initialization of 'ft::Map<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::iterator' (aka 'MapIterator<node<pair<int, std::__1::basic_string<char> > >, pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >')
+                                iterator                                                                        begin() {       return m_tree.begin();  }
+                                                                                                                                       ^~~~~~~~~~~~~~
+test.cpp:22:18: note: in instantiation of member function 'ft::Map<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::begin' requested here
+        ft_m.erase(ft_m.begin());
+                        ^
+./MapIterator.hpp:43:4: note: candidate constructor not viable: no known conversion from 'ft::RBT<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::iterator' (aka 'MapIterator<node<pair<int, std::__1::basic_string<char> > >, pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >') to 'ft::MapIterator<ft::node<ft::pair<int, std::__1::basic_string<char> > >, ft::pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::m_pointer' (aka 'ft::node<ft::pair<int, std::__1::basic_string<char> > > *') for 1st argument
+                        MapIterator             (m_pointer x): _p(x) {
+                        ^
+./MapIterator.hpp:32:4: note: candidate constructor not viable: requires 0 arguments, but 1 was provided
+                        MapIterator             () {}
+                        ^
+./MapIterator.hpp:51:4: note: candidate constructor not viable: requires 2 arguments, but 1 was provided
+                        MapIterator             (m_pointer x, m_pointer root)
+                        ^
+In file included from test.cpp:6:
+In file included from ./map.hpp:5:
+./RBT_Tree.hpp:82:35: error: no matching constructor for initialization of 'ft::RBT<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::iterator' (aka 'MapIterator<node<pair<int, std::__1::basic_string<char> > >, pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >')
+                                iterator                                        begin() {       return iterator(in_order_succ(root), root);     }
+                                                                                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./map.hpp:95:46: note: in instantiation of member function 'ft::RBT<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::begin' requested here
+                                iterator                                                                        begin() {       return m_tree.begin();  }
+                                                                                                                                              ^
+test.cpp:22:18: note: in instantiation of member function 'ft::Map<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::begin' requested here
+        ft_m.erase(ft_m.begin());
+                        ^
+./MapIterator.hpp:43:4: note: candidate constructor not viable: no known conversion from 'ft::RBT<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::iterator' (aka 'MapIterator<node<pair<int, std::__1::basic_string<char> > >, pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >') to 'ft::MapIterator<ft::node<ft::pair<int, std::__1::basic_string<char> > >, ft::pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::m_pointer' (aka 'ft::node<ft::pair<int, std::__1::basic_string<char> > > *') for 1st argument
+                        MapIterator             (m_pointer x): _p(x) {
+                        ^
+./MapIterator.hpp:32:4: note: candidate constructor not viable: requires 0 arguments, but 1 was provided
+                        MapIterator             () {}
+                        ^
+./MapIterator.hpp:51:4: note: candidate constructor not viable: requires 2 arguments, but 1 was provided
+                        MapIterator             (m_pointer x, m_pointer root)
+                        ^
+In file included from test.cpp:3:
+In file included from ./../vector/vector.hpp:8:
+./../reverse_iterator.hpp:78:20: error: no matching constructor for initialization of 'ft::reverse_iterator<ft::MapIterator<ft::node<ft::pair<int, std::__1::basic_string<char> > >, ft::pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > > >::iterator_type' (aka 'ft::MapIterator<ft::node<ft::pair<int, std::__1::basic_string<char> > >, ft::pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >')
+                                        iterator_type tmp = _iter;
+                                                      ^     ~~~~~
+./../reverse_iterator.hpp:85:46: note: in instantiation of member function 'ft::reverse_iterator<ft::MapIterator<ft::node<ft::pair<int, std::__1::basic_string<char> > >, ft::pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > > >::operator*' requested here
+                                pointer                         operator->() const {    return &(operator*());  }
+                                                                                                 ^
+test.cpp:25:15: note: in instantiation of member function 'ft::reverse_iterator<ft::MapIterator<ft::node<ft::pair<int, std::__1::basic_string<char> > >, ft::pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > > >::operator->' requested here
+        ft_m.erase(it->first);
+                     ^
+./MapIterator.hpp:43:4: note: candidate constructor not viable: no known conversion from 'const ft::reverse_iterator<ft::MapIterator<ft::node<ft::pair<int, std::__1::basic_string<char> > >, ft::pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > > >::iterator_type' (aka 'const ft::MapIterator<ft::node<ft::pair<int, std::__1::basic_string<char> > >, ft::pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >') to 'ft::MapIterator<ft::node<ft::pair<int, std::__1::basic_string<char> > >, ft::pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::m_pointer' (aka 'ft::node<ft::pair<int, std::__1::basic_string<char> > > *') for 1st argument
+                        MapIterator             (m_pointer x): _p(x) {
+                        ^
+./MapIterator.hpp:32:4: note: candidate constructor not viable: requires 0 arguments, but 1 was provided
+                        MapIterator             () {}
+                        ^
+./MapIterator.hpp:51:4: note: candidate constructor not viable: requires 2 arguments, but 1 was provided
+                        MapIterator             (m_pointer x, m_pointer root)
+                        ^
+In file included from test.cpp:6:
+./map.hpp:214:29: error: no matching member function for call to 'erase'
+                                void                                                                            clear() {       erase(begin(), end());  }
+                                                                                                                                ^~~~~
+test.cpp:31:7: note: in instantiation of member function 'ft::Map<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::clear' requested here
+        ft_m.clear();
+             ^
+./map.hpp:186:19: note: candidate function not viable: no known conversion from 'MapIterator<[...], const pair<...>, [4 * ...]>' to 'MapIterator<[...], pair<...>, [4 * ...]>' for 1st argument
+                                void                                                                            erase(iterator first, iterator last)
+                                                                                                                ^
+./map.hpp:173:23: note: candidate function not viable: requires single argument 'k', but 2 arguments were provided
+                                size_type                                                                       erase(const key_type& k)
+                                                                                                                ^
+./map.hpp:168:19: note: candidate function not viable: requires single argument 'position', but 2 arguments were provided
+                                void                                                                            erase(iterator position)
+                                                                                                                ^
+In file included from test.cpp:6:
+In file included from ./map.hpp:5:
+In file included from ./RBT_Tree.hpp:5:
+./MapIterator.hpp:38:12: error: no viable overloaded '='
+                                helper = x.helper;
+                                ~~~~~~ ^ ~~~~~~~~
+./map.hpp:96:50: note: in instantiation of member function 'ft::MapIterator<ft::node<ft::pair<int, std::__1::basic_string<char> > >, const ft::pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::MapIterator' requested here
+                                const_iterator                                                          begin() const { return m_tree.begin();  }
+                                                                                                                               ^
+./map.hpp:214:35: note: in instantiation of member function 'ft::Map<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::begin' requested here
+                                void                                                                            clear() {       erase(begin(), end());  }
+                                                                                                                                      ^
+test.cpp:31:7: note: in instantiation of member function 'ft::Map<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::clear' requested here
+        ft_m.clear();
+             ^
+./RBT_Tree.hpp:67:10: note: candidate function not viable: 1st argument ('const ft::RBT<int, basic_string<char>, less<int>, allocator<pair<const int, basic_string<char> > > >') would lose const qualifier
+                                RBT&    operator=(RBT& const x)
+                                        ^
+In file included from test.cpp:6:
+./map.hpp:98:37: error: no matching constructor for initialization of 'ft::Map<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::iterator' (aka 'MapIterator<node<pair<int, std::__1::basic_string<char> > >, pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >')
+                                iterator                                                                        end() { return m_tree.end();    }
+                                                                                                                               ^~~~~~~~~~~~
+./map.hpp:214:44: note: in instantiation of member function 'ft::Map<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::end' requested here
+                                void                                                                            clear() {       erase(begin(), end());  }
+                                                                                                                                               ^
+test.cpp:31:7: note: in instantiation of member function 'ft::Map<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::clear' requested here
+        ft_m.clear();
+             ^
+./MapIterator.hpp:43:4: note: candidate constructor not viable: no known conversion from 'ft::RBT<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::iterator' (aka 'MapIterator<node<pair<int, std::__1::basic_string<char> > >, pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >') to 'ft::MapIterator<ft::node<ft::pair<int, std::__1::basic_string<char> > >, ft::pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::m_pointer' (aka 'ft::node<ft::pair<int, std::__1::basic_string<char> > > *') for 1st argument
+                        MapIterator             (m_pointer x): _p(x) {
+                        ^
+./MapIterator.hpp:32:4: note: candidate constructor not viable: requires 0 arguments, but 1 was provided
+                        MapIterator             () {}
+                        ^
+./MapIterator.hpp:51:4: note: candidate constructor not viable: requires 2 arguments, but 1 was provided
+                        MapIterator             (m_pointer x, m_pointer root)
+                        ^
+In file included from test.cpp:6:
+In file included from ./map.hpp:5:
+./RBT_Tree.hpp:85:33: error: no matching constructor for initialization of 'ft::RBT<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::iterator' (aka 'MapIterator<node<pair<int, std::__1::basic_string<char> > >, pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >')
+                                iterator                                        end() { return iterator(0, root);       }
+                                                                                               ^~~~~~~~~~~~~~~~~
+./map.hpp:98:44: note: in instantiation of member function 'ft::RBT<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::end' requested here
+                                iterator                                                                        end() { return m_tree.end();    }
+                                                                                                                                      ^
+./map.hpp:214:44: note: in instantiation of member function 'ft::Map<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::end' requested here
+                                void                                                                            clear() {       erase(begin(), end());  }
+                                                                                                                                               ^
+test.cpp:31:7: note: in instantiation of member function 'ft::Map<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::clear' requested here
+        ft_m.clear();
+             ^
+./MapIterator.hpp:43:4: note: candidate constructor not viable: no known conversion from 'ft::RBT<int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::iterator' (aka 'MapIterator<node<pair<int, std::__1::basic_string<char> > >, pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >') to 'ft::MapIterator<ft::node<ft::pair<int, std::__1::basic_string<char> > >, ft::pair<const int, std::__1::basic_string<char> >, int, std::__1::basic_string<char>, std::__1::less<int>, std::__1::allocator<ft::pair<const int, std::__1::basic_string<char> > > >::m_pointer' (aka 'ft::node<ft::pair<int, std::__1::basic_string<char> > > *') for 1st argument
+                        MapIterator             (m_pointer x): _p(x) {
+                        ^
+./MapIterator.hpp:32:4: note: candidate constructor not viable: requires 0 arguments, but 1 was provided
+                        MapIterator             () {}
+                        ^
+./MapIterator.hpp:51:4: note: candidate constructor not viable: requires 2 arguments, but 1 was provided
+                        MapIterator             (m_pointer x, m_pointer root)
+                        ^
+9 errors generated.

@@ -88,9 +88,9 @@ namespace ft
 		{
 			for (; first1 != last1; first1++, first2++)
 			{
-				if (first2 == last2 || comp(first2->first, first1->first))
+				if (first2 == last2 || comp(first2->first, first1->first) || first2->second < first1->second)
 						return false;
-				else if (comp(first2->first, first1->first))
+				else if (comp(first1->first, first2->first) || first1->second < first2->second)
 					return true;
 			}
 			return (first2 != last2);
@@ -99,8 +99,10 @@ namespace ft
 		bool map_equal (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2)
 		{
 			for (; first1 != last1; first1++, first2++)
-				if (first1->first != first2->first)
+			{
+				if (first1->first != first2->first || first1->second != first2->second)
 					return false;
+			}
 			return true;
 		}
 }

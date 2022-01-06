@@ -10,19 +10,36 @@
 int main()
 {
 	ft::Map<int, std::string> ft_m;
-	for (size_t i = 0; i < 16; ++i)
+	for (size_t i = 0; i < 1e6; ++i)
 	{
 		ft_m.insert(ft::make_pair(i, "value"));
 	}
-	// ft::Map<int, std::string>::iterator it = --ft_m.end();
-	// for (; it != ft_m.begin(); --it)
-	// 	std::cout << it->first << std::endl;
-	// for (size_t i = 0; i < ft_m.size(); i++)
-	// 	std::cout << "i = " << i << " " << ft_m[i] << std::endl;
-	ft_m.erase(2);
-	ft_m.erase(3);
+	ft::Map<int, std::string> ft_m2;
+	for (size_t i = 0; i < 1e6; ++i)
+	{
+		ft_m2.insert(ft::make_pair(i, "value"));
+	}
+	ft_m2.swap(ft_m);
+
+	std::cout << "m size = " << ft_m.size() << "\tm2 size = " << ft_m2.size() << std::endl;
+
+	// std::cout << (ft_m == ft_m2) << std::endl;
+	// // ft::Map<int, std::string>::iterator it = ft_m.begin();
+	// ft::Map<int, std::string>::reverse_iterator it = ft_m.rbegin();
+	// // for (; it != ft_m.begin(); --it)
+	// 	// std::cout << it->first << std::endl;
+	
+	// ft_m.erase(ft_m.begin());
+	// // ft_m.erase(4);
+	// // ft_m.erase(2);
+	// ft_m.erase(it->first);
+	// for (size_t i = 0; i < ft_m2.size(); i++)
+	// 	std::cout << "i = " << i << " " << ft_m2[i] << std::endl;
+	// // ft_m.erase(1);
+	// // ft_m.erase(2);
+	// // ft_m.erase(3);
 	// ft_m.clear();
-	system("leaks a.out");
+	// system("leaks a.out");
 
 	// typedef ft::node<int, int> node;
 	// typedef ft::Map<int, int> RBT;
