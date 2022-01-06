@@ -9,18 +9,40 @@
 
 int main()
 {
-	ft::Map<int, std::string> ft_m;
-	for (size_t i = 0; i < 10; ++i)
-	{
-		ft_m.insert(ft::make_pair(i, "value"));
-	}
-	ft::Map<int, std::string> ft_m2;
-	for (size_t i = 0; i < 10; ++i)
-	{
-		ft_m2.insert(ft::make_pair(i, "value"));
-	}
-	std::cout << "eq range 1 = " << ft_m.equal_range(0).first->first << " eq range 2 = " << ft_m.equal_range(0).second->first << std::endl;
+	// ft::Map<int, std::string> ft_m;
+	// for (size_t i = 0; i < 10; ++i)
+	// {
+	// 	ft_m.insert(ft::make_pair(i, "value"));
+	// }
+	// ft::Map<int, std::string> ft_m2;
+	// for (size_t i = 0; i < 10; ++i)
+	// {
+	// 	ft_m2.insert(ft::make_pair(i, "value"));
+	// }
+	// std::cout << "eq range 1 = " << ft_m.equal_range(0).first->first << " eq range 2 = " << ft_m.equal_range(0).second->first << std::endl;
 	// ft_m2.swap(ft_m);
+	std::map<int, std::string> m;
+        ft::Map<int, std::string> ft_m;
+        int arr[] = {20, 10, 100, 15, 60, 90, 65, 200, 150}; // size = 9
+        for (size_t i = 0; i < 9; ++i)
+        {
+            m.insert(std::make_pair(arr[i], "value"));
+            ft_m.insert(ft::make_pair(arr[i], "value"));
+        }
+        std::map<int, std::string> const c_m(m.begin(), m.end());
+        ft::Map<int, std::string> const c_ft_m(ft_m.begin(), ft_m.end());
+		// std::cout << (m.lower_bound(15)->first) << " " << (ft_m.lower_bound(15)->first) << std::endl;
+        std::cout << (m.lower_bound(15)->first == ft_m.lower_bound(15)->first) << std::endl;
+        std::cout << (m.lower_bound(65)->first == ft_m.lower_bound(65)->first) << std::endl;
+        std::cout << (m.lower_bound(63)->first == ft_m.lower_bound(63)->first) << std::endl;
+        std::cout << (m.lower_bound(120)->first == ft_m.lower_bound(120)->first) << std::endl;
+        std::cout << (m.lower_bound(70)->first == ft_m.lower_bound(70)->first) << std::endl;
+
+        std::cout << (c_m.lower_bound(15)->first == c_ft_m.lower_bound(15)->first) << std::endl;
+        std::cout << (c_m.lower_bound(65)->first == c_ft_m.lower_bound(65)->first) << std::endl;
+        std::cout << (c_m.lower_bound(63)->first == c_ft_m.lower_bound(63)->first) << std::endl;
+        std::cout << (c_m.lower_bound(120)->first == c_ft_m.lower_bound(120)->first) << std::endl;
+        std::cout << (c_m.lower_bound(70)->first == c_ft_m.lower_bound(70)->first) << std::endl;
 
 	// std::cout << "m size = " << ft_m.size() << "\tm2 size = " << ft_m2.size() << std::endl;
 

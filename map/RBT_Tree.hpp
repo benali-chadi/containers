@@ -112,9 +112,59 @@ namespace ft
 
 					while (tmp)
 					{
+						if (tmp->data.first > k && (!tmp->left || in_order_pred(tmp->left)->data.first < k))
+							return ft::make_pair(tmp, true);
 						if (tmp->data.first == k)
 							return ft::make_pair(tmp, false);
-						if (tmp->data.first > k && (!tmp->left || tmp->left->data.first < k))
+						if (tmp->data.first > k)
+							tmp = tmp->left;
+						else
+							tmp = tmp->right;
+					}
+					return ft::make_pair(end(), false);
+				}
+
+				ft::pair<const_iterator, bool>	search(const key &k) const
+				{
+					node	*tmp = root;
+
+					while (tmp)
+					{
+						if (tmp->data.first == k)
+							return ft::make_pair(tmp, false);
+						if (tmp->data.first > k && (!tmp->left || in_order_pred(tmp->left)->data.first < k))
+							return ft::make_pair(tmp, true);
+						if (tmp->data.first > k)
+							tmp = tmp->left;
+						else
+							tmp = tmp->right;
+					}
+					return ft::make_pair(end(), false);
+				}
+
+				ft::pair<iterator, bool>	search_for_upper_bound(const key &k)
+				{
+					node	*tmp = root;
+
+					while (tmp)
+					{
+						if (tmp->data.first > k && (!tmp->left || in_order_pred(tmp->left)->data.first <= k))
+							return ft::make_pair(tmp, true);
+						if (tmp->data.first > k)
+							tmp = tmp->left;
+						else
+							tmp = tmp->right;
+					}
+					return ft::make_pair(end(), false);
+				}
+
+				ft::pair<const_iterator, bool>	search_for_upper_bound(const key &k) const
+				{
+					node	*tmp = root;
+
+					while (tmp)
+					{
+						if (tmp->data.first > k && (!tmp->left || in_order_pred(tmp->left)->data.first <= k))
 							return ft::make_pair(tmp, true);
 						if (tmp->data.first > k)
 							tmp = tmp->left;
@@ -205,6 +255,16 @@ namespace ft
 				*/
 
 				node						*in_order_pred(node *n)
+				{
+					node	*tmp = n;
+
+					while (tmp && tmp->right != 0)
+						tmp = tmp->right;
+					
+					return tmp;
+				}
+
+				const node						*in_order_pred(node *n) const
 				{
 					node	*tmp = n;
 
