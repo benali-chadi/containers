@@ -77,13 +77,6 @@ namespace ft
 				{
 					_size = x._size;
 					m_tree.deep_copy(x.m_tree);
-					// insert(x.begin(), x.end());
-					
-					// m_tree.deep_copy(x.m_tree);
-					// // m_tree = x.m_tree;
-					// _size = x._size;
-					// _alloc = x._alloc;
-					// _compare = x._compare;
 
 					return *this;
 				}
@@ -123,14 +116,7 @@ namespace ft
 
 				mapped_type&								operator[](const key_type& k)
 				{
-					// ft::pair<key_type, mapped_type> tmp;
-					// tmp.first = k;
-					// // tmp.second = 0;
-					// return m_tree.find(tmp)->data.second;
-					// mapped_type &tmp = (*(insert(ft::make_pair(k, mapped_type())).first)).second;
-					// std::cout << "tmp = " << tmp << std::endl;
 					return (*(insert(ft::make_pair(k, mapped_type())).first)).second;
-					// return tmp;
 				}
 				
 				/*
@@ -143,10 +129,7 @@ namespace ft
 
 					if (ret.second)
 						_size++;
-					// std::cout << "after insert\n";
-					
-					// std::cout << "val = " << val.first << std::endl;
-					// std::cout << "ret = " << (ret.first)->second << std::endl;
+
 					return ret;
 				}
 				iterator									insert(iterator position, const value_type& val)
@@ -169,9 +152,6 @@ namespace ft
 				}
 				size_type									erase(const key_type& k)
 				{
-					// std::cout << "k = " << k << std::endl;
-					// std::cout << "TRAVERSING..." << std::endl;
-					// m_tree.traverse();
 					bool ret = m_tree.erase(ft::make_pair(k, mapped_type()));
 					if (ret)
 					{
@@ -186,15 +166,10 @@ namespace ft
 					size_type	old_size = _size;
 
 					for (size_type i = 0; first != last; first++, i++)
-					{
 						keys[i] = first->first;
-					}
 
 					for (size_type i = 0; i < old_size; i++)
-					{
-						// std::cout << "key = " << keys[i] << std::endl;
 						erase(keys[i]);
-					}
 				}
 
 				void										swap(Map& x)
@@ -221,7 +196,6 @@ namespace ft
 				void										clear()	{	
 					m_tree.delete_tree();
 					_size = 0;
-					/*erase(begin(), end());*/
 				}
 				
 				/*
@@ -236,18 +210,20 @@ namespace ft
 				*/
 				
 				iterator									find(const key_type& k) {
-					ft::pair<key_type, mapped_type> tmp;
-					tmp.first = k;
+					// ft::pair<key_type, mapped_type> tmp;
+					// tmp.first = k;
 					// tmp.second = 0;
 
-					return m_tree.find(tmp);
+					return m_tree.find(ft::make_pair(k, mapped_type()));
+					// return m_tree.find(tmp);
 				}
 				const_iterator								find(const key_type& k) const {
-					ft::pair<key_type, mapped_type> tmp;
-					tmp.first = k;
+					// ft::pair<key_type, mapped_type> tmp;
+					// tmp.first = k;
 					// tmp.second = 0;
 	
-					return m_tree.find(k);
+					return m_tree.find(ft::make_pair(k, mapped_type()));
+					// return m_tree.find(tmp);
 				}
 
 				size_type									count(const key_type& k)
@@ -259,20 +235,32 @@ namespace ft
 
 				iterator									lower_bound(const key_type& k)
 				{
-					for (iterator first = begin(); first != end(); first++)
-					{
-						if (first->first >= k)
-							return first;
-					}
+					// for (iterator first = begin(); first != end(); first++)
+					// {
+					// 	if (first->first >= k)
+					// 		return first;
+					// }
+
+					ft::pair<iterator, bool> ret = m_tree.search(k);
+
+					if (ret.first != end())
+						return ret.first;
 					return end();
 				}
 				const_iterator								lower_bound (const key_type& k) const
 				{
-					for (const_iterator first = begin(); first != end(); first++)
-					{
-						if (first->first >= k)
-							return first;
-					}
+					// for (const_iterator first = begin(); first != end(); first++)
+					// {
+					// 	if (first->first >= k)
+					// 		return first;
+					// }
+
+					RBT	tmp = m_tree;
+
+					ft::pair<const_iterator, bool> ret = tmp.search(k);
+
+					if (ret.first != end())
+						return ret.first;
 					return end();
 				}
 
@@ -283,6 +271,12 @@ namespace ft
 						if (first->first > k)
 							return first;
 					}
+
+					// ft::pair<iterator, bool> ret = m_tree.search(k);
+
+					// if (ret.second)
+					// 	return ret.first;
+
 					return end();
 				}
 				const_iterator								upper_bound (const key_type& k) const
@@ -292,50 +286,73 @@ namespace ft
 						if (first->first > k)
 							return first;
 					}
+
+					// ft::pair<iterator, bool> ret = m_tree.search(k);
+
+					// if (ret.second)
+					// 	return ret.first;
+
 					return end();
 				}
 
 				ft::pair<const_iterator, const_iterator>	equal_range(const key_type& k) const
 				{
-					ft::pair<const_iterator, const_iterator> ret;
-					for (const_iterator first = begin(); first != end(); first++)
-					{
-						if (first->first == k)
-						{
-							ret.first = first;
-							first++;
-							ret.second = first;
-							return ret;
-						}
-						if (first->first > k)
-						{
-							ret.first = first;
-							ret.second = first;
-							return ret;
-						}
-					}
+					// ft::pair<const_iterator, const_iterator> ret;
+					// std::cout << "k = " << k << std::endl;
+					// for (const_iterator first = begin(); first != end(); first++)
+					// {
+					// 	if (first->first == k)
+					// 	{
+					// 		ret.first = first;
+					// 		first++;
+					// 		ret.second = first;
+					// 		return ret;
+					// 	}
+					// 	if (first->first > k)
+					// 	{
+					// 		ret.first = first;
+					// 		ret.second = first;
+					// 		return ret;
+					// 	}
+					// }
+
+					ft::pair<const_iterator, bool> ret = m_tree.search(k);
+
+					if (ret.first != end() && !ret.second)
+						return ft::make_pair(ret.first, ++ret.first);
+					if (ret.second)
+						return ft::make_pair(ret.first, ret.first);
+
 					return ft::make_pair(end(), end());
 				}
 
 				pair<iterator,iterator>             equal_range (const key_type& k)
 				{
-					ft::pair<iterator, iterator> ret;
-					for (iterator first = begin(); first != end(); first++)
-					{
-						if (first->first == k)
-						{
-							ret.first = first;
-							first++;
-							ret.second = first != end() ? first : ret.first;
-							return ret;
-						}
-						if (first->first > k)
-						{
-							ret.first = first;
-							ret.second = first;
-							return ret;
-						}
-					}
+					// ft::pair<iterator, iterator> ret;
+					// // std::cout << "k = " << k << std::endl;
+					// for (iterator first = begin(); first != end(); first++)
+					// {
+					// 	if (first->first == k)
+					// 	{
+					// 		ret.first = first;
+					// 		first++;
+					// 		ret.second = first != end() ? first : ret.first;
+					// 		return ret;
+					// 	}
+					// 	if (first->first > k)
+					// 	{
+					// 		ret.first = first;
+					// 		ret.second = first;
+					// 		return ret;
+					// 	}
+					// }
+					ft::pair<iterator, bool> ret = m_tree.search(k);
+
+					if (ret.first != end() && !ret.second)
+						return ft::make_pair(ret.first, ++ret.first);
+					if (ret.second)
+						return ft::make_pair(ret.first, ret.first);
+
 					return ft::make_pair(end(), end());
 				}
 
@@ -346,10 +363,11 @@ namespace ft
 				allocator_type						get_allocator() const {	return _alloc;	}
 
 			private:
+				typedef ft::RBT<key, T, Compare, Alloc>			RBT;
 				Alloc											_alloc;
 				key_compare										_compare;
 				size_type										_size;
-				ft::RBT<key, T, Compare, Alloc>				m_tree;
+				RBT												m_tree;
 		};
 
 		/*

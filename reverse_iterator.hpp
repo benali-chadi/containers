@@ -48,21 +48,11 @@ namespace ft {
 
 				reverse_iterator () {}
 				explicit reverse_iterator (iterator_type it): _iter(it) {}
-				// {
-				// 	_iter = it;
-				// 	// iterator_type tmp = --it;
-				// 	// // --tmp;
-				// 	// tmp.print_addr();
-				// 	// _iter = --tmp;
-				// }
+
 				template <class Iter>
 					reverse_iterator (const reverse_iterator<Iter>& rev_it) {	_iter = rev_it.base();	}
 				
-				iterator_type 		base() const {
-					// iterator_type tmp = _iter;
-					// ++tmp;
-					return _iter;
-				}
+				iterator_type 		base() const {	return _iter;	}
 
 				reverse_iterator	operator+(difference_type n) const
 				{
@@ -77,9 +67,6 @@ namespace ft {
 				reference			operator*() const {
 					iterator_type tmp = _iter;
 					--tmp;
-					// tmp.print_addr();
-					// std::cout << "HEEERE\n";
-					// std::cout << "okok\n";
 					return *(tmp);
 				}
 				pointer				operator->() const {	return &(operator*());	}

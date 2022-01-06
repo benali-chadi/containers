@@ -9,8 +9,6 @@ namespace ft
 {
 	template <class T>
 		struct node {
-			// T1		first;
-			// T2				second;
 			T				data;
 			char			color;
 			struct node 	*parent;
@@ -22,19 +20,15 @@ namespace ft
 				left = 0;
 				right = 0;
 			}
-			node(const T &p) //first(p.first) {
+			node(const T &p)
 			{
-				// first = p.first;
-				// second = p.second;
 				data = p;
 				parent = 0;
 				left = 0;
 				right = 0;
 			}
-			node (struct node const &n) //first(n.first) {
+			node (struct node const &n)
 			{
-				// first = n.first;
-				// second = n.second;
 				data = n.data;
 				color = n.color;
 				parent = 0;
@@ -112,11 +106,27 @@ namespace ft
 					print(tmp);
 				}
 
+				ft::pair<iterator, bool>	search(const key &k)
+				{
+					node	*tmp = root;
+
+					while (tmp)
+					{
+						if (tmp->data.first == k)
+							return ft::make_pair(tmp, false);
+						if (tmp->data.first > k && (!tmp->left || tmp->left->data.first < k))
+							return ft::make_pair(tmp, true);
+						if (tmp->data.first > k)
+							tmp = tmp->left;
+						else
+							tmp = tmp->right;
+					}
+					return ft::make_pair(end(), false);
+				}
+
 				ft::pair<iterator, bool>	insert (value_type p)
 				{
 					node		*newNode = _alloc.allocate(1);
-					// newNode->first = p.first;
-					// newNode->second = p.second;
 					newNode->data = p;
 					newNode->left = 0;
 					newNode->right = 0;
@@ -152,12 +162,7 @@ namespace ft
 				
 				bool						erase(value_type p)
 				{
-					// std::cout << "TRAVERSING...\n";
-					// traverse();
-					// search the position of key
-					// std::cout << "p first = " << p.first << std::endl;
 					node	*n = search_to_erase(p);
-					// std::cout << "n1 = " << n << std::endl;
 
 					if (n)
 					{
@@ -171,10 +176,8 @@ namespace ft
 							n = node_is_black(n);
 							remove(n);
 						}
-						// _alloc.destroy(n);
 						return true;
 					}
-					// _alloc.destroy(n);
 					return false;
 				}
 
@@ -287,8 +290,6 @@ namespace ft
 				{
 					node *tmp = p;
 
-					// if (tmp->color != 'R' && tmp->color != 'B')
-					// 	return tmp;
 					while (tmp && tmp->parent)
 						tmp = tmp->parent;
 					return tmp;
@@ -549,7 +550,7 @@ namespace ft
 						n->parent->left = 0;
 					else
 						n->parent->right = 0;
-					// std::cout << "n to remove = " << n << std::endl;
+
 					_alloc.deallocate(n, 1);
 				}
 

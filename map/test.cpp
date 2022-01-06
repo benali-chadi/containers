@@ -10,18 +10,19 @@
 int main()
 {
 	ft::Map<int, std::string> ft_m;
-	for (size_t i = 0; i < 1e6; ++i)
+	for (size_t i = 0; i < 10; ++i)
 	{
 		ft_m.insert(ft::make_pair(i, "value"));
 	}
 	ft::Map<int, std::string> ft_m2;
-	for (size_t i = 0; i < 1e6; ++i)
+	for (size_t i = 0; i < 10; ++i)
 	{
 		ft_m2.insert(ft::make_pair(i, "value"));
 	}
-	ft_m2.swap(ft_m);
+	std::cout << "eq range 1 = " << ft_m.equal_range(0).first->first << " eq range 2 = " << ft_m.equal_range(0).second->first << std::endl;
+	// ft_m2.swap(ft_m);
 
-	std::cout << "m size = " << ft_m.size() << "\tm2 size = " << ft_m2.size() << std::endl;
+	// std::cout << "m size = " << ft_m.size() << "\tm2 size = " << ft_m2.size() << std::endl;
 
 	// std::cout << (ft_m == ft_m2) << std::endl;
 	// // ft::Map<int, std::string>::iterator it = ft_m.begin();
