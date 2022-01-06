@@ -67,11 +67,6 @@ namespace ft
 					return *this;
 				}
 
-				void	delete_tree()
-				{
-					while (root != 0)
-						erase(in_order_pred(root)->data);
-				}
 				void	deep_copy(RBT const &x)
 				{
 					delete_tree();
@@ -97,14 +92,100 @@ namespace ft
 				const_reverse_iterator		rend() const {	return reverse_iterator(iterator(in_order_succ(root), root));	}
 
 				/*
-					* Member functions
+					* Main functions
 				*/
+
+				ft::pair<iterator, bool>	insert (value_type p)
+				{
+					node		*newNode = _alloc.allocate(1);
+					newNode->data = p;
+					newNode->left = 0;
+					newNode->right = 0;
+
+					if (!root)
+					{
+						newNode->color = 'B';
+						newNode->parent = root;
+						root = newNode;
+						return ft::make_pair(newNode, true);
+					}
+					newNode->color = 'R';
+					
+					node *tmp = search_to_erase(newNode->data);
+					if (tmp)
+					{
+						// _alloc.deallocate(newNode, 1);
+						return ft::make_pair(tmp, false);
+					}
+					
+					tmp = search_to_insert(*newNode);
+					newNode->parent = tmp;
+					
+					// Place the node
+					if (!cmpr(tmp->data.first,newNode->data.first))
+						tmp->left = newNode;
+					else
+						tmp->right = newNode;
+
+					check(newNode);
+					return ft::make_pair(newNode, true);
+				}
+				
+				bool						erase(value_type p)
+				{
+					node	*n = search_to_erase(p);
+
+					if (n)
+					{
+						n = get_leaf_node(n);
+						// if the leaf is red, delete it
+						if (n->color == 'R' || n == root)
+							remove(n);
+						// the node is BLACK!!
+						else
+						{
+							n = node_is_black(n);
+							remove(n);
+						}
+						return true;
+					}
+					return false;
+				}
+
+				void	delete_tree()
+				{
+					while (root != 0)
+						erase(in_order_pred(root)->data);
+				}
 
 				void						traverse()
 				{
 					node *tmp = root;
 					print(tmp);
 				}
+
+				/*
+					* Map operation methods helpers
+				*/
+
+				bool						contains(key k)
+				{
+					node	*tmp = root;
+
+					while (tmp)
+					{
+						if (tmp->data.first == k)
+							return true;
+						if (!cmpr(tmp->data.first, k))
+							tmp = tmp->left;
+						
+						else if (cmpr(tmp->data.first, k))
+							tmp = tmp->right;
+					}
+					return false;
+				}
+
+				node						*find(value_type p) {	return search_to_erase(p);	}
 
 				ft::pair<iterator, bool>	search(const key &k)
 				{
@@ -174,82 +255,6 @@ namespace ft
 					return ft::make_pair(end(), false);
 				}
 
-				ft::pair<iterator, bool>	insert (value_type p)
-				{
-					node		*newNode = _alloc.allocate(1);
-					newNode->data = p;
-					newNode->left = 0;
-					newNode->right = 0;
-
-					if (!root)
-					{
-						newNode->color = 'B';
-						newNode->parent = root;
-						root = newNode;
-						return ft::make_pair(newNode, true);
-					}
-					newNode->color = 'R';
-					
-					node *tmp = search_to_erase(newNode->data);
-					if (tmp)
-					{
-						// _alloc.deallocate(newNode, 1);
-						return ft::make_pair(tmp, false);
-					}
-					
-					tmp = search_to_insert(*newNode);
-					newNode->parent = tmp;
-					
-					// Place the node
-					if (!cmpr(tmp->data.first,newNode->data.first))
-						tmp->left = newNode;
-					else
-						tmp->right = newNode;
-
-					check(newNode);
-					return ft::make_pair(newNode, true);
-				}
-				
-				bool						erase(value_type p)
-				{
-					node	*n = search_to_erase(p);
-
-					if (n)
-					{
-						n = get_leaf_node(n);
-						// if the leaf is red, delete it
-						if (n->color == 'R' || n == root)
-							remove(n);
-						// the node is BLACK!!
-						else
-						{
-							n = node_is_black(n);
-							remove(n);
-						}
-						return true;
-					}
-					return false;
-				}
-
-				node						*find(value_type p) {	return search_to_erase(p);	}
-				
-				bool						contains(key k)
-				{
-					node	*tmp = root;
-
-					while (tmp)
-					{
-						if (tmp->data.first == k)
-							return true;
-						if (!cmpr(tmp->data.first, k))
-							tmp = tmp->left;
-						
-						else if (cmpr(tmp->data.first, k))
-							tmp = tmp->right;
-					}
-					return false;
-				}
-				
 				/*
 					Iterator Helper functions
 				*/
