@@ -15,21 +15,21 @@ namespace ft
 			 >
 		class Map {
 			public:
-				typedef				key																		key_type;
-				typedef 			T																		mapped_type;
-				typedef				ft::pair<const key_type, mapped_type>									value_type;
-				typedef				Compare																	key_compare;
-				typedef				Alloc																	allocator_type;
-				typedef	typename	allocator_type::reference												reference;
-				typedef	typename	allocator_type::const_reference											const_reference;
-				typedef	typename	allocator_type::pointer													pointer;
-				typedef	typename	allocator_type::const_pointer											const_pointer;
+				typedef				key														key_type;
+				typedef 			T														mapped_type;
+				typedef				ft::pair<const key_type, mapped_type>					value_type;
+				typedef				Compare													key_compare;
+				typedef				Alloc													allocator_type;
+				typedef	typename	allocator_type::reference								reference;
+				typedef	typename	allocator_type::const_reference							const_reference;
+				typedef	typename	allocator_type::pointer									pointer;
+				typedef	typename	allocator_type::const_pointer							const_pointer;
 				typedef typename	ft::RBT<key, T, Compare, Alloc>::iterator				iterator;
 				typedef typename	ft::RBT<key, T, Compare, Alloc>::const_iterator			const_iterator;
 				typedef typename	ft::RBT<key, T, Compare, Alloc>::reverse_iterator		reverse_iterator;
 				typedef typename	ft::RBT<key, T, Compare, Alloc>::const_reverse_iterator	const_reverse_iterator;
-				typedef				std::ptrdiff_t															difference_type;
-				typedef				size_t																	size_type;
+				typedef				std::ptrdiff_t											difference_type;
+				typedef				size_t													size_type;
 				typedef				class value_compare: std::binary_function<value_type, value_type, bool>
 				{
 					friend class Map;
@@ -68,10 +68,7 @@ namespace ft
 							insert(tmp);
 						}
 					}
-				Map										(const Map& x)											// Copy
-				{
-					*this = x;
-				}
+				Map										(const Map& x) {	*this = x;	}						// Copy
 
 				Map&									operator=(const Map& x)									// Assignement operator
 				{
@@ -84,6 +81,7 @@ namespace ft
 				/*
 					* Destrucor
 				*/
+
 				~Map		() {	clear();	}
 
 				/*
@@ -146,10 +144,7 @@ namespace ft
 							insert(ft::make_pair(first->first, first->second));
 					}
 
-				void										erase(iterator position)
-				{
-					erase(position->first);
-				}
+				void										erase(iterator position) {	erase(position->first);	}
 				size_type									erase(const key_type& k)
 				{
 					bool ret = m_tree.erase(ft::make_pair(k, mapped_type()));
@@ -175,6 +170,7 @@ namespace ft
 				void										swap(Map& x)
 				{
 					Map tmp;
+
 					tmp.m_tree = m_tree;
 					tmp._size = _size;
 					tmp._compare = _compare;
@@ -193,7 +189,8 @@ namespace ft
 					tmp.m_tree.set_root(0);
 				}
 
-				void										clear()	{	
+				void										clear()
+				{
 					m_tree.delete_tree();
 					_size = 0;
 				}

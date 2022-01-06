@@ -1,8 +1,8 @@
-#ifndef RBT_TREE_HPP
-#define RBT_TREE_HPP
+#ifndef RBT_TREE_SET_HPP
+#define RBT_TREE_SET_HPP
 
 # include "../utils/pair.hpp"
-# include "MapIterator.hpp"
+# include "SetIterator.hpp"
 # include "../utils/reverse_iterator.hpp"
 
 namespace ft
@@ -39,26 +39,24 @@ namespace ft
 		};
 	
 	template <	
-				class key,
-				class T2,
+				class T,
 				class Compare,
 				class Alloc
 			 >
-		class RBT {
+		class RBT_Set {
 			public:
-				typedef				ft::pair<const key, T2>								value_type;
-				typedef				ft::pair<key, T2>									m_value_type;
-				typedef struct 		node<m_value_type>									node;
-				typedef 			ft::MapIterator<node, value_type, key, T2, Compare, Alloc>	iterator;
-				typedef 			ft::MapIterator<node, const value_type, key, T2, Compare, Alloc>		const_iterator;
+				typedef				T							value_type;
+				typedef struct 		node<value_type>									node;
+				typedef 			ft::SetIterator<node, value_type, Compare, Alloc>	iterator;
+				typedef 			ft::SetIterator<node, const value_type, Compare, Alloc>		const_iterator;
 				typedef				ft::reverse_iterator<iterator>						reverse_iterator;
 				typedef				ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 				typedef	typename	Alloc::template rebind<node>::other					m_Alloc;
 
-				RBT(): root(0) {}
-				RBT(node *r): root(r) {}
+				RBT_Set(): root(0) {}
+				RBT_Set(node *r): root(r) {}
 
-				RBT&	operator=(RBT const &x)
+				RBT_Set&	operator=(RBT_Set const &x)
 				{
 					root = x.root;
 					_alloc = x._alloc;
@@ -67,7 +65,7 @@ namespace ft
 					return *this;
 				}
 
-				void	deep_copy(RBT const &x)
+				void	deep_copy(RBT_Set const &x)
 				{
 					delete_tree();
 
@@ -122,7 +120,7 @@ namespace ft
 					newNode->parent = tmp;
 					
 					// Place the node
-					if (!cmpr(tmp->data.first,newNode->data.first))
+					if (!cmpr(tmp->data,newNode->data))
 						tmp->left = newNode;
 					else
 						tmp->right = newNode;
@@ -168,18 +166,18 @@ namespace ft
 					* Map operation methods helpers
 				*/
 
-				bool						contains(key k)
+				bool						contains(value_type k)
 				{
 					node	*tmp = root;
 
 					while (tmp)
 					{
-						if (tmp->data.first == k)
+						if (tmp->data == k)
 							return true;
-						if (!cmpr(tmp->data.first, k))
+						if (!cmpr(tmp->data, k))
 							tmp = tmp->left;
 						
-						else if (cmpr(tmp->data.first, k))
+						else if (cmpr(tmp->data, k))
 							tmp = tmp->right;
 					}
 					return false;
@@ -187,17 +185,17 @@ namespace ft
 
 				node						*find(value_type p) {	return search_to_erase(p);	}
 
-				ft::pair<iterator, bool>	search(const key &k)
+				ft::pair<iterator, bool>	search(const value_type &k)
 				{
 					node	*tmp = root;
 
 					while (tmp)
 					{
-						if (tmp->data.first > k && (!tmp->left || in_order_pred(tmp->left)->data.first < k))
+						if (tmp->data > k && (!tmp->left || in_order_pred(tmp->left)->data < k))
 							return ft::make_pair(tmp, true);
-						if (tmp->data.first == k)
+						if (tmp->data == k)
 							return ft::make_pair(tmp, false);
-						if (tmp->data.first > k)
+						if (tmp->data > k)
 							tmp = tmp->left;
 						else
 							tmp = tmp->right;
@@ -205,17 +203,17 @@ namespace ft
 					return ft::make_pair(end(), false);
 				}
 
-				ft::pair<const_iterator, bool>	search(const key &k) const
+				ft::pair<const_iterator, bool>	search(const value_type &k) const
 				{
 					node	*tmp = root;
 
 					while (tmp)
 					{
-						if (tmp->data.first == k)
+						if (tmp->data == k)
 							return ft::make_pair(tmp, false);
-						if (tmp->data.first > k && (!tmp->left || in_order_pred(tmp->left)->data.first < k))
+						if (tmp->data > k && (!tmp->left || in_order_pred(tmp->left)->data < k))
 							return ft::make_pair(tmp, true);
-						if (tmp->data.first > k)
+						if (tmp->data > k)
 							tmp = tmp->left;
 						else
 							tmp = tmp->right;
@@ -223,15 +221,15 @@ namespace ft
 					return ft::make_pair(end(), false);
 				}
 
-				ft::pair<iterator, bool>	search_for_upper_bound(const key &k)
+				ft::pair<iterator, bool>	search_for_upper_bound(const value_type &k)
 				{
 					node	*tmp = root;
 
 					while (tmp)
 					{
-						if (tmp->data.first > k && (!tmp->left || in_order_pred(tmp->left)->data.first <= k))
+						if (tmp->data > k && (!tmp->left || in_order_pred(tmp->left)->data <= k))
 							return ft::make_pair(tmp, true);
-						if (tmp->data.first > k)
+						if (tmp->data > k)
 							tmp = tmp->left;
 						else
 							tmp = tmp->right;
@@ -239,15 +237,15 @@ namespace ft
 					return ft::make_pair(end(), false);
 				}
 
-				ft::pair<const_iterator, bool>	search_for_upper_bound(const key &k) const
+				ft::pair<const_iterator, bool>	search_for_upper_bound(const value_type &k) const
 				{
 					node	*tmp = root;
 
 					while (tmp)
 					{
-						if (tmp->data.first > k && (!tmp->left || in_order_pred(tmp->left)->data.first <= k))
+						if (tmp->data > k && (!tmp->left || in_order_pred(tmp->left)->data <= k))
 							return ft::make_pair(tmp, true);
-						if (tmp->data.first > k)
+						if (tmp->data > k)
 							tmp = tmp->left;
 						else
 							tmp = tmp->right;
@@ -292,13 +290,13 @@ namespace ft
 				{
 					while (parent != root)
 					{
-						if (!cmpr(parent->data.first, p.first))
+						if (!cmpr(parent->data, p))
 							return parent;
 						parent = parent->parent;
 					}
 
 					// if the parent's key is less than the key return the end() address
-					if (cmpr(parent->data.first, p.first))
+					if (cmpr(parent->data, p))
 						return 0;
 
 					return parent;
@@ -308,13 +306,13 @@ namespace ft
 				{
 					while (parent != root)
 					{
-						if (cmpr(parent->data.first, p.first))
+						if (cmpr(parent->data, p))
 							return parent;
 						parent = parent->parent;
 					}
 
 					// if the parent's key is bigger than the key return the end() address
-					if (!cmpr(parent->data.first, p.first))
+					if (!cmpr(parent->data, p))
 						return 0;
 					
 					return parent;
@@ -377,7 +375,7 @@ namespace ft
 					print(n->left);
 					if (n == root)
 						std::cout << "this is root\n";
-					std::cout << n->data.first << " color = " << n->color << std::endl;
+					std::cout << n->data << " color = " << n->color << std::endl;
 					print(n->right);
 				}
 
@@ -508,16 +506,16 @@ namespace ft
 				{
 					node *tmp = root;
 
-					if (tmp->data.first == n.data.first)
+					if (tmp->data == n.data)
 					{
 						return 0;
 					}
 
 					while (tmp && (tmp->right != 0 || tmp->left != 0))
 					{
-						if (tmp->data.first == n.data.first)
+						if (tmp->data == n.data)
 							return 0;
-						if (cmpr(n.data.first, tmp->data.first))
+						if (cmpr(n.data, tmp->data))
 						{
 							if (!tmp->left)
 								return tmp;
@@ -566,9 +564,9 @@ namespace ft
 
 					while (tmp)
 					{
-						if (tmp->data.first == p.first)
+						if (tmp->data == p)
 							return tmp;
-						else if (cmpr(p.first, tmp->data.first))
+						else if (cmpr(p, tmp->data))
 							tmp = tmp->left;
 						else
 							tmp = tmp->right;
@@ -585,7 +583,7 @@ namespace ft
 						{
 							node	*toDelete = tmp->right ? in_order_succ(tmp->right) : in_order_pred(tmp->left);
 							// swap its key with the IOP or IOS
-							m_value_type	t = tmp->data;
+							value_type	t = tmp->data;
 							tmp->data = toDelete->data;
 							toDelete->data = t;
 							
@@ -596,7 +594,7 @@ namespace ft
 							// search for the in-order predecessor (the largest element in the left side of the node)
 							node	*toDelete = in_order_pred(n->left);
 							// swap its key with the IOP
-							m_value_type	t = tmp->data;
+							value_type	t = tmp->data;
 							tmp->data = toDelete->data;
 							toDelete->data = t;
 
