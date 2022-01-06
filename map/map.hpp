@@ -214,6 +214,8 @@ namespace ft
 					x._size = tmp._size;
 					x._compare = tmp._compare;
 					x._alloc = tmp._alloc;
+
+					tmp.m_tree.set_root(0);
 				}
 
 				void										clear()	{	

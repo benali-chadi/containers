@@ -80,8 +80,6 @@ namespace ft
 				}
 				void	deep_copy(RBT const &x)
 				{
-					RBT tmp = x;
-					std::cout << "root = " << root << " x root = " << tmp.get_root2() << std::endl;
 					delete_tree();
 
 					for(const_iterator it = x.begin(); it != x.end(); it++)
