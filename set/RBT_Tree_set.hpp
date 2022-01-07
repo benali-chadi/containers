@@ -36,6 +36,9 @@ namespace ft
 				right = 0;
 			}
 
+			operator node<const T>() {
+				return node<const T>(data);
+			}
 		};
 	
 	template <	
@@ -45,13 +48,14 @@ namespace ft
 			 >
 		class RBT_Set {
 			public:
-				typedef				T							value_type;
-				typedef struct 		node<value_type>									node;
-				typedef 			ft::SetIterator<node, value_type, Compare, Alloc>	iterator;
-				typedef 			ft::SetIterator<node, const value_type, Compare, Alloc>		const_iterator;
-				typedef				ft::reverse_iterator<iterator>						reverse_iterator;
-				typedef				ft::reverse_iterator<const_iterator>				const_reverse_iterator;
-				typedef	typename	Alloc::template rebind<node>::other					m_Alloc;
+				typedef				T															value_type;
+				typedef struct		node<const value_type>										Node;
+				typedef struct 		node<value_type>											node;
+				typedef 			ft::SetIterator<T, Node, node, Compare, Alloc>			iterator;
+				typedef 			ft::SetIterator<const T, Node, node, Compare, Alloc>		const_iterator;
+				typedef				ft::reverse_iterator<iterator>								reverse_iterator;
+				typedef				ft::reverse_iterator<const_iterator>						const_reverse_iterator;
+				typedef	typename	Alloc::template rebind<node>::other							m_Alloc;
 
 				RBT_Set(): root(0) {}
 				RBT_Set(node *r): root(r) {}
@@ -77,17 +81,17 @@ namespace ft
 					Iterators
 				*/
 
-				iterator					begin() {	return iterator(in_order_succ(root), root);	}
-				const_iterator				begin() const {	return iterator(in_order_succ(root), root);	}
+				iterator					begin() {	return iterator(&in_order_succ(root)->data, (Node *)root);	}
+				const_iterator				begin() const {	return iterator(&in_order_succ(root)->data, (Node *)root);	}
 
-				iterator					end() {	return iterator(0, root);	}
-				const_iterator				end() const {	return iterator(0, root);	}
+				iterator					end() {	return iterator(0, (Node *)root);	}
+				const_iterator				end() const {	return iterator(0, (Node *)root);	}
 				
-				reverse_iterator			rbegin() {	return reverse_iterator(iterator(0, root));	}
-				const_reverse_iterator		rbegin() const {	return reverse_iterator(iterator(0, root));	}
+				reverse_iterator			rbegin() {	return reverse_iterator(iterator(0, (Node *)root));	}
+				const_reverse_iterator		rbegin() const {	return reverse_iterator(iterator(0, (Node *)root));	}
 
-				reverse_iterator			rend() {	return reverse_iterator(iterator(in_order_succ(root), root));	}
-				const_reverse_iterator		rend() const {	return reverse_iterator(iterator(in_order_succ(root), root));	}
+				reverse_iterator			rend() {	return reverse_iterator(iterator(&in_order_succ(root)->data, (Node *)root));	}
+				const_reverse_iterator		rend() const {	return reverse_iterator(iterator(&in_order_succ(root)->data, (Node *)root));	}
 
 				/*
 					* Main functions
@@ -105,7 +109,7 @@ namespace ft
 						newNode->color = 'B';
 						newNode->parent = root;
 						root = newNode;
-						return ft::make_pair(newNode, true);
+						return ft::make_pair(&newNode->data, true);
 					}
 					newNode->color = 'R';
 					
@@ -113,7 +117,7 @@ namespace ft
 					if (tmp)
 					{
 						// _alloc.deallocate(newNode, 1);
-						return ft::make_pair(tmp, false);
+						return ft::make_pair(&tmp->data, false);
 					}
 					
 					tmp = search_to_insert(*newNode);
@@ -126,7 +130,7 @@ namespace ft
 						tmp->right = newNode;
 
 					check(newNode);
-					return ft::make_pair(newNode, true);
+					return ft::make_pair(&newNode->data, true);
 				}
 				
 				bool						erase(value_type p)
@@ -166,7 +170,7 @@ namespace ft
 					* Map operation methods helpers
 				*/
 
-				bool						contains(value_type k)
+				bool						contains(value_type k) const
 				{
 					node	*tmp = root;
 
@@ -183,7 +187,7 @@ namespace ft
 					return false;
 				}
 
-				node						*find(value_type p) {	return search_to_erase(p);	}
+				node						*find(value_type p) const {	return search_to_erase(p);	}
 
 				ft::pair<iterator, bool>	search(const value_type &k)
 				{
@@ -192,9 +196,9 @@ namespace ft
 					while (tmp)
 					{
 						if (tmp->data > k && (!tmp->left || in_order_pred(tmp->left)->data < k))
-							return ft::make_pair(tmp, true);
+							return ft::make_pair(&tmp->data, true);
 						if (tmp->data == k)
-							return ft::make_pair(tmp, false);
+							return ft::make_pair(&tmp->data, false);
 						if (tmp->data > k)
 							tmp = tmp->left;
 						else
@@ -210,9 +214,9 @@ namespace ft
 					while (tmp)
 					{
 						if (tmp->data == k)
-							return ft::make_pair(tmp, false);
+							return ft::make_pair(&tmp->data, false);
 						if (tmp->data > k && (!tmp->left || in_order_pred(tmp->left)->data < k))
-							return ft::make_pair(tmp, true);
+							return ft::make_pair(&tmp->data, true);
 						if (tmp->data > k)
 							tmp = tmp->left;
 						else
@@ -228,7 +232,7 @@ namespace ft
 					while (tmp)
 					{
 						if (tmp->data > k && (!tmp->left || in_order_pred(tmp->left)->data <= k))
-							return ft::make_pair(tmp, true);
+							return ft::make_pair(&tmp->data, true);
 						if (tmp->data > k)
 							tmp = tmp->left;
 						else
@@ -244,7 +248,7 @@ namespace ft
 					while (tmp)
 					{
 						if (tmp->data > k && (!tmp->left || in_order_pred(tmp->left)->data <= k))
-							return ft::make_pair(tmp, true);
+							return ft::make_pair(&tmp->data, true);
 						if (tmp->data > k)
 							tmp = tmp->left;
 						else
@@ -286,6 +290,25 @@ namespace ft
 					return tmp;
 				}
 
+				// node						*in_order_succ(value_type *n) const
+				// {
+				// 	node	*tmp = find(n);
+
+				// 	while (tmp && tmp->left != 0)
+				// 		tmp = tmp->left;
+				// 	return tmp;
+				// }
+
+				// node						*in_order_pred(value_type *n)
+				// {
+				// 	node	*tmp = find(n);
+
+				// 	while (tmp && tmp->right != 0)
+				// 		tmp = tmp->right;
+					
+				// 	return tmp;
+				// }
+
 				node						*find_bigger_parent(node *parent, value_type p)
 				{
 					while (parent != root)
@@ -318,40 +341,40 @@ namespace ft
 					return parent;
 				}
 
-				node						*increment(node *p)
+				value_type*						increment(value_type *p)
 				{
 					if (!p)
-						return in_order_succ(root);
-					node	*tmp = in_order_succ(p->right);
+						return &in_order_succ(root)->data;
+					node	*tmp = in_order_succ(find(*p)->right);
 
 					if (tmp)
-						return tmp;
+						return &tmp->data;
 	
-					tmp = p->parent ? find_bigger_parent(p->parent, p->data) : 0;
+					tmp = find(*p)->parent ? find_bigger_parent(find(*p)->parent, *p) : 0;
 					if (tmp)
-						return tmp;
+						return &tmp->data;
 					return 0;
 				}
 
-				node						*decrement(node *p)
+				value_type*						decrement(value_type *p)
 				{
 					if (!p)
-						return in_order_pred(root);
-					node	*tmp = in_order_pred(p->left);
+						return &in_order_pred(root)->data;
+					node	*tmp = in_order_pred(find(*p)->left);
 
 					if (tmp)
-						return tmp;
+						return &tmp->data;
 
-					tmp = p->parent ? find_smaller_parent(p->parent, p->data) : 0;
+					tmp = find(*p)->parent ? find_smaller_parent(find(*p)->parent, *p) : 0;
 					if (tmp)
-						return tmp;
+						return &tmp->data;
 					
 					return 0;
 				}
 
-				node						*get_root(node *p)  // getting the root of the iterator
+				node						*get_root(value_type *p)  // getting the root of the iterator
 				{
-					node *tmp = p;
+					node *tmp = find(*p);
 
 					while (tmp && tmp->parent)
 						tmp = tmp->parent;
@@ -360,7 +383,12 @@ namespace ft
 
 				node						*get_root2() {	return root;	}
 
-				void						set_root(node *r) {	root = r;	}
+				void						set_root(Node *r) {	root = (node *)r;	}
+				// void						set_root(Node *r) {	root = (node *)r;	}
+
+				operator Node() {
+				return Node();
+				}
 
 			private:
 
@@ -558,7 +586,7 @@ namespace ft
 					* Erase helpers
 				*/
 
-				node	*search_to_erase(value_type p)
+				node	*search_to_erase(value_type p) const
 				{
 					node	*tmp = root;
 

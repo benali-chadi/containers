@@ -1,13 +1,14 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include "Vector.hpp"
+#include "vector.hpp"
 
 #include <ctime>
 #include <iomanip>
 #include <unistd.h>
 #include <signal.h>
 #include <sys/time.h>
+#include "class.hpp"
 #define TIME_FAC 3
 
 time_t get_time(void)
@@ -23,6 +24,14 @@ time_t get_time(void)
 
 int main()
 {
+	Class toto;
+	ft::Vector<Class> vec1(1, toto);
+	try{
+		vec1.insert(vec1.begin(), 10, toto);
+	}catch(...){}
+	std::cout << "size: " << vec1.size() << "\n";
+	std::cout << "cap: " << vec1.capacity() << "\n";
+
 	// std::vector<int> foo (3,100);	// three ints with a value of 100
 	// std::vector<int> bar (1, 15);	// five ints with a value of 200
 
@@ -156,15 +165,15 @@ int main()
 	// rit = v.rbegin();
 	// for (;rit != v.rend(); rit++)
 	// 	std::cout << *(rit.base()) << std::endl;
-	ft::Vector<int> v(4, 5);
-	ft::Vector<int>::reverse_iterator my_rit2(v.end());
-	ft::Vector<int>::const_reverse_iterator c_it, c_ob(v.end());
-	c_it = my_rit2;
-	std::cout << "c_it = " << &(*c_it) << " rit = " << &(*my_rit2) << std::endl;
-	if (&(*my_rit2) == &(*c_it) && (&(*my_rit2) == &(*c_ob)))
-		std::cout << "true\n";
-	else
-		std::cout << "false\n";
+	// ft::Vector<int> v(4, 5);
+	// ft::Vector<int>::reverse_iterator my_rit2(v.end());
+	// ft::Vector<int>::const_reverse_iterator c_it, c_ob(v.end());
+	// c_it = my_rit2;
+	// std::cout << "c_it = " << &(*c_it) << " rit = " << &(*my_rit2) << std::endl;
+	// if (&(*my_rit2) == &(*c_it) && (&(*my_rit2) == &(*c_ob)))
+	// 	std::cout << "true\n";
+	// else
+	// 	std::cout << "false\n";
 
 	// for (iterator it = ft_v1.begin(); it != ft_v1.end(); it++)
 	// 	std::cout << *it << std::endl;

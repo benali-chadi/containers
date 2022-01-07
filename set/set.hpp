@@ -13,21 +13,21 @@ namespace ft
 			 >
 		class Set {
 			public:
-				typedef				T									key_type;
-				typedef				T									value_type;
-				typedef				Compare								key_compare;
-				typedef				Compare								value_compare;
-				typedef				Alloc								allocator_type;
-				typedef	typename	allocator_type::reference			reference;
-				typedef	typename	allocator_type::const_reference		const_reference;
-				typedef	typename	allocator_type::pointer				pointer;
-				typedef	typename	allocator_type::const_pointer		const_pointer;
-				typedef	typename	RBT::iterator						iterator;
-				typedef	typename	RBT::const_iterator					const_iterator;
-				typedef	typename	RBT::reverse_iterator				reverse_iterator;
-				typedef	typename	RBT::const_reverse_iterator			const_reverse_iterator;
-				typedef				std::ptrdiff_t						difference_type;
-				typedef				size_t								size_type;
+				typedef				T														key_type;
+				typedef				T														value_type;
+				typedef				Compare													key_compare;
+				typedef				Compare													value_compare;
+				typedef				Alloc													allocator_type;
+				typedef	typename	allocator_type::reference								reference;
+				typedef	typename	allocator_type::const_reference							const_reference;
+				typedef	typename	allocator_type::pointer									pointer;
+				typedef	typename	allocator_type::const_pointer							const_pointer;
+				typedef	typename	ft::RBT_Set<T, Compare, Alloc>::iterator				iterator;
+				typedef	typename	ft::RBT_Set<T, Compare, Alloc>::const_iterator			const_iterator;
+				typedef	typename	ft::RBT_Set<T, Compare, Alloc>::reverse_iterator		reverse_iterator;
+				typedef	typename	ft::RBT_Set<T, Compare, Alloc>::const_reverse_iterator	const_reverse_iterator;
+				typedef				std::ptrdiff_t											difference_type;
+				typedef				size_t													size_type;
 
 				/*
 					* Constructors
@@ -116,7 +116,7 @@ namespace ft
 							insert(*first);
 					}
 
-				void										erase(iterator position) {	erase(position->first);	}
+				void										erase(iterator position) {	erase(*position);	}
 				size_type									erase(const value_type& k)
 				{
 					bool ret = m_tree.erase(k);
@@ -158,7 +158,7 @@ namespace ft
 					x._compare = tmp._compare;
 					x._alloc = tmp._alloc;
 
-					tmp.m_tree.Set_root(0);
+					tmp.m_tree.set_root(0);
 				}
 
 				void										clear()
@@ -178,7 +178,7 @@ namespace ft
 					* Operations
 				*/
 				
-				iterator									find(const value_type& k) const {	return m_tree.find(k);	}
+				iterator									find(const value_type& k) const {	return &m_tree.find(k)->data;	}
 
 				size_type									count(const value_type& k) const
 				{
@@ -189,33 +189,33 @@ namespace ft
 
 				iterator									lower_bound(const value_type& k) const
 				{
-					ft::pair<iterator, bool> ret = m_tree.search(k);
+					ft::pair<const_iterator, bool> ret = m_tree.search(k);
 
-					if (ret.first != end())
-						return ret.first;
+					if ((const_iterator)ret.first != end())
+						return iterator((value_type *)&(ret.first));
 					return end();
 				}
 
 				iterator									upper_bound(const value_type& k) const
 				{
-					ft::pair<iterator, bool> ret = m_tree.search_for_upper_bound(k);
+					ft::pair<const_iterator, bool> ret = m_tree.search_for_upper_bound(k);
 
 					if (ret.second)
-						return ret.first;
+						return iterator((value_type *)&(ret.first));
 
 					return end();
 				}
 
 				pair<iterator,iterator>             equal_range (const value_type& k) const
 				{
-					ft::pair<iterator, bool> ret = m_tree.search(k);
+					ft::pair<const_iterator, bool> ret = m_tree.search(k);
 
-					if (ret.first != end() && !ret.second)
-						return ft::make_pair(ret.first, ++ret.first);
+					if ((const_iterator)ret.first != end() && !ret.second)
+						return ft::make_pair(iterator((value_type *)&(ret.first)), iterator((value_type *)&(++ret.first)));
 					if (ret.second)
-						return ft::make_pair(ret.first, ret.first);
+						return ft::make_pair(iterator((value_type *)&(ret.first)), iterator((value_type *)&(ret.first)));
 
-					return ft::make_pair(end(), end());
+					return ft::make_pair(iterator((value_type *)&(*end())), iterator((value_type *)&(*end())));
 				}
 
 				/*
