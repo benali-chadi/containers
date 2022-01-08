@@ -193,7 +193,7 @@ namespace ft
 
 					if ((const_iterator)ret.first != end())
 						return iterator((value_type *)&(ret.first));
-					return end();
+					return iterator(0, (Node *)m_tree.get_root2());
 				}
 
 				iterator									upper_bound(const value_type& k) const
@@ -203,7 +203,7 @@ namespace ft
 					if (ret.second)
 						return iterator((value_type *)&(ret.first));
 
-					return end();
+					return iterator(0, (Node *)m_tree.get_root2());
 				}
 
 				pair<iterator,iterator>             equal_range (const value_type& k) const
@@ -215,7 +215,7 @@ namespace ft
 					if (ret.second)
 						return ft::make_pair(iterator((value_type *)&(ret.first)), iterator((value_type *)&(ret.first)));
 
-					return ft::make_pair(iterator((value_type *)&(*end())), iterator((value_type *)&(*end())));
+					return ft::make_pair(iterator(0, (Node *)m_tree.get_root2()), iterator(0, (Node *)m_tree.get_root2()));
 				}
 
 				/*
@@ -226,6 +226,7 @@ namespace ft
 
 			private:
 				typedef ft::RBT_Set<T, Compare, Alloc>			RBT;
+				typedef typename RBT::Node						Node;
 				Alloc											_alloc;
 				key_compare										_compare;
 				size_type										_size;

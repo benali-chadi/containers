@@ -381,7 +381,7 @@ namespace ft
 					return tmp;
 				}
 
-				node						*get_root2() {	return root;	}
+				node						*get_root2() const {	return root;	}
 
 				void						set_root(Node *r) {	root = (node *)r;	}
 				// void						set_root(Node *r) {	root = (node *)r;	}
