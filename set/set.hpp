@@ -95,6 +95,7 @@ namespace ft
 
 				ft::pair<iterator, bool>					insert(const value_type val)
 				{
+					// std::cout << "val = " << val << std::endl;
 					ft::pair<iterator, bool>	ret = m_tree.insert(val);
 
 					if (ret.second)
@@ -178,7 +179,7 @@ namespace ft
 					* Operations
 				*/
 				
-				iterator									find(const value_type& k) const {	return &m_tree.find(k)->data;	}
+				iterator									find(const value_type& k) const {	return iterator(&m_tree.find(k)->data, (Node *)m_tree.get_root2());	}
 
 				size_type									count(const value_type& k) const
 				{
@@ -192,7 +193,7 @@ namespace ft
 					ft::pair<const_iterator, bool> ret = m_tree.search(k);
 
 					if ((const_iterator)ret.first != end())
-						return iterator((value_type *)&(ret.first));
+						return iterator((value_type *)&(*ret.first), (Node *)m_tree.get_root2());
 					return iterator(0, (Node *)m_tree.get_root2());
 				}
 
@@ -201,7 +202,7 @@ namespace ft
 					ft::pair<const_iterator, bool> ret = m_tree.search_for_upper_bound(k);
 
 					if (ret.second)
-						return iterator((value_type *)&(ret.first));
+						return iterator((value_type *)&(*ret.first), (Node *)m_tree.get_root2());
 
 					return iterator(0, (Node *)m_tree.get_root2());
 				}
@@ -211,9 +212,9 @@ namespace ft
 					ft::pair<const_iterator, bool> ret = m_tree.search(k);
 
 					if ((const_iterator)ret.first != end() && !ret.second)
-						return ft::make_pair(iterator((value_type *)&(ret.first)), iterator((value_type *)&(++ret.first)));
+						return ft::make_pair(iterator((value_type *)&(*ret.first), (Node *)m_tree.get_root2()), iterator((value_type *)&(*(++ret.first)), (Node *)m_tree.get_root2()));
 					if (ret.second)
-						return ft::make_pair(iterator((value_type *)&(ret.first)), iterator((value_type *)&(ret.first)));
+						return ft::make_pair(iterator((value_type *)&(*ret.first), (Node *)m_tree.get_root2()), iterator((value_type *)&(*ret.first), (Node *)m_tree.get_root2()));
 
 					return ft::make_pair(iterator(0, (Node *)m_tree.get_root2()), iterator(0, (Node *)m_tree.get_root2()));
 				}
@@ -240,7 +241,7 @@ namespace ft
 			{
 				if (lhs.size() != rhs.size())
 					return false;
-				return ft::equal(lhs.begin(), lhs.end(), rhs.begin(), lhs.value_comp());
+				return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
 			}
 		template< class T, class Compare, class Alloc >
 			bool	operator!=(	const Set< T, Compare,Alloc>& lhs,

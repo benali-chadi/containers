@@ -99,6 +99,7 @@ namespace ft
 
 				ft::pair<iterator, bool>	insert (value_type p)
 				{
+
 					node		*newNode = _alloc.allocate(1);
 					newNode->data = p;
 					newNode->left = 0;
@@ -196,9 +197,9 @@ namespace ft
 					while (tmp)
 					{
 						if (tmp->data > k && (!tmp->left || in_order_pred(tmp->left)->data < k))
-							return ft::make_pair(&tmp->data, true);
+							return ft::make_pair(iterator(&tmp->data, (Node *)root), true);
 						if (tmp->data == k)
-							return ft::make_pair(&tmp->data, false);
+							return ft::make_pair(iterator(&tmp->data, (Node *)root), false);
 						if (tmp->data > k)
 							tmp = tmp->left;
 						else
@@ -214,9 +215,9 @@ namespace ft
 					while (tmp)
 					{
 						if (tmp->data == k)
-							return ft::make_pair(&tmp->data, false);
+							return ft::make_pair(const_iterator(&tmp->data, (Node *)root), false);
 						if (tmp->data > k && (!tmp->left || in_order_pred(tmp->left)->data < k))
-							return ft::make_pair(&tmp->data, true);
+							return ft::make_pair(const_iterator(&tmp->data, (Node *)root), true);
 						if (tmp->data > k)
 							tmp = tmp->left;
 						else
@@ -232,7 +233,7 @@ namespace ft
 					while (tmp)
 					{
 						if (tmp->data > k && (!tmp->left || in_order_pred(tmp->left)->data <= k))
-							return ft::make_pair(&tmp->data, true);
+							return ft::make_pair(iterator(&tmp->data, (Node *)root), true);
 						if (tmp->data > k)
 							tmp = tmp->left;
 						else
@@ -248,7 +249,7 @@ namespace ft
 					while (tmp)
 					{
 						if (tmp->data > k && (!tmp->left || in_order_pred(tmp->left)->data <= k))
-							return ft::make_pair(&tmp->data, true);
+							return ft::make_pair(const_iterator(&tmp->data, (Node *)root), true);
 						if (tmp->data > k)
 							tmp = tmp->left;
 						else
