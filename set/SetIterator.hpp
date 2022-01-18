@@ -73,7 +73,7 @@ namespace ft
 			reference		&operator*() const {
 				return *_p;
 			}
-			pointer			operator->() const {	return &operator*();	}
+			pointer			operator->() const {	return _p;	}
 			
 			SetIterator&	operator++()
 			{

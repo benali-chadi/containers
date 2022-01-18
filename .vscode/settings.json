@@ -68,6 +68,21 @@
 		"unordered_map": "cpp",
 		"utility": "cpp",
 		"vector": "cpp",
-		"__functional_03": "cpp"
+		"__functional_03": "cpp",
+		"hash_map": "cpp",
+		"*.tcc": "cpp",
+		"clocale": "cpp",
+		"compare": "cpp",
+		"concepts": "cpp",
+		"condition_variable": "cpp",
+		"list": "cpp",
+		"unordered_set": "cpp",
+		"memory_resource": "cpp",
+		"numbers": "cpp",
+		"semaphore": "cpp",
+		"stop_token": "cpp",
+		"thread": "cpp",
+		"cinttypes": "cpp",
+		"variant": "cpp"
 	}
 }
