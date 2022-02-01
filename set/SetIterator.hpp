@@ -12,7 +12,6 @@ namespace ft
 	{
 		public:
 			typedef typename	iterator<std::bidirectional_iterator_tag, T >::difference_type		difference_type;
-			// typedef typename	iterator<std::bidirectional_iterator_tag, T >::T			T;
 			typedef typename	iterator<std::bidirectional_iterator_tag, T >::pointer				pointer;
 			typedef typename	iterator<std::bidirectional_iterator_tag, T >::reference			reference;
 			typedef typename	iterator<std::bidirectional_iterator_tag, T >::iterator_category	iterator_category;
@@ -20,7 +19,6 @@ namespace ft
 			typedef 			node*																m_pointer;
 
 
-			// typedef	ft::RBT<key, key, Compare> RBT;
 			/*
 				* Constructors
 			*/
@@ -32,19 +30,11 @@ namespace ft
 
 			SetIterator		(const SetIterator &x)
 			{
-				// helper = x.helper;
 				*this = x;
-				// pointer r = helper.get_root(_p);
-				// helper.set_root(r);
 			}
 
 			SetIterator		(pointer x): _p(x) {
-
-				// pointer r = helper.get_root(_p);
-				// if (x == r && (helper.in_order_pred(r) != r && helper.in_order_succ(r) != r))
-				// 	_p = 0;
 				helper.set_root((m_pointer)helper.get_root(x));
-				// helper.set_root(r);
 			}
 			SetIterator		(pointer x, m_pointer root)
 			{

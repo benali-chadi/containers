@@ -32,12 +32,12 @@ namespace ft
 				* Assignment operator
 			*/
 
-			// pair&	operator= (const pair& pr)
-			// {
-			// 	first = pr.first;
-			// 	second = pr.second;
-			// 	return *this;
-			// }
+			pair&	operator= (const pair& pr)
+			{
+				first = pr.first;
+				second = pr.second;
+				return *this;
+			}
 		};
 	
 	/*

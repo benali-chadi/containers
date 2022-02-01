@@ -116,10 +116,7 @@ namespace ft
 					
 					node *tmp = search_to_erase(newNode->data);
 					if (tmp)
-					{
-						// _alloc.deallocate(newNode, 1);
 						return ft::make_pair(&tmp->data, false);
-					}
 					
 					tmp = search_to_insert(*newNode);
 					newNode->parent = tmp;
@@ -290,25 +287,6 @@ namespace ft
 						tmp = tmp->left;
 					return tmp;
 				}
-
-				// node						*in_order_succ(value_type *n) const
-				// {
-				// 	node	*tmp = find(n);
-
-				// 	while (tmp && tmp->left != 0)
-				// 		tmp = tmp->left;
-				// 	return tmp;
-				// }
-
-				// node						*in_order_pred(value_type *n)
-				// {
-				// 	node	*tmp = find(n);
-
-				// 	while (tmp && tmp->right != 0)
-				// 		tmp = tmp->right;
-					
-				// 	return tmp;
-				// }
 
 				node						*find_bigger_parent(node *parent, value_type p)
 				{
