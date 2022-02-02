@@ -46,14 +46,14 @@ namespace ft
 			 >
 		class RBT {
 			public:
-				typedef				ft::pair<const key, T2>								value_type;
-				typedef				ft::pair<key, T2>									m_value_type;
-				typedef struct 		node<m_value_type>									node;
-				typedef 			ft::MapIterator<node, value_type, key, T2, Compare, Alloc>	iterator;
-				typedef 			ft::MapIterator<node, const value_type, key, T2, Compare, Alloc>		const_iterator;
-				typedef				ft::reverse_iterator<iterator>						reverse_iterator;
-				typedef				ft::reverse_iterator<const_iterator>				const_reverse_iterator;
-				typedef	typename	Alloc::template rebind<node>::other					m_Alloc;
+				typedef				ft::pair<const key, T2>												value_type;
+				typedef				ft::pair<key, T2>													m_value_type;
+				typedef struct 		node<m_value_type>													node;
+				typedef 			ft::MapIterator<node, value_type, key, T2, Compare, Alloc>			iterator;
+				typedef 			ft::MapIterator<node, const value_type, key, T2, Compare, Alloc>	const_iterator;
+				typedef				ft::reverse_iterator<iterator>										reverse_iterator;
+				typedef				ft::reverse_iterator<const_iterator>								const_reverse_iterator;
+				typedef	typename	Alloc::template rebind<node>::other									m_Alloc;
 
 				RBT(): root(0) {}
 				RBT(node *r): root(r) {}
@@ -113,10 +113,7 @@ namespace ft
 					
 					node *tmp = search_to_erase(newNode->data);
 					if (tmp)
-					{
-						// _alloc.deallocate(newNode, 1);
 						return ft::make_pair(tmp, false);
-					}
 					
 					tmp = search_to_insert(*newNode);
 					newNode->parent = tmp;

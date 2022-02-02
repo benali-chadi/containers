@@ -11,7 +11,7 @@
 /* ************************************************************************************************ */
 
 // you should include your path to this files
-#include "../stack/Stack.hpp"       // your stack path.
+#include "../stack/stack.hpp"       // your stack path.
 #include "../vector/vector.hpp" // your Vector path.
 
 #include <vector>
@@ -30,7 +30,7 @@
 #define RESET "\e[0m"
 
 #define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
-#define TIME_FAC 3 // the ft::Map methods can be slower up to std::map methods * TIME_FAC (MAX 20)
+#define TIME_FAC 1 // the ft::Map methods can be slower up to std::map methods * TIME_FAC (MAX 20)
 
 
 #define TEST_CASE(fn)                                                                                                             \

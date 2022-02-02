@@ -69,9 +69,7 @@ namespace ft
 				reallocate(x.size());
 
 				for (size_type i = 0; i < x.size(); i++)
-				{
 					push_back(x._arr[i]);
-				}
 				return *this;
 			}
 			
@@ -91,14 +89,8 @@ namespace ft
 			iterator				end() {	return iterator(_arr + _size);	}
 			const_iterator			end() const {	return const_iterator(_arr + _size);	}
 
-			reverse_iterator		rbegin() {
-				// size_type len = _size ? _size - 1 : _size;
-				return reverse_iterator(_arr + _size);
-			}
-			const_reverse_iterator	rbegin() const {
-				// size_type len = _size ? _size - 1 : _size;
-				return const_reverse_iterator(_arr + _size);
-			}
+			reverse_iterator		rbegin() {	return reverse_iterator(_arr + _size);	}
+			const_reverse_iterator	rbegin() const {	return const_reverse_iterator(_arr + _size);	}
 
 			reverse_iterator 		rend() {	return reverse_iterator(_arr);	}
 			const_reverse_iterator 	rend() const {	return const_reverse_iterator(_arr);	}
@@ -216,6 +208,7 @@ namespace ft
 			void					insert(iterator position, size_type n, const value_type& val)
 			{
 				size_type dist = std::distance(begin(), position);
+				size_type len = std::distance(position, end());
 
 				if (_size + n > _capacity)
 				{
@@ -226,14 +219,20 @@ namespace ft
 				}
 				position = begin() + dist;
 
-				Vector tmp(position, end());
+				pointer tmp = _alloc.allocate(len);
+				for (size_t i = dist, j = 0; j < len; i++, j++)
+					tmp[j] = _arr[i];
+
 				for (; n; position++, n--, dist++)
 				{
 					_alloc.construct(_arr + dist, val);
 					_size++;
 				}
-				for (iterator it = tmp.begin(); it != tmp.end(); it++, dist++)
-					_alloc.construct(_arr + dist, *it);
+
+				for (size_t i = 0; i < len; i++, dist++)
+					_alloc.construct(_arr + dist, tmp[i]);
+				if (len)
+					_alloc.deallocate(tmp, len);
 			}
 			template <class InputIterator>
    				void 				insert (
@@ -245,6 +244,8 @@ namespace ft
 				{
 					size_type dist = std::distance(begin(), position);
 					size_type range = std::distance(first, last);
+					size_type len = std::distance(position, end());
+					
 
 					if (_size + range > _capacity)
 					{
@@ -255,14 +256,20 @@ namespace ft
 					}
 					
 					position = begin() + dist;
-					Vector tmp(position, end());
+					pointer tmp = _alloc.allocate(len);
+					for (size_t i = dist, j = 0; j < len; i++, j++)
+						tmp[j] = _arr[i];
+
 					for (; first != last; first++, dist++)
 					{
 						_alloc.construct(_arr + dist, *first);
 						_size++;
 					}
-					for (iterator it = tmp.begin(); it != tmp.end(); it++, dist++)
-						_alloc.construct(_arr + dist, *it);
+
+					for (size_t i = 0; i < len; i++, dist++)
+						_alloc.construct(_arr + dist, tmp[i]);
+					if	(len)
+						_alloc.deallocate(tmp, len);
 				}
 
 			iterator 				erase(iterator position)
@@ -356,8 +363,7 @@ namespace ft
 				for (size_type i = 0; i < _size; i++)
 					_alloc.construct(_arr + i, tmp[i]);
 
-				for (size_type i = 0; i < cap; i++)
-					_alloc.destroy(tmp + i);
+				_alloc.deallocate(tmp, cap);
 			}
 	};
 
